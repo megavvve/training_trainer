@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "371545126336",
+    "project_id": "training-trainer",
+    "storage_bucket": "training-trainer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371545126336:android:399ab1eafd48f6a3b6c425",
+        "android_client_info": {
+          "package_name": "com.example.training_trainer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJLpDcPL--rbKDI4yztTMFaBykqc2xAMc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,10 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:training_trainer/presentation/home_screen.dart';
-import 'package:training_trainer/presentation/welcome_screen.dart';
+import 'package:training_trainer/data/repositories/question_repo_impl.dart';
+import 'package:training_trainer/presentation/bloc/question_list_bloc.dart';
 import 'package:training_trainer/utils/routing.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final f = await Firebase.initializeApp();
+  print(f.name);
   runApp(MainApp());
 }
 
@@ -13,14 +18,23 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-        designSize: Size(375, 812),
-        builder: (con, _) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => QuestionListBloc(
+            questionRepo: QuestionRepoImpl(),
+          ),
+        ),
+      ],
+      child: ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (context, child) {
           return MaterialApp(
             initialRoute: '/',
             routes: routes,
-            home: WelcomeScreen(),
           );
-        });
+        },
+      ),
+    );
   }
 }

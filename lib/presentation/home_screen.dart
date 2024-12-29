@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:training_trainer/presentation/profile_screen.dart';
-import 'package:training_trainer/presentation/search_profile.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_trainer/domain/models/question.dart';
+import 'package:training_trainer/presentation/bloc/question_list_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,32 +11,50 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
   @override
   Widget build(BuildContext context) {
-  int _selectedIndex = 0;
-
-   List<Widget> _pages = <Widget>[
-    HomeScreen(),
-    SearchScreen(),
-    ProfileScreen()
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
     return Scaffold(
-      appBar: AppBar(),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
+      appBar: AppBar(
+        title: const Text("Тренажеры"),
+        centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'dsds',
+        onPressed: () {
+          context.read<QuestionListBloc>().add(LoadQuestionsEvent());
+        },
+        child: const Icon(Icons.refresh),
+      ),
+      body: BlocBuilder<QuestionListBloc, QuestionListState>(
+        builder: (context, state) {
+          if (state is QuestionListLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is QuestionListLoadedState) {
+            return ListView.builder(
+              itemCount: state.questions.length,
+              itemBuilder: (context, index) {
+                final question = state.questions[index];
+                return ListTile(
+                  title: Text(question.name),
+                  subtitle: Text(question.description),
+                );
+              },
+            );
+          } else if (state is QuestionListErrorState) {
+            return Center(
+              child: Text(
+                state.message,
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
+          } else {
+            return const Center(child: Text("Неизвестное состояние"));
+          }
+        },
       ),
     );
   }

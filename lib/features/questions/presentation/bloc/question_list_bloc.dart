@@ -1,8 +1,7 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+
 import 'package:training_trainer/features/questions/data/models/repositories/question_repo_impl.dart';
 import 'package:training_trainer/features/questions/domain/entities/question.dart';
-import 'package:training_trainer/features/questions/domain/repositories/question_repo.dart';
+import 'package:bloc/bloc.dart';
 
 part 'question_list_event.dart';
 part 'question_list_state.dart';

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:training_trainer/features/questions/domain/entities/question.dart';
 import 'package:training_trainer/features/questions/data/models/question_from_code_war.dart';
 import 'package:training_trainer/features/questions/domain/repositories/question_repo.dart';
@@ -16,7 +15,8 @@ class QuestionRepoImpl implements QuestionRepo {
       final Map<String, dynamic> data = jsonDecode(response.body);
       return QuestionFromCodeWars.fromJson(data);
 
-    } 
+    }
+    return null; 
   }
 
   @override

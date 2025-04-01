@@ -10,7 +10,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
    // final brightness = context.watch<ThemeCubit>().state.brightness;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           alignment: Alignment.center,
@@ -18,7 +18,9 @@ class LoginForm extends StatelessWidget {
           width: 127.w,
           height: 33.h,
           decoration: BoxDecoration(
-           
+            // color: brightness == Brightness.dark
+            //     ? const Color(0xFF656565)
+            //     : const Color(0xFFD9D9D9),
             borderRadius: BorderRadius.all(
               Radius.circular(16.sp),
             ),

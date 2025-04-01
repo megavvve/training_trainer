@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:training_trainer/core/utils/checks.dart';
+import 'package:training_trainer/core/utils/pop_up_notifications.dart';
 import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/email_form.dart';
 import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/headline.dart';
 import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/login_form.dart';
@@ -16,7 +18,7 @@ class AuthScreen extends ConsumerStatefulWidget {
 }
 
 class _AuthScreenState extends ConsumerState<AuthScreen> {
- final _emailController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _loginController = TextEditingController();
   bool isRegistry = true;
@@ -24,12 +26,44 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   Future<void> _submit() async {
     try {
       if (isRegistry) {
+        if (_emailController.text.isEmpty ||
+            _passwordController.text.isEmpty ||
+            _loginController.text.isEmpty) {
+          inputFieldsNotFilledIn(context);
+
+          return;
+        }
+        if (!isValidEmail(_emailController.text)) {
+          showErrorSnackBar(context, "Некорректный email");
+          return;
+        }
+
+        if (!isValidPassword(_passwordController.text)) {
+          showErrorSnackBar(context,
+              "Пароль должен содержать минимум 8 символов, включая буквы и цифры");
+          return;
+        }
         await ref.read(signUpProvider).call(
               email: _emailController.text,
               password: _passwordController.text,
               login: _loginController.text,
             );
       } else {
+        if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+          inputFieldsNotFilledIn(context);
+
+          return;
+        }
+        if (!isValidEmail(_emailController.text)) {
+          showErrorSnackBar(context, "Некорректный email");
+          return;
+        }
+
+        if (!isValidPassword(_passwordController.text)) {
+          showErrorSnackBar(context,
+              "Пароль должен содержать минимум 8 символов, включая буквы и цифры");
+          return;
+        }
         await ref.read(signInProvider).call(
               email: _emailController.text,
               password: _passwordController.text,
@@ -44,12 +78,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     }
   }
 
-     @override
+  @override
   Widget build(BuildContext context) {
-
-
-
-
     return Scaffold(
       // backgroundColor: brightness == Brightness.dark
       //     ? backgroundColorDark
@@ -66,23 +96,24 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   ),
           ),
           SliverToBoxAdapter(
-            child: Center(
-              child: SizedBox(),
-            ),
-          ),
-           SliverToBoxAdapter(
-            child: isRegistry 
-              ? LoginForm(controller: _loginController)
-              : const SizedBox(),
-          ),
-          SliverToBoxAdapter(
-            child: Center(
-              child: EmailForm(controller:_emailController),
-            ),
+            child: isRegistry
+                ? Center(
+                    child: LoginForm(
+                      controller: _loginController,
+                    ),
+                  )
+                : const SizedBox(),
           ),
           SliverToBoxAdapter(
             child: Center(
-              child: PasswordForm(controller: _passwordController,),
+              child: EmailForm(controller: _emailController),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Center(
+              child: PasswordForm(
+                controller: _passwordController,
+              ),
             ),
           ),
           SliverToBoxAdapter(
@@ -111,7 +142,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           SliverToBoxAdapter(
             child: Center(
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    isRegistry = !isRegistry;
+                  });
+                },
                 child: isRegistry
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,

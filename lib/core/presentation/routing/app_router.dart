@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:training_trainer/core/presentation/widgets/scaffold_with_nav_bar.dart';
-import 'package:training_trainer/core/routing/app_routes.dart';
+import 'package:training_trainer/core/presentation/routing/app_routes.dart';
 import 'package:training_trainer/features/auth/presentation/auth_screen/auth_screen.dart';
 import 'package:training_trainer/features/auth/presentation/providers/auth_providers.dart';
 import 'package:training_trainer/features/auth/presentation/profile_screen/profile_screen.dart';
@@ -43,7 +43,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.home,
                 pageBuilder: (context, state) =>  NoTransitionPage(
-                  child: HomeScreen(trainers: Trainer.testTrainers,),
+                  child: HomeScreen(trainers:Trainer.testTrainers),
                 ),
               ),
             ],

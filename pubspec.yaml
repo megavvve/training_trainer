@@ -22,6 +22,9 @@ dependencies:
   get_it: ^8.0.3
   talker: ^4.7.1
   json_annotation: ^4.9.0
+  equatable: ^2.0.7
+
+
 
 dev_dependencies:
   flutter_test:
@@ -32,7 +35,6 @@ dev_dependencies:
   custom_lint: ^0.7.5
   riverpod_lint: ^2.6.5
   json_serializable: ^6.9.4
-
 flutter:
   uses-material-design: true
   assets:

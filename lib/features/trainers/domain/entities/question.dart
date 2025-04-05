@@ -17,6 +17,5 @@ class Question {
       required this.answers});
       factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
 
-  /// Connect the generated [_$QuestionToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$QuestionToJson(this);
 }

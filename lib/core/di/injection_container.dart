@@ -1,20 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:training_trainer/core/domain/theme_repository.dart';
-import 'package:training_trainer/core/presentation/cubits/theme_cubit.dart';
+import 'package:talker/talker.dart';
+import 'package:training_trainer/core/config/ai_config.dart';
+import 'package:training_trainer/core/services/ai/ai_generator_inteface.dart';
+import 'package:training_trainer/core/services/ai/generator_factory.dart';
 import 'package:training_trainer/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:training_trainer/features/auth/domain/repositories/auth_repository.dart';
-import 'package:training_trainer/features/auth/domain/usecases/sign_out.dart'; // Импортируем UseCase
+import 'package:training_trainer/features/auth/domain/usecases/sign_out.dart';
+import 'package:training_trainer/features/trainers/data/firebase_repository_impl.dart';
+import 'package:training_trainer/features/trainers/domain/repositories/trainiers_repository.dart'; // Импортируем UseCase
 
 final getIt = GetIt.instance;
 
 Future<void> setupDependencies() async {
   // Services
   getIt.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
+  getIt.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
+   getIt.registerSingleton<Talker>(Talker());
+
+  getIt.registerSingleton<AIConfig>(
+    GeminiConfig('AIzaSyBzvbe7Sm6rbLReiyvzo1H4eUX8O2rd5eA'),
+  );
+
+  getIt.registerSingleton<AIGenerator>(
+    AIGeneratorFactory.create(getIt<AIConfig>()),
+  );
 
   // Repositories
   getIt.registerSingleton<AuthRepository>(
     FirebaseAuthRepositoryImpl(getIt<FirebaseAuth>()),
+  );
+   getIt.registerSingleton<TrainersRepository>(
+    FirebaseTrainersRepository(getIt<FirebaseFirestore>()),
   );
   
   // Registering ThemeRepositoryInterface (если раскомментировать)
@@ -23,9 +41,9 @@ Future<void> setupDependencies() async {
   // );
 
   // Cubits
-  getIt.registerFactory(
-    () => ThemeCubit(themeRepository: getIt<ThemeRepositoryInterface>()),
-  );
+  // getIt.registerFactory(
+  //   () => ThemeCubit(themeRepository: getIt<ThemeRepositoryInterface>()),
+  // );
 
   // UseCases
   getIt.registerFactory<Signout>(() => Signout(authRepository:getIt<AuthRepository>()));

@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:talker/talker.dart';
+import 'package:training_trainer/core/di/injection_container.dart';
+import 'package:training_trainer/core/errors/exceptions.dart';
 import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
 import 'package:training_trainer/features/trainers/domain/repositories/trainiers_repository.dart';
 
@@ -16,7 +19,8 @@ class FirebaseTrainersRepository implements TrainersRepository {
           .map((doc) => Trainer.fromJson(doc.data()))
           .toList();
     } on FirebaseException catch (e) {
-      throw _handleFirebaseError(e);
+      getIt<Talker>().error(e);
+      throw handleFirebaseError(e);
     }
   }
 
@@ -26,7 +30,8 @@ class FirebaseTrainersRepository implements TrainersRepository {
       final doc = await _firestore.doc('$_collectionName/$id').get();
       return doc.exists ? Trainer.fromJson(doc.data()!) : null;
     } on FirebaseException catch (e) {
-      throw _handleFirebaseError(e);
+      getIt<Talker>().error(e);
+      throw handleFirebaseError(e);
     }
   }
 
@@ -37,7 +42,8 @@ class FirebaseTrainersRepository implements TrainersRepository {
           .doc('$_collectionName/${trainer.id}')
           .set(trainer.toJson());
     } on FirebaseException catch (e) {
-      throw _handleFirebaseError(e);
+      getIt<Talker>().error(e);
+      throw handleFirebaseError(e);
     }
   }
 
@@ -51,7 +57,8 @@ class FirebaseTrainersRepository implements TrainersRepository {
       }
       await batch.commit();
     } on FirebaseException catch (e) {
-      throw _handleFirebaseError(e);
+      getIt<Talker>().error(e);
+      throw handleFirebaseError(e);
     }
   }
 
@@ -62,7 +69,8 @@ class FirebaseTrainersRepository implements TrainersRepository {
           .doc('$_collectionName/${trainer.id}')
           .update(trainer.toJson());
     } on FirebaseException catch (e) {
-      throw _handleFirebaseError(e);
+      getIt<Talker>().error(e);
+      throw handleFirebaseError(e);
     }
   }
 
@@ -71,18 +79,10 @@ class FirebaseTrainersRepository implements TrainersRepository {
     try {
       await _firestore.doc('$_collectionName/$id').delete();
     } on FirebaseException catch (e) {
-      throw _handleFirebaseError(e);
+      getIt<Talker>().error(e);
+      throw handleFirebaseError(e);
     }
   }
 
-  String _handleFirebaseError(FirebaseException e) {
-    switch (e.code) {
-      case 'permission-denied':
-        return 'Ошибка доступа';
-      case 'not-found':
-        return 'Данные не найдены';
-      default:
-        return 'Ошибка Firebase: ${e.message}';
-    }
-  }
+  
 }

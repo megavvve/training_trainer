@@ -32,7 +32,7 @@ Map<String, dynamic> _$TrainerToJson(Trainer instance) => <String, dynamic>{
       'starCount': instance.starCount,
       'timeRequiredInSeconds': instance.timeRequiredInSeconds,
       'title': instance.title,
-      'questions': instance.questions,
+      'questions': instance.questions.map((x)=>x.toJson()),
       'keywords': instance.keywords,
       'description': instance.description,
       'createdAt': instance.createdAt.toIso8601String(),

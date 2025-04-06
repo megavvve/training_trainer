@@ -1,12 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:training_trainer/core/presentation/widgets/scaffold_with_nav_bar.dart';
-import 'package:training_trainer/core/presentation/routing/app_routes.dart';
+import 'package:training_trainer/core/widgets/scaffold_with_nav_bar.dart';
+import 'package:training_trainer/core/config/routing/app_routes.dart';
 import 'package:training_trainer/features/auth/presentation/auth_screen/auth_screen.dart';
 import 'package:training_trainer/features/auth/presentation/providers/auth_providers.dart';
 import 'package:training_trainer/features/auth/presentation/profile_screen/profile_screen.dart';
 import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
-import 'package:training_trainer/features/trainers/presentation/home_screen.dart';
+import 'package:training_trainer/features/trainers/presentation/add_trainer_screen/add_trainer_screen.dart';
+import 'package:training_trainer/features/trainers/presentation/home_screen/home_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -17,13 +18,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isAuth = authState.value != null;
       final isAuthRoute = state.matchedLocation == AppRoutes.auth;
 
-      // Показываем loading пока идет проверка
       if (authState.isLoading || authState.hasError) return null;
       
-      // Если не авторизован и не на странице авторизации
       if (!isAuth && !isAuthRoute) return AppRoutes.auth;
       
-      // Если авторизован и на странице авторизации
       if (isAuth && isAuthRoute) return AppRoutes.home;
       
       return null;
@@ -32,6 +30,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.auth,
         builder: (context, state) => const AuthScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.addTrainer,
+        builder: (context, state) => const AddTrainerScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) => ScaffoldWithNavBar(
@@ -43,7 +45,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.home,
                 pageBuilder: (context, state) =>  NoTransitionPage(
-                  child: HomeScreen(trainers:Trainer.testTrainers),
+                  child: HomeScreen(trainers: Trainer.testTrainers,),
                 ),
               ),
             ],

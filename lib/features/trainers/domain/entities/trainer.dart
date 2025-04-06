@@ -41,7 +41,7 @@ class Trainer {
     keywords: ['программирование', 'Dart', 'новичкам'],
     questions: [
       Question(
-        id: 1,
+        id: "1",
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
@@ -50,7 +50,6 @@ class Trainer {
         ],
         rightAnswer: "Что такое Null Safety в Dart?",
       ),
-      // Добавьте другие вопросы
     ],
   ),
   Trainer(
@@ -63,7 +62,7 @@ class Trainer {
     keywords: ['Flutter', 'UI', 'виджеты'],
     questions: [
        Question(
-        id: 1,
+        id: "1",
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
@@ -84,7 +83,7 @@ class Trainer {
     keywords: ['сеть', 'HTTP', 'JSON'],
     questions: [
       Question(
-        id: 1,
+        id: "1",
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
@@ -105,7 +104,7 @@ class Trainer {
     keywords: ['BLoC', 'Provider', 'Riverpod'],
     questions: [
     Question(
-        id: 1,
+        id: "1",
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
@@ -126,7 +125,7 @@ class Trainer {
     keywords: ['анимации', 'UI', 'движение'],
     questions: [
      Question(
-        id: 1,
+        id: "1",
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
@@ -147,7 +146,7 @@ class Trainer {
     keywords: ['тесты', 'качество', 'unit'],
     questions: [
        Question(
-        id: 1,
+        id: "1",
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',

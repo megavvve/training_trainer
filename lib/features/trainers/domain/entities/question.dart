@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'question.g.dart';
 @JsonSerializable()
 class Question {
-  final int id;
+  final String id;
 
   final String textQuestion;
 

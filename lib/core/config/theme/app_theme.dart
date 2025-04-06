@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:training_trainer/core/presentation/theme/app_colors.dart';
+import 'package:training_trainer/core/config/theme/app_colors.dart';
 
 class AppTheme {
   static ThemeData light() {

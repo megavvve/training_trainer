@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:training_trainer/core/di/injection_container.dart';
-import 'package:training_trainer/core/presentation/theme/app_colors.dart';
+import 'package:training_trainer/core/config/theme/app_colors.dart';
 import 'package:training_trainer/features/auth/domain/usecases/sign_out.dart';
 
 
@@ -20,6 +20,8 @@ class _SignOutButtonState extends State<SignOutButton> {
   Widget build(BuildContext context) {
 
             return MaterialButton(
+              shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(20.0),),
               color: AppColors.primary,
               onPressed: getIt<Signout>(),
              

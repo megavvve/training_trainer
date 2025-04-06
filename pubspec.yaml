@@ -23,6 +23,7 @@ dependencies:
   talker: ^4.7.1
   json_annotation: ^4.9.0
   equatable: ^2.0.7
+  google_generative_ai: ^0.4.6
 
 
 
@@ -38,5 +39,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-
     - assets/svg1.svg
+  fonts:
+    - family: RobotoMono
+      fonts:
+        - asset: assets/fonts/RobotoMono-Medium.ttf

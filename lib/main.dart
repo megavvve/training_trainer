@@ -10,5 +10,9 @@ Future<void> main() async {
 
   setupDependencies();
 
-  runApp(ProviderScope(child: MainApp()));
+  runApp(
+    ProviderScope(
+      child: MainApp(),
+    ),
+  );
 }

@@ -5,7 +5,6 @@ import 'package:training_trainer/core/config/routing/app_routes.dart';
 import 'package:training_trainer/features/auth/presentation/auth_screen/auth_screen.dart';
 import 'package:training_trainer/features/auth/presentation/providers/auth_providers.dart';
 import 'package:training_trainer/features/auth/presentation/profile_screen/profile_screen.dart';
-import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
 import 'package:training_trainer/features/trainers/presentation/add_trainer_screen/add_trainer_screen.dart';
 import 'package:training_trainer/features/trainers/presentation/home_screen/home_screen.dart';
 
@@ -45,7 +44,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.home,
                 pageBuilder: (context, state) =>  NoTransitionPage(
-                  child: HomeScreen(trainers: Trainer.testTrainers,),
+                  child: HomeScreen(),
                 ),
               ),
             ],

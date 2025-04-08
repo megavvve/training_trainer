@@ -38,6 +38,7 @@ class FirebaseTrainersRepository implements TrainersRepository {
   @override
   Future<void> addTrainer(Trainer trainer) async {
     try {
+      
       await _firestore
           .doc('$_collectionName/${trainer.id}')
           .set(trainer.toJson());

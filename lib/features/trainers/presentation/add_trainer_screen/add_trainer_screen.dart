@@ -1,11 +1,8 @@
-// 1. Import required packages
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:training_trainer/core/di/injection_container.dart';
-import 'package:training_trainer/core/services/ai/ai_generator_inteface.dart';
+import 'package:training_trainer/core/services/ai/ai_generator_interface.dart';
 import 'package:training_trainer/features/trainers/domain/entities/question.dart';
-import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_trainer/features/trainers/presentation/add_trainer_screen/widgets/general_info_form.dart';
 import 'package:training_trainer/features/trainers/presentation/add_trainer_screen/widgets/keywords_form.dart';
@@ -72,7 +69,7 @@ class AddTrainerScreenState extends State<AddTrainerScreen> {
               ),
             ),
             Step(
-              title: const Text('Добавление вопросов'),
+              title: const Text('Добавление вопросов',),
               content: QuestionsForm(
                 questionController: _questionController,
                 answerController: _answerController,
@@ -88,14 +85,20 @@ class AddTrainerScreenState extends State<AddTrainerScreen> {
             Step(
               title: const Text('Ключевые слова'),
               content: KeywordsForm(
-                keywordsController: keywordsController,
-                keywords: keywords,
-                removeKeyword: (String keyword) => setState(
-                  () => keywords.remove(
-                    keyword,
-                  ),
-                ),
-              ),
+                  keywordsController: keywordsController,
+                  keywords: keywords,
+                  removeKeyword: (String keyword) => setState(
+                        () => keywords.remove(
+                          keyword,
+                        ),
+                      ),
+                  addKeyword: (String keyword) {
+                    if (keyword.isNotEmpty && !keywords.contains(keyword)) {
+                      setState(() {
+                        keywords.add(keyword);
+                      });
+                    }
+                  }),
             ),
             Step(
               title: const Text('Просмотр'),
@@ -135,7 +138,14 @@ class AddTrainerScreenState extends State<AddTrainerScreen> {
 
   void _continue() {
     if (_currentStep == 3) {
-      _saveTrainer();
+      context.read<TrainersBloc>().add(AddTrainer(
+            timeRequiredInSeconds: _timeController.text,
+            title: _titleController.text,
+            questions: questions,
+            keywords: keywords,
+            description: _descriptionController.text,
+          ));
+      Navigator.pop(context);
     } else {
       setState(() => _currentStep += 1);
     }
@@ -150,35 +160,19 @@ class AddTrainerScreenState extends State<AddTrainerScreen> {
   Future<void> _addQuestion() async {
     if (_questionController.text.isNotEmpty &&
         _answerController.text.isNotEmpty) {
-    
-      final List<String>   list = await getIt<AIGenerator>().generateWrongAnswers(question: _questionController.text, correctAnswer: _answerController.text);
+      final List<String> list = await getIt<AIGenerator>().generateWrongAnswers(
+          question: _questionController.text,
+          correctAnswer: _answerController.text);
       setState(() {
         questions.add(Question(
           id: questions.hashCode.toString(),
           textQuestion: _questionController.text,
           rightAnswer: _answerController.text,
-          answers: list, // For incorrect answers
+          answers: list,
         ));
         _questionController.clear();
         _answerController.clear();
       });
     }
-  }
-
-  void _saveTrainer() {
-    final newTrainer = Trainer(
-      id: DateTime.now().toIso8601String(),
-      userId: getIt<FirebaseAuth>().currentUser!.uid,
-      starCount: 0,
-      timeRequiredInSeconds: int.parse(_timeController.text) * 60,
-      title: _titleController.text,
-      questions: questions,
-      keywords: keywords,
-      description: _descriptionController.text,
-      createdAt: DateTime.now(),
-    );
-
-    context.read<TrainersBloc>().add(AddTrainer(newTrainer));
-    Navigator.pop(context);
   }
 }

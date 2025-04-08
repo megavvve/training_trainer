@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:training_trainer/core/config/theme/app_colors.dart';
@@ -6,11 +7,12 @@ import 'package:training_trainer/core/config/routing/app_routes.dart';
 import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
 import 'package:training_trainer/features/trainers/presentation/home_screen/widgets/full_screen_trainer_card.dart';
 import 'package:training_trainer/features/trainers/presentation/home_screen/widgets/trainer_card.dart';
+import 'package:training_trainer/features/trainers/presentation/providers/bloc/trainers_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
-  final List<Trainer> trainers;
-
-  const HomeScreen({super.key, required this.trainers});
+  const HomeScreen({
+    super.key,
+  });
 
   @override
   HomeScreenState createState() => HomeScreenState();
@@ -20,11 +22,12 @@ class HomeScreenState extends State<HomeScreen> {
   bool _isCompactMode = true;
   final PageController _pageController = PageController();
   List<Trainer> _filteredTrainers = [];
-
   @override
   void initState() {
     super.initState();
-    _filteredTrainers = widget.trainers;
+    context.read<TrainersBloc>().add(
+          LoadTrainers(),
+        );
   }
 
   void _toggleViewMode() {
@@ -33,45 +36,65 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton:  FloatingActionButton(
-                      onPressed: () =>  context.push(AppRoutes.addTrainer),
-                      // backgroundColor: brightness == Brightness.dark
-                      //     ? colorForButton
-                      //     : Colors.white,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.add,
-                        // color: brightness == Brightness.dark
-                        //     ? Colors.white
-                        //     : Colors.blue,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  
-      backgroundColor: AppColors.lightBackground,
-      body: GestureDetector(
-        onScaleUpdate: (details) {
-          if (details.scale < 1) {
-            // Уменьшение (переход в компактный режим)
-            if (!_isCompactMode) {
-              _toggleViewMode();
-            }
-          } else if (details.scale > 1) {
-            // Увеличение (переход в полный экран)
-            if (_isCompactMode) {
-              _toggleViewMode();
-            }
-          }
-        },
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 500),
-          child: _isCompactMode ? _buildCompactView() : _buildFullScreenView(),
-        ),
-      ),
+    return BlocBuilder<TrainersBloc, TrainersState>(
+      builder: (context, state) {
+        if (state is TrainersLoading) {
+          return Center(
+              child: CircularProgressIndicator(
+            backgroundColor: AppColors.lightBackground,
+          ));
+        }
+        if (state is TrainersLoaded) {
+          _filteredTrainers = state.trainers;
+        }
+        if (state is TrainersLoadFailure) {
+          return Center(
+            child: Text(
+              state.message,
+              style: TextStyle(color: Colors.red),
+            ),
+          );
+        }
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => context.push(AppRoutes.addTrainer),
+            // backgroundColor: brightness == Brightness.dark
+            //     ? colorForButton
+            //     : Colors.white,
+            backgroundColor: Colors.white,
+            child: Icon(
+              Icons.add,
+              // color: brightness == Brightness.dark
+              //     ? Colors.white
+              //     : Colors.blue,
+              color: Colors.blue,
+            ),
+          ),
+          backgroundColor: AppColors.lightBackground,
+          body: GestureDetector(
+            onScaleUpdate: (details) {
+              if (details.scale < 1) {
+                // Уменьшение (переход в компактный режим)
+                if (!_isCompactMode) {
+                  _toggleViewMode();
+                }
+              } else if (details.scale > 1) {
+                // Увеличение (переход в полный экран)
+                if (_isCompactMode) {
+                  _toggleViewMode();
+                }
+              }
+            },
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child:
+                  _isCompactMode ? _buildCompactView() : _buildFullScreenView(),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -79,7 +102,7 @@ class HomeScreenState extends State<HomeScreen> {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
-          backgroundColor: AppColors.lightBackground,
+            backgroundColor: AppColors.lightBackground,
             centerTitle: true,
             pinned: true,
             expandedHeight: 25.0.h,

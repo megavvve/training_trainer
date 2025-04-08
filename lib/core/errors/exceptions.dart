@@ -16,8 +16,13 @@ class LoadTrainersException extends AppException {
 class DeleteTrainerException extends AppException {
   DeleteTrainerException(super.message);
 }
-class AIGenerationException extends AppException {
-  AIGenerationException(super.message);
+
+class AIGenerationException implements Exception {
+  final String message;
+  AIGenerationException(this.message);
+
+  @override
+  String toString() => 'AIGenerationException: $message';
 }
 
 String handleFirebaseError(FirebaseException e) {

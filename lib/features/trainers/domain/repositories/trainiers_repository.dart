@@ -4,13 +4,12 @@ abstract class TrainersRepository {
   /// Получить поток всех тренажеров
   Future<List<Trainer>> getTrainers();
 
-  
-
   /// Получить конкретный тренажер по ID
   Future<Trainer?> getTrainerById(String id);
 
   /// Добавить новый тренажер
   Future<void> addTrainer(Trainer exercise);
+
   /// Добавить новые тренажеры
   Future<void> addTrainers(List<Trainer> exercise);
 

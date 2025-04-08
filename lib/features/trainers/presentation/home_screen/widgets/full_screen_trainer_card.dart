@@ -37,12 +37,16 @@ class FullScreenTrainerCard extends StatelessWidget {
               height: 200.h,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(16.sp),
+                borderRadius: BorderRadius.circular(
+                  16.sp,
+                ),
               ),
               child: Center(
                 child: Text(
                   '${trainer.questions.length} вопросов',
-                  style: TextStyle(fontSize: 24.sp),
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                  ),
                 ),
               ),
             ),
@@ -75,7 +79,10 @@ class FullScreenTrainerCard extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 16.h),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 40.w,
+                  vertical: 16.h,
+                ),
               ),
               onPressed: () {},
               child: Text(

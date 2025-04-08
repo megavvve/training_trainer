@@ -2,7 +2,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:talker/talker.dart';
 import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/core/errors/exceptions.dart';
-import 'package:training_trainer/core/services/ai/ai_generator_inteface.dart';
+import 'package:training_trainer/core/services/ai/ai_generator_interface.dart';
 
 class GeminiGenerator implements AIGenerator {
   final String apiKey;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class TextPatternScreen extends StatelessWidget {
-  const TextPatternScreen({super.key});
+class TextPatternWidget extends StatelessWidget {
+  const TextPatternWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class TextPatternScreen extends StatelessWidget {
         style: TextStyle(
          height: 2.5.h,
           fontSize: 16.sp,
-          color: Colors.blue,
+          color: Colors.blue.withOpacity(0.5),
           fontFamily: 'RobotoMono',
           fontWeight: FontWeight.w500,
           letterSpacing: 15.sp,
@@ -48,16 +48,5 @@ class TextPatternScreen extends StatelessWidget {
     );
   }
 
-  // Color _getColorForIndex(int index) {
-  //   final colors = [
-  //     Colors.red,
-  //     Colors.orange,
-  //     Colors.yellow,
-  //     Colors.green,
-  //     Colors.blue,
-  //     Colors.indigo,
-  //     Colors.purple,
-  //   ];
-  //   return colors[index % colors.length];
-  // }
+
 }

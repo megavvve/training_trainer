@@ -18,4 +18,16 @@ class Question {
       factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
 
   Map<String, dynamic> toJson() => _$QuestionToJson(this);
+  Question copyWith({
+    String? id,
+    String? textQuestion,
+    String? rightAnswer,
+    List<String>? answers,
+  }) {
+    return Question(
+      id: id ?? this.id,
+      textQuestion: textQuestion ?? this.textQuestion,
+      rightAnswer: rightAnswer ?? this.rightAnswer,
+      answers: answers ?? this.answers,
+    );}
 }

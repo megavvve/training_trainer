@@ -15,12 +15,15 @@ part 'trainers_state.dart';
 
 class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
   final TrainersRepository repository;
-  List<Trainer> _currentTrainers = [];
+  List<Trainer> trainers = [];
+  List<Trainer> filteredTrainers = []; // New list for filtered trainers
 
   TrainersBloc({required this.repository}) : super(TrainersInitial()) {
-    on<LoadTrainers>(_onLoadTrainers);
     on<DeleteTrainer>(_onDeleteTrainer);
     on<AddTrainer>(_onAddTrainer);
+    on<LoadTrainers>(_onLoadTrainers);
+    on<SearchTrainers>(_onSearchTrainers);
+    on<SortTrainers>(_onSortTrainers);
   }
 
   FutureOr<void> _onLoadTrainers(
@@ -29,14 +32,12 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
   ) async {
     emit(TrainersLoading());
     try {
-      _currentTrainers = await repository.getTrainers();
-      emit(TrainersLoaded(_currentTrainers));
-    } on LoadTrainersException catch (e) {
-      getIt<Talker>().error(e);
-      emit(TrainersLoadFailure(e.message));
+      trainers = await repository.getTrainers();
+      filteredTrainers = List.from(trainers); // Initialize filtered list with all trainers
+      emit(TrainersLoadSuccess(filteredTrainers));
     } catch (e) {
       getIt<Talker>().error(e);
-      emit(TrainersLoadFailure('Неизвестная ошибка'));
+      emit(TrainersLoadFailure(e.toString()));
     }
   }
 
@@ -58,8 +59,9 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
         createdAt: DateTime.now(),
       );
       await repository.addTrainer(newTrainer);
-      _currentTrainers = List.from(_currentTrainers)..add(newTrainer);
-      emit(TrainersLoaded(_currentTrainers));
+      trainers = List.from(trainers)..add(newTrainer);
+      filteredTrainers = List.from(trainers); // Update filtered list as well
+      emit(TrainersLoadSuccess(filteredTrainers));
     } on AddTrainerException catch (e) {
       getIt<Talker>().error(e);
       emit(TrainersLoadFailure(e.message));
@@ -76,9 +78,9 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
     emit(TrainersLoading());
     try {
       await repository.deleteTrainer(event.trainer.id);
-      _currentTrainers = List.from(_currentTrainers)
-        ..removeWhere((t) => t.id == event.trainer.id);
-      emit(TrainersLoaded(_currentTrainers));
+      trainers = List.from(trainers)..removeWhere((t) => t.id == event.trainer.id);
+      filteredTrainers = List.from(trainers); // Ensure filtered list is updated
+      emit(TrainersLoadSuccess(filteredTrainers));
     } on DeleteTrainerException catch (e) {
       getIt<Talker>().error(e);
       emit(TrainersLoadFailure(e.message));
@@ -86,5 +88,45 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
       getIt<Talker>().error(e);
       emit(TrainersLoadFailure('Ошибка удаления тренажера'));
     }
+  }
+
+  FutureOr<void> _onSearchTrainers(
+    SearchTrainers event,
+    Emitter<TrainersState> emit,
+  ) async {
+    if (event.query.isEmpty) {
+      filteredTrainers = List.from(trainers); 
+      emit(TrainersLoadSuccess(filteredTrainers));
+    } else {
+      final query = event.query.toLowerCase();
+
+      filteredTrainers = trainers.where((trainer) {
+        return trainer.title.toLowerCase().contains(query) ||
+            trainer.keywords.any(
+              (keyword) => keyword.toLowerCase().contains(query),
+            );
+      }).toList();
+
+      emit(TrainersLoadSuccess(filteredTrainers)); 
+    }
+  }
+   FutureOr<void> _onSortTrainers(
+    SortTrainers event,
+    Emitter<TrainersState> emit,
+  ) {
+    switch (event.sortBy) {
+      case 'title':
+        filteredTrainers.sort((a, b) => a.title.compareTo(b.title));
+        break;
+      case 'createdAt':
+        filteredTrainers.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+        break;
+      case 'questions':
+        filteredTrainers.sort((a, b) => a.questions.length.compareTo(b.questions.length));
+        break;
+      default:
+        break;
+    }
+    emit(TrainersLoadSuccess(filteredTrainers));
   }
 }

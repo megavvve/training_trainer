@@ -158,5 +158,28 @@ class Trainer {
     ],
   ),
 ];
+Trainer copyWith({
+    String? id,
+    String? userId,
+    double? starCount,
+    int? timeRequiredInSeconds,
+    String? title,
+    List<Question>? questions,
+    List<String>? keywords,
+    String? description,
+    DateTime? createdAt,
+  }) {
+    return Trainer(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      starCount: starCount ?? this.starCount,
+      timeRequiredInSeconds: timeRequiredInSeconds ?? this.timeRequiredInSeconds,
+      title: title ?? this.title,
+      questions: questions ?? this.questions,
+      keywords: keywords ?? this.keywords,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
   }
   

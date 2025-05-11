@@ -4,11 +4,12 @@ import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/core/services/ai/ai_generator_interface.dart';
 import 'package:training_trainer/features/trainers/domain/entities/question.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:training_trainer/features/trainers/presentation/add_trainer_screen/widgets/general_info_form.dart';
-import 'package:training_trainer/features/trainers/presentation/add_trainer_screen/widgets/keywords_form.dart';
-import 'package:training_trainer/features/trainers/presentation/add_trainer_screen/widgets/preview_form.dart';
-import 'package:training_trainer/features/trainers/presentation/add_trainer_screen/widgets/question_form.dart';
-import 'package:training_trainer/features/trainers/presentation/providers/bloc/trainers_bloc.dart';
+import 'package:training_trainer/features/trainers/presentation/screens/add_trainer_screen/widgets/general_info_form.dart';
+import 'package:training_trainer/features/trainers/presentation/screens/add_trainer_screen/widgets/keywords_form.dart';
+import 'package:training_trainer/features/trainers/presentation/screens/add_trainer_screen/widgets/preview_form.dart';
+import 'package:training_trainer/features/trainers/presentation/screens/add_trainer_screen/widgets/question_form.dart';
+import 'package:training_trainer/features/trainers/presentation/providers/trainers_bloc/trainers_bloc.dart';
+import 'package:training_trainer/uikit/appbars/custom_app_bar.dart';
 
 class AddTrainerScreen extends StatefulWidget {
   const AddTrainerScreen({super.key});
@@ -44,74 +45,65 @@ class AddTrainerScreenState extends State<AddTrainerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Создание тренажера'),
-      ),
-      body: BlocListener<TrainersBloc, TrainersState>(
-        listener: (context, state) {
-          if (state is TrainersLoaded) {
-            Navigator.pop(context, state.trainers);
-          }
-        },
-        child: Stepper(
-          currentStep: _currentStep,
-          onStepContinue: _continue,
-          onStepCancel: _cancel,
-          controlsBuilder: _controlsBuilder,
-          steps: [
-            Step(
-              title: const Text('Основная информация'),
-              content: GeneralInfoForm(
-                titleController: _titleController,
-                descriptionController: _descriptionController,
-                timeController: _timeController,
-                formKey: _formKey,
-              ),
+      appBar: CustomAppBar(title: "Создание тренажера",useBackButton:true),
+      body: Stepper(
+        currentStep: _currentStep,
+        onStepContinue: _continue,
+        onStepCancel: _cancel,
+        controlsBuilder: _controlsBuilder,
+        steps: [
+          Step(
+            title: const Text('Основная информация'),
+            content: GeneralInfoForm(
+              titleController: _titleController,
+              descriptionController: _descriptionController,
+              timeController: _timeController,
+              formKey: _formKey,
             ),
-            Step(
-              title: const Text('Добавление вопросов',),
-              content: QuestionsForm(
-                questionController: _questionController,
-                answerController: _answerController,
-                addQuestion: _addQuestion,
-                questions: questions,
-                removeQuestion: (String id) => setState(
-                  () => questions.removeWhere(
-                    (q) => q.id == id,
-                  ),
+          ),
+          Step(
+            title: const Text('Добавление вопросов',),
+            content: QuestionsForm(
+              questionController: _questionController,
+              answerController: _answerController,
+              addQuestion: _addQuestion,
+              questions: questions,
+              removeQuestion: (String id) => setState(
+                () => questions.removeWhere(
+                  (q) => q.id == id,
                 ),
               ),
             ),
-            Step(
-              title: const Text('Ключевые слова'),
-              content: KeywordsForm(
-                  keywordsController: keywordsController,
-                  keywords: keywords,
-                  removeKeyword: (String keyword) => setState(
-                        () => keywords.remove(
-                          keyword,
-                        ),
-                      ),
-                  addKeyword: (String keyword) {
-                    if (keyword.isNotEmpty && !keywords.contains(keyword)) {
-                      setState(() {
-                        keywords.add(keyword);
-                      });
-                    }
-                  }),
-            ),
-            Step(
-              title: const Text('Просмотр'),
-              content: PreviewForm(
-                title: _titleController.text,
-                description: _descriptionController.text,
-                time: _timeController.text,
+          ),
+          Step(
+            title: const Text('Ключевые слова'),
+            content: KeywordsForm(
+                keywordsController: keywordsController,
                 keywords: keywords,
-                questions: questions,
-              ),
+                removeKeyword: (String keyword) => setState(
+                      () => keywords.remove(
+                        keyword,
+                      ),
+                    ),
+                addKeyword: (String keyword) {
+                  if (keyword.isNotEmpty && !keywords.contains(keyword)) {
+                    setState(() {
+                      keywords.add(keyword);
+                    });
+                  }
+                }),
+          ),
+          Step(
+            title: const Text('Просмотр'),
+            content: PreviewForm(
+              title: _titleController.text,
+              description: _descriptionController.text,
+              time: _timeController.text,
+              keywords: keywords,
+              questions: questions,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

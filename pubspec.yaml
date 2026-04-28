@@ -33,6 +33,7 @@ dependencies:
   hive_ce_flutter: ^2.3.0
   google_fonts: ^6.2.1
   bloc: ^9.0.0
+  mcp_toolkit: ^0.4.0
 
 dependency_overrides:
   freezed_annotation: 3.0.0

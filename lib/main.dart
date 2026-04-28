@@ -7,7 +7,9 @@ import 'package:training_trainer/core/app/app.dart';
 import 'package:training_trainer/core/di/injection_container.dart';
 
 Future<void> main() async {
+  
   WidgetsFlutterBinding.ensureInitialized();
+  await MCPToolkitBinding.instance.initialize();
   await Firebase.initializeApp();
   await Hive.initFlutter();
 

@@ -1,16 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:talker/talker.dart';
-import 'package:training_trainer/core/config/ai_config.dart';
+import 'package:training_trainer/core/network/rest_client.dart';
 import 'package:training_trainer/core/services/ai/ai_generator_interface.dart';
-import 'package:training_trainer/core/services/ai/generator_factory.dart';
-import 'package:training_trainer/features/auth/data/repositories/auth_repo_impl.dart';
+import 'package:training_trainer/core/services/ai/ai_implimentation/rest_ai_generator.dart';
+import 'package:training_trainer/features/auth/data/repositories/rest_auth_repository_impl.dart';
 import 'package:training_trainer/features/auth/domain/repositories/auth_repository.dart';
 import 'package:training_trainer/features/auth/domain/usecases/sign_out.dart';
-import 'package:training_trainer/features/trainers/data/repositories/firebase_repository_impl.dart';
+import 'package:training_trainer/features/trainers/data/repositories/rest_trainers_repository_impl.dart';
 import 'package:training_trainer/features/trainers/domain/repositories/trainiers_repository.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,30 +16,30 @@ final getIt = GetIt.instance;
 
 Future<void> setupDependencies() async {
   // Services
-  getIt.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
-  getIt.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
   getIt.registerSingleton<Talker>(Talker());
   getIt.registerSingleton<Uuid>(Uuid());
 
   final box = await Hive.openBox<dynamic>('settings');
   getIt.registerSingleton<Box<dynamic>>(box);
 
-  // getIt.registerSingleton<AIConfig>(
-  //   GeminiConfig('AIzaSyBzvbe7Sm6rbLReiyvzo1H4eUX8O2rd5eA'),
-  // );
-  getIt.registerSingleton<AIConfig>(
-    MistralConfig('OuVkcvXtRU1iAcH7pUW9rDPaPNOikKYU'),
+  // REST Client with backend URL from environment
+  // Default to 10.0.2.2 for Android device testing (localhost doesn't work on physical devices)
+  const backendUrl = String.fromEnvironment(
+    'BACKEND_URL',
+    defaultValue: 'http://192.168.31.170:8000',
   );
-  getIt.registerSingleton<AIGenerator>(
-    AIGeneratorFactory.create(getIt<AIConfig>()),
+  getIt.registerSingleton<RestClient>(
+    RestClient(baseUrl: backendUrl),
   );
 
-  // Repositories
+ 
+
+  // Repositories (now using REST API instead of Firebase)
   getIt.registerSingleton<AuthRepository>(
-    FirebaseAuthRepositoryImpl(getIt<FirebaseAuth>()),
+    RestAuthRepositoryImpl(getIt<RestClient>()),
   );
   getIt.registerSingleton<TrainersRepository>(
-    FirebaseTrainersRepository(getIt<FirebaseFirestore>()),
+    RestTrainersRepositoryImpl(getIt<RestClient>()),
   );
 
   // Registering ThemeRepositoryInterface (если раскомментировать)

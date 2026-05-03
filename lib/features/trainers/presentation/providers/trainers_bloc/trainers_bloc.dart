@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import 'package:talker/talker.dart';
 import 'package:training_trainer/core/di/injection_container.dart';
@@ -49,7 +48,7 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
     try {
       final newTrainer = Trainer(
         id: getIt<Uuid>().v4(),
-        userId: getIt<FirebaseAuth>().currentUser!.uid,
+        userId: event.userId,
         starCount: 0,
         timeRequiredInSeconds: int.parse(event.timeRequiredInSeconds) * 60,
         title: event.title,

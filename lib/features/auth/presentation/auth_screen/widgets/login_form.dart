@@ -57,6 +57,7 @@ class LoginForm extends StatelessWidget {
             ),
           ),
           child: TextField(
+            key: const ValueKey('loginInput'),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             maxLines: 1,

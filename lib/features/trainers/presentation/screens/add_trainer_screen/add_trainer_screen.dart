@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/core/services/ai/ai_generator_interface.dart';
+import 'package:training_trainer/features/auth/presentation/providers/auth_providers.dart';
 import 'package:training_trainer/features/trainers/domain/entities/question.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_trainer/features/trainers/presentation/screens/add_trainer_screen/widgets/general_info_form.dart';
@@ -11,14 +13,14 @@ import 'package:training_trainer/features/trainers/presentation/screens/add_trai
 import 'package:training_trainer/features/trainers/presentation/providers/trainers_bloc/trainers_bloc.dart';
 import 'package:training_trainer/uikit/appbars/custom_app_bar.dart';
 
-class AddTrainerScreen extends StatefulWidget {
+class AddTrainerScreen extends ConsumerStatefulWidget {
   const AddTrainerScreen({super.key});
 
   @override
-  AddTrainerScreenState createState() => AddTrainerScreenState();
+  ConsumerState<AddTrainerScreen> createState() => AddTrainerScreenState();
 }
 
-class AddTrainerScreenState extends State<AddTrainerScreen> {
+class AddTrainerScreenState extends ConsumerState<AddTrainerScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -45,7 +47,7 @@ class AddTrainerScreenState extends State<AddTrainerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Создание тренажера",useBackButton:true),
+      appBar: CustomAppBar(title: "Создание тренажера", useBackButton: true),
       body: Stepper(
         currentStep: _currentStep,
         onStepContinue: _continue,
@@ -62,36 +64,31 @@ class AddTrainerScreenState extends State<AddTrainerScreen> {
             ),
           ),
           Step(
-            title: const Text('Добавление вопросов',),
+            title: const Text('Добавление вопросов'),
             content: QuestionsForm(
               questionController: _questionController,
               answerController: _answerController,
               addQuestion: _addQuestion,
               questions: questions,
-              removeQuestion: (String id) => setState(
-                () => questions.removeWhere(
-                  (q) => q.id == id,
-                ),
-              ),
+              removeQuestion: (String id) =>
+                  setState(() => questions.removeWhere((q) => q.id == id)),
             ),
           ),
           Step(
             title: const Text('Ключевые слова'),
             content: KeywordsForm(
-                keywordsController: keywordsController,
-                keywords: keywords,
-                removeKeyword: (String keyword) => setState(
-                      () => keywords.remove(
-                        keyword,
-                      ),
-                    ),
-                addKeyword: (String keyword) {
-                  if (keyword.isNotEmpty && !keywords.contains(keyword)) {
-                    setState(() {
-                      keywords.add(keyword);
-                    });
-                  }
-                }),
+              keywordsController: keywordsController,
+              keywords: keywords,
+              removeKeyword: (String keyword) =>
+                  setState(() => keywords.remove(keyword)),
+              addKeyword: (String keyword) {
+                if (keyword.isNotEmpty && !keywords.contains(keyword)) {
+                  setState(() {
+                    keywords.add(keyword);
+                  });
+                }
+              },
+            ),
           ),
           Step(
             title: const Text('Просмотр'),
@@ -130,14 +127,26 @@ class AddTrainerScreenState extends State<AddTrainerScreen> {
 
   void _continue() {
     if (_currentStep == 3) {
-      context.read<TrainersBloc>().add(AddTrainer(
-            timeRequiredInSeconds: _timeController.text,
-            title: _titleController.text,
-            questions: questions,
-            keywords: keywords,
-            description: _descriptionController.text,
-          ));
-      Navigator.pop(context);
+      final authState = ref.read(authStateProvider);
+      authState.whenData((user) {
+        if (user != null) {
+          context.read<TrainersBloc>().add(
+            AddTrainer(
+              userId: user.uid,
+              timeRequiredInSeconds: _timeController.text,
+              title: _titleController.text,
+              questions: questions,
+              keywords: keywords,
+              description: _descriptionController.text,
+            ),
+          );
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Пользователь не аутентифицирован')),
+          );
+        }
+      });
     } else {
       setState(() => _currentStep += 1);
     }
@@ -153,15 +162,18 @@ class AddTrainerScreenState extends State<AddTrainerScreen> {
     if (_questionController.text.isNotEmpty &&
         _answerController.text.isNotEmpty) {
       final List<String> list = await getIt<AIGenerator>().generateWrongAnswers(
-          question: _questionController.text,
-          correctAnswer: _answerController.text);
+        question: _questionController.text,
+        correctAnswer: _answerController.text,
+      );
       setState(() {
-        questions.add(Question(
-          id: questions.hashCode.toString(),
-          textQuestion: _questionController.text,
-          rightAnswer: _answerController.text,
-          answers: list,
-        ));
+        questions.add(
+          Question(
+            id: questions.hashCode.toString(),
+            textQuestion: _questionController.text,
+            rightAnswer: _answerController.text,
+            answers: list,
+          ),
+        );
         _questionController.clear();
         _answerController.clear();
       });

@@ -56,6 +56,7 @@ class EmailForm extends StatelessWidget {
             ),
           ),
           child: TextField(
+            key: const ValueKey('emailInput'),
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.done,
             maxLines: 1,

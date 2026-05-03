@@ -1,5 +1,4 @@
 // features/auth/domain/models/app_user.dart
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AppUser {
   final String uid;
@@ -12,9 +11,6 @@ class AppUser {
     required this.login,
   });
 
-  factory AppUser.fromFirebase(User user) => AppUser(
-        uid: user.uid,
-        email: user.email ?? '',
-        login: user.displayName ?? '',
-      );
+  @override
+  String toString() => 'AppUser(uid: $uid, email: $email, login: $login)';
 }

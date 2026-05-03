@@ -11,6 +11,7 @@ final class DeleteTrainer extends TrainersEvent {
 class LoadTrainers extends TrainersEvent {}
 
 final class AddTrainer extends TrainersEvent {
+  final String userId;
   final String timeRequiredInSeconds;
   final String title;
   final List<Question> questions;
@@ -18,6 +19,7 @@ final class AddTrainer extends TrainersEvent {
   final String description;
 
   AddTrainer({
+    required this.userId,
     required this.timeRequiredInSeconds,
     required this.title,
     required this.questions,

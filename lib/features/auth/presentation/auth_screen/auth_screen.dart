@@ -9,6 +9,7 @@ import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/
 import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/login_form.dart';
 import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/password_form.dart';
 import 'package:training_trainer/features/auth/presentation/providers/auth_providers.dart';
+import 'package:training_trainer/routing/app_routes.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -70,7 +71,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             );
       }
       if (!mounted) return;
-      context.go('/home');
+      context.go(AppRoutes.trainers);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
@@ -118,6 +119,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           ),
           SliverToBoxAdapter(
               child: MaterialButton(
+            key: const ValueKey('submitButton'),
             onPressed: _submit,
             child: Container(
               alignment: Alignment.center,

@@ -63,6 +63,7 @@ class PasswordFormState extends State<PasswordForm> {
             ),
           ),
           child: TextField(
+            key: const ValueKey('passwordInput'),
             controller: widget.controller,
             obscureText: !_isPasswordVisible,
             keyboardType: TextInputType.visiblePassword,

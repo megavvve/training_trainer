@@ -10,7 +10,7 @@ abstract class TrainersRepository {
   Future<Trainer?> getTrainerById(String id);
 
   /// Добавить новый тренажер
-  Future<void> addTrainer(Trainer exercise);
+  Future<Trainer> addTrainer(Trainer exercise);
 
   /// Добавить новые тренажеры
   Future<void> addTrainers(List<Trainer> exercise);

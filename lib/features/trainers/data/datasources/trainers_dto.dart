@@ -1,4 +1,7 @@
 /// DTO for Trainer from REST API
+import 'package:training_trainer/features/trainers/domain/entities/question.dart';
+import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
+
 class TrainerDTO {
   final String id;
   final String userId;
@@ -7,7 +10,8 @@ class TrainerDTO {
   final List<QuestionDTO> questions;
   final List<String> keywords;
   final int timeRequiredInSeconds;
-  final int starCount;
+  final double starCount;
+  final DateTime createdAt;
 
   TrainerDTO({
     required this.id,
@@ -18,6 +22,7 @@ class TrainerDTO {
     required this.keywords,
     required this.timeRequiredInSeconds,
     required this.starCount,
+    required this.createdAt,
   });
 
   factory TrainerDTO.fromJson(Map<String, dynamic> json) {
@@ -33,64 +38,92 @@ class TrainerDTO {
       return keywords.map((k) => k.toString()).toList();
     }
 
+    // Mapping aliases from backend
     return TrainerDTO(
       id: json['id'] as String? ?? '',
-      userId: json['user_id'] as String? ?? '',
+      userId: json['userId'] as String? ?? json['user_id'] as String? ?? '',
       title: json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
       questions: parseQuestions(json['questions'] as List<dynamic>?),
       keywords: parseKeywords(json['keywords'] as List<dynamic>?),
-      timeRequiredInSeconds: json['time_required_in_seconds'] as int? ?? 0,
-      starCount: json['star_count'] as int? ?? 0,
+      timeRequiredInSeconds: json['timeRequiredInSeconds'] as int? ?? json['time_required_in_seconds'] as int? ?? 0,
+      starCount: (json['starCount'] ?? json['star_count'] ?? 0).toDouble(),
+      createdAt: json['createdAt'] != null 
+          ? DateTime.parse(json['createdAt']) 
+          : (json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now()),
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'user_id': userId,
+    'userId': userId,
     'title': title,
     'description': description,
     'questions': questions.map((q) => q.toJson()).toList(),
     'keywords': keywords,
-    'time_required_in_seconds': timeRequiredInSeconds,
-    'star_count': starCount,
+    'timeRequiredInSeconds': timeRequiredInSeconds,
+    'starCount': starCount,
+    'createdAt': createdAt.toIso8601String(),
   };
+  
+  Trainer toEntity() {
+    return Trainer(
+      id: id,
+      userId: userId,
+      title: title,
+      description: description,
+      questions: questions.map((q) => q.toEntity()).toList(),
+      keywords: keywords,
+      timeRequiredInSeconds: timeRequiredInSeconds,
+      starCount: starCount,
+      createdAt: createdAt,
+    );
+  }
 }
 
 /// DTO for Question from REST API
 class QuestionDTO {
   final String id;
-  final String question;
-  final String correctAnswer;
-  final List<String> distractors;
+  final String textQuestion;
+  final String rightAnswer;
+  final List<String> answers;
 
   QuestionDTO({
     required this.id,
-    required this.question,
-    required this.correctAnswer,
-    required this.distractors,
+    required this.textQuestion,
+    required this.rightAnswer,
+    required this.answers,
   });
 
   factory QuestionDTO.fromJson(Map<String, dynamic> json) {
-    List<String> parseDistractors(List<dynamic>? distractors) {
-      if (distractors == null) return [];
-      return distractors.map((d) => d.toString()).toList();
+    List<String> parseAnswers(List<dynamic>? answers) {
+      if (answers == null) return [];
+      return answers.map((a) => a.toString()).toList();
     }
 
     return QuestionDTO(
       id: json['id'] as String? ?? '',
-      question: json['question'] as String? ?? '',
-      correctAnswer: json['correct_answer'] as String? ?? '',
-      distractors: parseDistractors(json['distractors'] as List<dynamic>?),
+      textQuestion: json['textQuestion'] as String? ?? json['question'] as String? ?? '',
+      rightAnswer: json['rightAnswer'] as String? ?? json['correct_answer'] as String? ?? '',
+      answers: parseAnswers(json['answers'] as List<dynamic>?),
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'question': question,
-    'correct_answer': correctAnswer,
-    'distractors': distractors,
+    'textQuestion': textQuestion,
+    'rightAnswer': rightAnswer,
+    'answers': answers,
   };
+  
+  Question toEntity() {
+    return Question(
+      id: id,
+      textQuestion: textQuestion,
+      rightAnswer: rightAnswer,
+      answers: answers,
+    );
+  }
 }
 
 /// DTO for creating trainer request
@@ -114,7 +147,7 @@ class CreateTrainerRequestDTO {
     'description': description,
     'questions': questions.map((q) => q.toJson()).toList(),
     'keywords': keywords,
-    'time_required_in_seconds': timeRequiredInSeconds,
+    'timeRequiredInSeconds': timeRequiredInSeconds,
   };
 }
 
@@ -125,6 +158,7 @@ class UpdateTrainerRequestDTO {
   final List<QuestionDTO> questions;
   final List<String> keywords;
   final int timeRequiredInSeconds;
+  final double starCount;
 
   UpdateTrainerRequestDTO({
     required this.title,
@@ -132,6 +166,7 @@ class UpdateTrainerRequestDTO {
     required this.questions,
     required this.keywords,
     required this.timeRequiredInSeconds,
+    this.starCount = 0,
   });
 
   Map<String, dynamic> toJson() => {
@@ -139,6 +174,7 @@ class UpdateTrainerRequestDTO {
     'description': description,
     'questions': questions.map((q) => q.toJson()).toList(),
     'keywords': keywords,
-    'time_required_in_seconds': timeRequiredInSeconds,
+    'timeRequiredInSeconds': timeRequiredInSeconds,
+    'starCount': starCount,
   };
 }

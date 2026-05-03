@@ -4,9 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/core/config/theme/cubit/theme_cubit.dart';
-import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
-import 'package:training_trainer/features/trainers/domain/repositories/trainiers_repository.dart';
 import 'package:training_trainer/features/trainers/presentation/providers/trainers_bloc/trainers_bloc.dart';
 import 'package:training_trainer/features/trainers/presentation/screens/trainer_screen/widget/trainer_card.dart';
 import 'package:training_trainer/routing/app_routes.dart';
@@ -33,61 +31,55 @@ class _TrainerScreenState extends State<TrainerScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BlocProvider<TrainersBloc>(
-      create: (context) => TrainersBloc(repository: getIt<TrainersRepository>())
-        ..add(LoadTrainers()),
-      child: BlocBuilder<TrainersBloc, TrainersState>(
-        builder: (context, state) {
-          if (state is TrainersLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is TrainersLoadSuccess) {
-            final brightness = context.watch<ThemeCubit>().state.brightness;
-            List<Trainer> trainerList = 
-                state.trainers.where((element) => element.questions.isNotEmpty).toList();
+    return BlocBuilder<TrainersBloc, TrainersState>(
+      builder: (context, state) {
+        if (state is TrainersLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is TrainersLoadSuccess) {
+          final brightness = context.watch<ThemeCubit>().state.brightness;
+          List<Trainer> trainerList =
+              state.trainers
+                  .where((element) => element.questions.isNotEmpty)
+                  .toList();
 
-            return Scaffold(
-              body: CustomScrollView(
-                slivers: <Widget>[
-                  SliverAppBar(
-                    title: BigAppBar(title: 'Главная',),
-                    
-                    pinned: true,
-                    snap: false,
-                    floating: true,
-                    surfaceTintColor: Colors.transparent,
-                   
-                   
+          return Scaffold(
+            body: CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar(
+                  title: BigAppBar(title: 'Главная'),
+
+                  pinned: true,
+                  snap: false,
+                  floating: true,
+                  surfaceTintColor: Colors.transparent,
+                ),
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      _buildSearchField(brightness, theme, context),
+
+                      _buildSortingRow(brightness, theme, context),
+                    ],
                   ),
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                       
-                    _buildSearchField(brightness, theme,context),
-                
-                _buildSortingRow(brightness, theme, context),
-                 
-                      ],
-                    ),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) =>
+                        TrainerCard(trainer: trainerList[index]),
+                    childCount: trainerList.length,
                   ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) =>
-                          TrainerCard(trainer: trainerList[index]),
-                      childCount: trainerList.length,
-                    ),
-                  ),
-                  SliverToBoxAdapter(child: SizedBox(height:30.h),),
-                ],
-              ),
-              
-              floatingActionButton: _buildFAB(brightness),
-            );
-          } else if (state is TrainersLoadFailure) {
-            return Center(child: Text(state.error));
-          }
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
+                ),
+                SliverToBoxAdapter(child: SizedBox(height: 30.h)),
+              ],
+            ),
+
+            floatingActionButton: _buildFAB(brightness),
+          );
+        } else if (state is TrainersLoadFailure) {
+          return Center(child: Text(state.error));
+        }
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 

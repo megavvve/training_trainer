@@ -35,7 +35,7 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
       filteredTrainers = List.from(trainers); // Initialize filtered list with all trainers
       emit(TrainersLoadSuccess(filteredTrainers));
     } catch (e) {
-      getIt<Talker>().error(e);
+      getIt<Talker>().error('LoadTrainers Error: $e');
       emit(TrainersLoadFailure(e.toString()));
     }
   }
@@ -44,9 +44,10 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
     AddTrainer event,
     Emitter<TrainersState> emit,
   ) async {
+    getIt<Talker>().info('TrainersBloc: _onAddTrainer triggered for ${event.title}');
     emit(TrainersLoading());
     try {
-      final newTrainer = Trainer(
+      final newTrainerTemplate = Trainer(
         id: getIt<Uuid>().v4(),
         userId: event.userId,
         starCount: 0,
@@ -57,16 +58,19 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
         description: event.description,
         createdAt: DateTime.now(),
       );
-      await repository.addTrainer(newTrainer);
-      trainers = List.from(trainers)..add(newTrainer);
-      filteredTrainers = List.from(trainers); // Update filtered list as well
+      
+      final savedTrainer = await repository.addTrainer(newTrainerTemplate);
+      getIt<Talker>().info('TrainersBloc: Trainer saved successfully with ID: ${savedTrainer.id}');
+      
+      trainers = List.from(trainers)..add(savedTrainer);
+      filteredTrainers = List.from(trainers); 
       emit(TrainersLoadSuccess(filteredTrainers));
     } on AddTrainerException catch (e) {
-      getIt<Talker>().error(e);
+      getIt<Talker>().error('AddTrainer Error: ${e.message}');
       emit(TrainersLoadFailure(e.message));
     } catch (e) {
-      getIt<Talker>().error(e);
-      emit(TrainersLoadFailure('Ошибка добавления тренажера'));
+      getIt<Talker>().error('AddTrainer Unexpected Error: $e');
+      emit(TrainersLoadFailure('Ошибка добавления тренажера: $e'));
     }
   }
 
@@ -78,13 +82,13 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
     try {
       await repository.deleteTrainer(event.trainer.id);
       trainers = List.from(trainers)..removeWhere((t) => t.id == event.trainer.id);
-      filteredTrainers = List.from(trainers); // Ensure filtered list is updated
+      filteredTrainers = List.from(trainers); 
       emit(TrainersLoadSuccess(filteredTrainers));
     } on DeleteTrainerException catch (e) {
-      getIt<Talker>().error(e);
+      getIt<Talker>().error('DeleteTrainer Error: ${e.message}');
       emit(TrainersLoadFailure(e.message));
     } catch (e) {
-      getIt<Talker>().error(e);
+      getIt<Talker>().error('DeleteTrainer Unexpected Error: $e');
       emit(TrainersLoadFailure('Ошибка удаления тренажера'));
     }
   }
@@ -109,7 +113,8 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
       emit(TrainersLoadSuccess(filteredTrainers)); 
     }
   }
-   FutureOr<void> _onSortTrainers(
+
+  FutureOr<void> _onSortTrainers(
     SortTrainers event,
     Emitter<TrainersState> emit,
   ) {

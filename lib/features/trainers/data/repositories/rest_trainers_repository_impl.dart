@@ -1,43 +1,44 @@
-import 'package:training_trainer/core/network/rest_client.dart';
+import 'package:training_trainer/core/network/api_client.dart';
 import 'package:training_trainer/features/trainers/data/datasources/trainers_dto.dart';
-import 'package:training_trainer/features/trainers/domain/entities/question.dart';
 import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
 import 'package:training_trainer/features/trainers/domain/repositories/trainiers_repository.dart';
+import 'package:dio/dio.dart';
 
-/// REST API implementation of TrainersRepository
+/// REST API implementation of TrainersRepository using Modern ApiClient
 class RestTrainersRepositoryImpl implements TrainersRepository {
-  final RestClient _restClient;
+  final ApiClient _apiClient;
 
-  RestTrainersRepositoryImpl(this._restClient);
+  RestTrainersRepositoryImpl(this._apiClient);
 
   @override
   Future<List<Trainer>> getTrainers() async {
     try {
-      final response = await _restClient.get('/api/v1/trainers');
-      final trainers = (response as List?)
+      final response = await _apiClient.get('/api/v1/trainers');
+      final trainers = (response.data as List?)
           ?.map((item) => TrainerDTO.fromJson(item as Map<String, dynamic>))
           .toList();
-      return trainers?.map((dto) => _trainerDtoToEntity(dto)).toList() ?? [];
-    } on RestClientException catch (e) {
-      throw Exception('Failed to fetch trainers: ${e.message}');
+      return trainers?.map((dto) => dto.toEntity()).toList() ?? [];
+    } catch (e) {
+      throw Exception('Failed to fetch trainers: $e');
     }
   }
 
   @override
   Future<Trainer?> getTrainerById(String id) async {
     try {
-      final response = await _restClient.get('/api/v1/trainers/$id');
-      final dto = TrainerDTO.fromJson(response);
-      return _trainerDtoToEntity(dto);
-    } on NotFoundException {
-      return null;
-    } on RestClientException catch (e) {
-      throw Exception('Failed to fetch trainer: ${e.message}');
+      final response = await _apiClient.get('/api/v1/trainers/$id');
+      final dto = TrainerDTO.fromJson(response.data);
+      return dto.toEntity();
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) return null;
+      throw Exception('Failed to fetch trainer: $e');
+    } catch (e) {
+      throw Exception('Failed to fetch trainer: $e');
     }
   }
 
   @override
-  Future<void> addTrainer(Trainer trainer) async {
+  Future<Trainer> addTrainer(Trainer trainer) async {
     try {
       final dto = CreateTrainerRequestDTO(
         title: trainer.title,
@@ -46,11 +47,9 @@ class RestTrainersRepositoryImpl implements TrainersRepository {
             .map(
               (q) => QuestionDTO(
                 id: q.id,
-                question: q.textQuestion,
-                correctAnswer: q.rightAnswer,
-                distractors: q.answers
-                    .where((answer) => answer != q.rightAnswer)
-                    .toList(),
+                textQuestion: q.textQuestion,
+                rightAnswer: q.rightAnswer,
+                answers: q.answers,
               ),
             )
             .toList(),
@@ -58,9 +57,14 @@ class RestTrainersRepositoryImpl implements TrainersRepository {
         timeRequiredInSeconds: trainer.timeRequiredInSeconds,
       );
 
-      await _restClient.post('/api/v1/trainers', body: dto.toJson());
-    } on RestClientException catch (e) {
-      throw Exception('Failed to create trainer: ${e.message}');
+      final response = await _apiClient.post(
+        '/api/v1/trainers',
+        data: dto.toJson(),
+      );
+      final newTrainer = TrainerDTO.fromJson(response.data);
+      return newTrainer.toEntity();
+    } catch (e) {
+      throw Exception('Failed to create trainer: $e');
     }
   }
 
@@ -81,46 +85,45 @@ class RestTrainersRepositoryImpl implements TrainersRepository {
             .map(
               (q) => QuestionDTO(
                 id: q.id,
-                question: q.textQuestion,
-                correctAnswer: q.rightAnswer,
-                distractors: q.answers
-                    .where((answer) => answer != q.rightAnswer)
-                    .toList(),
+                textQuestion: q.textQuestion,
+                rightAnswer: q.rightAnswer,
+                answers: q.answers,
               ),
             )
             .toList(),
         keywords: trainer.keywords,
         timeRequiredInSeconds: trainer.timeRequiredInSeconds,
+        starCount: trainer.starCount,
       );
 
-      await _restClient.put(
+      await _apiClient.put(
         '/api/v1/trainers/${trainer.id}',
-        body: dto.toJson(),
+        data: dto.toJson(),
       );
-    } on RestClientException catch (e) {
-      throw Exception('Failed to update trainer: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to update trainer: $e');
     }
   }
 
   @override
   Future<void> deleteTrainer(String id) async {
     try {
-      await _restClient.delete('/api/v1/trainers/$id');
-    } on RestClientException catch (e) {
-      throw Exception('Failed to delete trainer: ${e.message}');
+      await _apiClient.delete('/api/v1/trainers/$id');
+    } catch (e) {
+      throw Exception('Failed to delete trainer: $e');
     }
   }
 
   @override
   Future<List<Trainer>> getTopTrainers() async {
     try {
-      final response = await _restClient.get('/api/v1/trainers/top');
-      final trainers = (response as List?)
+      final response = await _apiClient.get('/api/v1/trainers/top');
+      final trainers = (response.data as List?)
           ?.map((item) => TrainerDTO.fromJson(item as Map<String, dynamic>))
           .toList();
-      return trainers?.map((dto) => _trainerDtoToEntity(dto)).toList() ?? [];
-    } on RestClientException catch (e) {
-      throw Exception('Failed to fetch top trainers: ${e.message}');
+      return trainers?.map((dto) => dto.toEntity()).toList() ?? [];
+    } catch (e) {
+      throw Exception('Failed to fetch top trainers: $e');
     }
   }
 
@@ -132,44 +135,16 @@ class RestTrainersRepositoryImpl implements TrainersRepository {
     try {
       final params = {'q': searchQuery, ...filters};
 
-      // Build query string
-      final queryString = Uri(
+      final response = await _apiClient.get(
+        '/api/v1/trainers/search',
         queryParameters: params,
-      ).query.split('&').where((p) => p.isNotEmpty).join('&');
-      final path = queryString.isEmpty
-          ? '/api/v1/trainers/search'
-          : '/api/v1/trainers/search?$queryString';
-
-      final response = await _restClient.get(path);
-      final trainers = (response as List?)
+      );
+      final trainers = (response.data as List?)
           ?.map((item) => TrainerDTO.fromJson(item as Map<String, dynamic>))
           .toList();
-      return trainers?.map((dto) => _trainerDtoToEntity(dto)).toList() ?? [];
-    } on RestClientException catch (e) {
-      throw Exception('Failed to search trainers: ${e.message}');
+      return trainers?.map((dto) => dto.toEntity()).toList() ?? [];
+    } catch (e) {
+      throw Exception('Failed to search trainers: $e');
     }
-  }
-
-  /// Convert TrainerDTO to Trainer entity
-  Trainer _trainerDtoToEntity(TrainerDTO dto) {
-    return Trainer(
-      id: dto.id,
-      userId: dto.userId,
-      title: dto.title,
-      description: dto.description,
-      questions: dto.questions
-          .map(
-            (q) => Question(
-              id: q.id,
-              textQuestion: q.question,
-              rightAnswer: q.correctAnswer,
-              answers: [q.correctAnswer, ...q.distractors],
-            ),
-          )
-          .toList(),
-      keywords: dto.keywords,
-      timeRequiredInSeconds: dto.timeRequiredInSeconds,
-      starCount: dto.starCount.toDouble(),
-    );
   }
 }

@@ -11,20 +11,35 @@ import 'package:training_trainer/features/auth/presentation/profile_screen/setti
 import 'package:training_trainer/features/trainers/presentation/screens/add_trainer_screen/add_trainer_screen.dart';
 import 'package:training_trainer/features/trainers/presentation/screens/trainer_screen/trainer_screen.dart';
 
+/// Provider for the router
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
   return GoRouter(
     debugLogDiagnostics: true,
+    initialLocation: AppRoutes.trainers,
+    // Use the authState as a refresh listenable if it were a listenable, 
+    // but here we rely on the provider rebuild which is also fine with current setup
+    // however re-creating GoRouter on every change is not ideal.
+    // For now, let's keep it but fix the redirect logic.
+    
     redirect: (context, state) {
+      // If still loading auth, don't redirect yet
+      if (authState.isLoading) return null;
+
       final isAuth = authState.value != null;
       final isAuthRoute = state.matchedLocation == AppRoutes.auth;
 
-      if (authState.isLoading || authState.hasError) return null;
+      if (!isAuth) {
+        // User not logged in, force to auth page
+        return isAuthRoute ? null : AppRoutes.auth;
+      }
 
-      if (!isAuth && !isAuthRoute) return AppRoutes.auth;
-
-      if (isAuth && isAuthRoute) return AppRoutes.trainers;
+      // User is logged in
+      if (isAuthRoute) {
+        // Logged in user shouldn't see auth page
+        return AppRoutes.trainers;
+      }
 
       return null;
     },
@@ -61,12 +76,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         branches: [
           StatefulShellBranch(
             routes: [
-              // GoRoute(
-              //   path: AppRoutes.home,
-              //   pageBuilder: (context, state) =>  NoTransitionPage(
-              //     child: HomeScreen(),
-              //   ),
-              // ),
               GoRoute(
                 path: AppRoutes.trainers,
                 builder: (context, state) => const TrainerScreen(),

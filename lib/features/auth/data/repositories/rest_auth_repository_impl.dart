@@ -1,19 +1,33 @@
 import 'dart:async';
-import 'package:training_trainer/core/network/rest_client.dart';
+import 'package:training_trainer/core/network/api_client.dart';
+import 'package:training_trainer/core/network/token_storage.dart';
 import 'package:training_trainer/features/auth/data/datasources/auth_dto.dart';
 import 'package:training_trainer/features/auth/domain/entities/app_user.dart';
 import 'package:training_trainer/features/auth/domain/repositories/auth_repository.dart';
 
-/// REST API implementation of AuthRepository
+/// REST API implementation of AuthRepository using Modern ApiClient
 class RestAuthRepositoryImpl implements AuthRepository {
-  final RestClient _restClient;
+  final ApiClient _apiClient;
+  final TokenStorage _tokenStorage;
   AppUser? _currentUser;
   final _authStateController = StreamController<AppUser?>.broadcast();
 
-  RestAuthRepositoryImpl(this._restClient) {
+  RestAuthRepositoryImpl(this._tokenStorage, this._apiClient) {
     _authStateController.onListen = () {
       _authStateController.add(_currentUser);
     };
+    _init();
+  }
+
+  /// Initialize by loading saved user data
+  Future<void> _init() async {
+    final userData = await _tokenStorage.getUser();
+
+    if (userData != null) {
+      final userDto = UserDTO.fromJson(userData);
+      _currentUser = _userDtoToEntity(userDto);
+      _authStateController.add(_currentUser);
+    }
   }
 
   @override
@@ -29,22 +43,26 @@ class RestAuthRepositoryImpl implements AuthRepository {
       final requestDto =
           RegisterRequestDTO(email: email, password: password, login: login);
 
-      final response = await _restClient.post(
+      final response = await _apiClient.post(
         '/api/v1/auth/register',
-        body: requestDto.toJson(),
-        includeAuth: false,
+        data: requestDto.toJson(),
       );
 
-      final authResponse = AuthResponseDTO.fromJson(response);
-      _restClient.setToken(authResponse.accessToken);
-
+      final authResponse = AuthResponseDTO.fromJson(response.data);
+      
+      // Persist token and user data
+      await _tokenStorage.saveAccessToken(authResponse.accessToken);
+      // Backend doesn't return refresh token yet, but we're ready
+      // await _tokenStorage.saveRefreshToken(authResponse.refreshToken);
+      await _tokenStorage.saveUser(authResponse.user.toJson());
+      
       final user = _userDtoToEntity(authResponse.user);
       _currentUser = user;
       _authStateController.add(user);
 
       return user;
-    } on RestClientException catch (e) {
-      throw Exception('Registration failed: ${e.message}');
+    } catch (e) {
+      throw Exception('Registration failed: $e');
     }
   }
 
@@ -56,29 +74,32 @@ class RestAuthRepositoryImpl implements AuthRepository {
     try {
       final requestDto = LoginRequestDTO(email: email, password: password);
 
-      final response = await _restClient.post(
+      final response = await _apiClient.post(
         '/api/v1/auth/login',
-        body: requestDto.toJson(),
-        includeAuth: false,
+        data: requestDto.toJson(),
       );
 
-      final authResponse = AuthResponseDTO.fromJson(response);
-      _restClient.setToken(authResponse.accessToken);
-
+      final authResponse = AuthResponseDTO.fromJson(response.data);
+      
+      // Persist token and user data
+      await _tokenStorage.saveAccessToken(authResponse.accessToken);
+      await _tokenStorage.saveUser(authResponse.user.toJson());
+      
       final user = _userDtoToEntity(authResponse.user);
       _currentUser = user;
       _authStateController.add(user);
 
       return user;
-    } on RestClientException catch (e) {
-      throw Exception('Sign in failed: ${e.message}');
+    } catch (e) {
+      throw Exception('Sign in failed: $e');
     }
   }
 
   @override
   Future<void> signOut() async {
     try {
-      _restClient.clearToken();
+      await _tokenStorage.clear();
+      await _apiClient.cookieJar.deleteAll();
       _currentUser = null;
       _authStateController.add(null);
     } catch (e) {

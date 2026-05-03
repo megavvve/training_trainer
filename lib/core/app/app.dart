@@ -10,6 +10,8 @@ import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/core/widgets/error_screen.dart';
 import 'package:training_trainer/core/widgets/loading_screen.dart';
 import 'package:training_trainer/features/trainers/presentation/providers/train_process_bloc/train_process_bloc.dart';
+import 'package:training_trainer/features/trainers/presentation/providers/trainers_bloc/trainers_bloc.dart';
+import 'package:training_trainer/features/trainers/domain/repositories/trainiers_repository.dart';
 import 'package:training_trainer/routing/app_router.dart';
 import 'package:training_trainer/features/auth/presentation/providers/auth_providers.dart';
 
@@ -19,17 +21,30 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final authState = ref.watch(authStateProvider);
+
+    // Show loading screen while checking auth
+    if (authState.isLoading) {
+      return ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (context, child) => const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: LoadingScreen(),
+        ),
+      );
+    }
 
     return MultiBlocProvider(
       providers: [
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(prefs: getIt<Box<dynamic>>()),
-          
         ),
-         BlocProvider<TrainProcessBloc>(
-                create: (context) => TrainProcessBloc(),
-
-          
+        BlocProvider<TrainProcessBloc>(
+          create: (context) => TrainProcessBloc(),
+        ),
+        BlocProvider<TrainersBloc>(
+          create: (context) => TrainersBloc(repository: getIt<TrainersRepository>())
+            ..add(LoadTrainers()),
         ),
       ],
       child: ScreenUtilInit(
@@ -40,20 +55,9 @@ class MainApp extends ConsumerWidget {
               return MaterialApp.router(
                 routerConfig: router,
                 debugShowCheckedModeBanner: false,
-                theme:
-                    themeState.brightness == Brightness.dark
-                        ? AppThemes.darkTheme
-                        : AppThemes.lightTheme,
-                builder: (context, child) {
-                  final authState = ref.watch(authStateProvider);
-
-                  return authState.when(
-                    loading: () => const LoadingScreen(),
-                    error:
-                        (error, stack) => ErrorScreen(error: error.toString()),
-                    data: (user) => child!,
-                  );
-                },
+                theme: themeState.brightness == Brightness.dark
+                    ? AppThemes.darkTheme
+                    : AppThemes.lightTheme,
               );
             },
           );

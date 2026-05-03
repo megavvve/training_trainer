@@ -1,12 +1,14 @@
 import 'package:http/http.dart' as http;
+import 'package:talker/talker.dart';
 import 'dart:convert';
 
 /// REST API client for communicating with FastAPI backend
 class RestClient {
   final String baseUrl;
+  final Talker? talker;
   String? _token;
 
-  RestClient({required this.baseUrl});
+  RestClient({required this.baseUrl, this.talker});
 
   /// Set JWT token for authenticated requests
   void setToken(String? token) {
@@ -40,14 +42,16 @@ class RestClient {
     String path, {
     bool includeAuth = true,
   }) async {
+    final url = Uri.parse('$baseUrl$path');
+    talker?.debug('REST GET: $url');
     try {
-      final url = Uri.parse('$baseUrl$path');
       final response = await http.get(
         url,
         headers: _buildHeaders(includeAuth: includeAuth),
       );
-      return _handleResponse(response);
-    } catch (e) {
+      return _handleResponse(response, 'GET $path');
+    } catch (e, st) {
+      talker?.handle(e, st, 'REST GET FAILED: $path');
       throw RestClientException('GET $path failed: $e');
     }
   }
@@ -58,15 +62,17 @@ class RestClient {
     required Map<String, dynamic> body,
     bool includeAuth = true,
   }) async {
+    final url = Uri.parse('$baseUrl$path');
+    talker?.debug('REST POST: $url\nBody: ${jsonEncode(body)}');
     try {
-      final url = Uri.parse('$baseUrl$path');
       final response = await http.post(
         url,
         headers: _buildHeaders(includeAuth: includeAuth),
         body: jsonEncode(body),
       );
-      return _handleResponse(response);
-    } catch (e) {
+      return _handleResponse(response, 'POST $path');
+    } catch (e, st) {
+      talker?.handle(e, st, 'REST POST FAILED: $path');
       throw RestClientException('POST $path failed: $e');
     }
   }
@@ -77,15 +83,17 @@ class RestClient {
     required Map<String, dynamic> body,
     bool includeAuth = true,
   }) async {
+    final url = Uri.parse('$baseUrl$path');
+    talker?.debug('REST PUT: $url\nBody: ${jsonEncode(body)}');
     try {
-      final url = Uri.parse('$baseUrl$path');
       final response = await http.put(
         url,
         headers: _buildHeaders(includeAuth: includeAuth),
         body: jsonEncode(body),
       );
-      return _handleResponse(response);
-    } catch (e) {
+      return _handleResponse(response, 'PUT $path');
+    } catch (e, st) {
+      talker?.handle(e, st, 'REST PUT FAILED: $path');
       throw RestClientException('PUT $path failed: $e');
     }
   }
@@ -95,20 +103,24 @@ class RestClient {
     String path, {
     bool includeAuth = true,
   }) async {
+    final url = Uri.parse('$baseUrl$path');
+    talker?.debug('REST DELETE: $url');
     try {
-      final url = Uri.parse('$baseUrl$path');
       final response = await http.delete(
         url,
         headers: _buildHeaders(includeAuth: includeAuth),
       );
-      return _handleResponse(response);
-    } catch (e) {
+      return _handleResponse(response, 'DELETE $path');
+    } catch (e, st) {
+      talker?.handle(e, st, 'REST DELETE FAILED: $path');
       throw RestClientException('DELETE $path failed: $e');
     }
   }
 
   /// Handle HTTP response and decode JSON
-  dynamic _handleResponse(http.Response response) {
+  dynamic _handleResponse(http.Response response, String logPrefix) {
+    talker?.debug('$logPrefix RESPONSE [${response.statusCode}]: ${response.body}');
+    
     if (response.statusCode >= 200 && response.statusCode < 300) {
       if (response.body.isEmpty) return null;
       return jsonDecode(response.body);
@@ -143,17 +155,17 @@ class RestClientException implements Exception {
 }
 
 class UnauthorizedException extends RestClientException {
-  UnauthorizedException(String message) : super(message);
+  UnauthorizedException(super.message);
 }
 
 class ForbiddenException extends RestClientException {
-  ForbiddenException(String message) : super(message);
+  ForbiddenException(super.message);
 }
 
 class NotFoundException extends RestClientException {
-  NotFoundException(String message) : super(message);
+  NotFoundException(super.message);
 }
 
 class ServerException extends RestClientException {
-  ServerException(String message) : super(message);
+  ServerException(super.message);
 }

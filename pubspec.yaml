@@ -28,6 +28,11 @@ dependencies:
   hive_ce_flutter: ^2.3.0
   bloc: ^9.0.0
   mcp_toolkit: ^0.4.0
+  dio: ^5.9.2
+  cookie_jar: ^4.0.9
+  dio_cookie_manager: ^3.4.0
+  flutter_secure_storage: ^10.0.0
+  talker_dio_logger: ^4.7.5
 
 dependency_overrides:
   freezed_annotation: 3.0.0

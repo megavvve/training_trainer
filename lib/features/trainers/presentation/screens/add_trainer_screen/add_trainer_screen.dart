@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:talker/talker.dart';
 import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/core/services/ai/ai_generator_interface.dart';
 import 'package:training_trainer/features/auth/presentation/providers/auth_providers.dart';
@@ -12,6 +13,7 @@ import 'package:training_trainer/features/trainers/presentation/screens/add_trai
 import 'package:training_trainer/features/trainers/presentation/screens/add_trainer_screen/widgets/question_form.dart';
 import 'package:training_trainer/features/trainers/presentation/providers/trainers_bloc/trainers_bloc.dart';
 import 'package:training_trainer/uikit/appbars/custom_app_bar.dart';
+import 'package:uuid/uuid.dart';
 
 class AddTrainerScreen extends ConsumerStatefulWidget {
   const AddTrainerScreen({super.key});
@@ -130,6 +132,7 @@ class AddTrainerScreenState extends ConsumerState<AddTrainerScreen> {
       final authState = ref.read(authStateProvider);
       authState.whenData((user) {
         if (user != null) {
+          getIt<Talker>().info('AddTrainerScreen: Dispatching AddTrainer event');
           context.read<TrainersBloc>().add(
             AddTrainer(
               userId: user.uid,
@@ -142,6 +145,7 @@ class AddTrainerScreenState extends ConsumerState<AddTrainerScreen> {
           );
           Navigator.pop(context);
         } else {
+          getIt<Talker>().error('AddTrainerScreen: User is null, cannot save trainer');
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Пользователь не аутентифицирован')),
           );
@@ -161,17 +165,21 @@ class AddTrainerScreenState extends ConsumerState<AddTrainerScreen> {
   Future<void> _addQuestion() async {
     if (_questionController.text.isNotEmpty &&
         _answerController.text.isNotEmpty) {
-      final List<String> list = await getIt<AIGenerator>().generateWrongAnswers(
-        question: _questionController.text,
-        correctAnswer: _answerController.text,
-      );
+      final String questionText = _questionController.text;
+      final String correctAnswer = _answerController.text;
+
+      final List<String> wrongAnswers =
+          await getIt<AIGenerator>().generateWrongAnswers(
+            question: questionText,
+            correctAnswer: correctAnswer,
+          );
       setState(() {
         questions.add(
           Question(
-            id: questions.hashCode.toString(),
-            textQuestion: _questionController.text,
-            rightAnswer: _answerController.text,
-            answers: list,
+            id: getIt<Uuid>().v4(),
+            textQuestion: questionText,
+            rightAnswer: correctAnswer,
+            answers: [correctAnswer, ...wrongAnswers],
           ),
         );
         _questionController.clear();

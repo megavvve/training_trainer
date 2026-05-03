@@ -97,12 +97,15 @@ class TrainerCard extends StatelessWidget {
               SizedBox(height: 16.h),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: _buildKeywords(context, isDark),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: _buildKeywords(context, isDark),
+                    ),
                   ),
+                  SizedBox(width: 12.w),
                   ElevatedButton(
                     onPressed: () {
                       showCustomBottomSheet(

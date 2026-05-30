@@ -1,87 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:training_trainer/constants/app_colors.dart';
+import 'package:training_trainer/uikit/inputs/app_text_field.dart';
 
 class EmailForm extends StatelessWidget {
+  const EmailForm({required this.controller, super.key});
   final TextEditingController controller;
-  const EmailForm({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    //final brightness = context.watch<ThemeCubit>().state.brightness;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(4.sp),
-          width: 127.w,
-          height: 33.h,
-          decoration: BoxDecoration(
-            // color: brightness == Brightness.dark
-            //     ? const Color(0xFF656565)
-            //     : const Color(0xFFD9D9D9),
-            borderRadius: BorderRadius.all(
-              Radius.circular(16.sp),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Icon(
-                Icons.email_outlined,
-                size: 20.sp,
-                color: Colors.black,
-              ),
-              Text(
-                "Почта:",
-                style: TextStyle(fontSize: 15.sp, color: Colors.black),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.all(16.sp),
-          width: 275.w,
-          height: 64.h,
-          decoration: BoxDecoration(
-            // color: brightness == Brightness.dark
-            //     ? const Color(0xFF6D85C8)
-            //     : const Color(0xFFD8E2FF),
-            borderRadius: BorderRadius.all(
-              Radius.circular(16.sp),
-            ),
-          ),
-          child: TextField(
-            key: const ValueKey('emailInput'),
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.done,
-            maxLines: 1,
+    return CustomTextField(
+      key: const ValueKey('emailInput'),
       controller: controller,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsetsDirectional.only(start: 1.w),
-              isCollapsed: true,
-              border: const UnderlineInputBorder(
-                borderSide: BorderSide.none,
-              ),
-              hintText: 'Введите почту...',
-              hintMaxLines: 1,
-              hintStyle: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w300,
-                color: Colors.grey,
-              ),
-            ),
-            style: TextStyle(
-              fontSize: 18.sp,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ],
+      label: 'Почта',
+      keyboardType: TextInputType.emailAddress,
+      showLeftIcon: true,
+      leftIcon: Icon(Icons.email_outlined, size: 20, color: AppColorsExt.fill2),
+      showClearButton: true,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:training_trainer/core/network/api_client.dart';
 import 'package:training_trainer/core/network/token_storage.dart';
 import 'package:training_trainer/features/auth/data/datasources/auth_dto.dart';
@@ -7,10 +8,6 @@ import 'package:training_trainer/features/auth/domain/repositories/auth_reposito
 
 /// REST API implementation of AuthRepository using Modern ApiClient
 class RestAuthRepositoryImpl implements AuthRepository {
-  final ApiClient _apiClient;
-  final TokenStorage _tokenStorage;
-  AppUser? _currentUser;
-  final _authStateController = StreamController<AppUser?>.broadcast();
 
   RestAuthRepositoryImpl(this._tokenStorage, this._apiClient) {
     _authStateController.onListen = () {
@@ -18,15 +15,26 @@ class RestAuthRepositoryImpl implements AuthRepository {
     };
     _init();
   }
+  final ApiClient _apiClient;
+  final TokenStorage _tokenStorage;
+  AppUser? _currentUser;
+  final _authStateController = StreamController<AppUser?>.broadcast();
 
   /// Initialize by loading saved user data
   Future<void> _init() async {
-    final userData = await _tokenStorage.getUser();
+    try {
+      final userData = await _tokenStorage.getUser();
 
-    if (userData != null) {
-      final userDto = UserDTO.fromJson(userData);
-      _currentUser = _userDtoToEntity(userDto);
+      if (userData != null) {
+        final userDto = UserDTO.fromJson(userData);
+        _currentUser = _userDtoToEntity(userDto);
+      } else {
+        _currentUser = null;
+      }
       _authStateController.add(_currentUser);
+    } catch (e) {
+      _currentUser = null;
+      _authStateController.add(null);
     }
   }
 
@@ -43,25 +51,33 @@ class RestAuthRepositoryImpl implements AuthRepository {
       final requestDto =
           RegisterRequestDTO(email: email, password: password, login: login);
 
+      debugPrint('[AuthRepo] POST /api/v1/auth/register body: ${requestDto.toJson()}');
+
       final response = await _apiClient.post(
         '/api/v1/auth/register',
         data: requestDto.toJson(),
       );
 
+      debugPrint('[AuthRepo] Response status: ${response.statusCode}');
+      debugPrint('[AuthRepo] Response data: ${response.data}');
+
       final authResponse = AuthResponseDTO.fromJson(response.data);
-      
+
       // Persist token and user data
       await _tokenStorage.saveAccessToken(authResponse.accessToken);
-      // Backend doesn't return refresh token yet, but we're ready
-      // await _tokenStorage.saveRefreshToken(authResponse.refreshToken);
+      if (authResponse.refreshToken != null) {
+        await _tokenStorage.saveRefreshToken(authResponse.refreshToken!);
+      }
       await _tokenStorage.saveUser(authResponse.user.toJson());
-      
+
       final user = _userDtoToEntity(authResponse.user);
       _currentUser = user;
       _authStateController.add(user);
 
+      debugPrint('[AuthRepo] Registration success: uid=${user.uid}, login=${user.login}');
       return user;
     } catch (e) {
+      debugPrint('[AuthRepo] Registration FAILED: $e');
       throw Exception('Registration failed: $e');
     }
   }
@@ -74,23 +90,33 @@ class RestAuthRepositoryImpl implements AuthRepository {
     try {
       final requestDto = LoginRequestDTO(email: email, password: password);
 
+      debugPrint('[AuthRepo] POST /api/v1/auth/login body: ${requestDto.toJson()}');
+
       final response = await _apiClient.post(
         '/api/v1/auth/login',
         data: requestDto.toJson(),
       );
 
+      debugPrint('[AuthRepo] Response status: ${response.statusCode}');
+      debugPrint('[AuthRepo] Response data: ${response.data}');
+
       final authResponse = AuthResponseDTO.fromJson(response.data);
-      
+
       // Persist token and user data
       await _tokenStorage.saveAccessToken(authResponse.accessToken);
+      if (authResponse.refreshToken != null) {
+        await _tokenStorage.saveRefreshToken(authResponse.refreshToken!);
+      }
       await _tokenStorage.saveUser(authResponse.user.toJson());
-      
+
       final user = _userDtoToEntity(authResponse.user);
       _currentUser = user;
       _authStateController.add(user);
 
+      debugPrint('[AuthRepo] Sign in success: uid=${user.uid}, login=${user.login}');
       return user;
     } catch (e) {
+      debugPrint('[AuthRepo] Sign in FAILED: $e');
       throw Exception('Sign in failed: $e');
     }
   }
@@ -110,7 +136,7 @@ class RestAuthRepositoryImpl implements AuthRepository {
   /// Convert UserDTO to AppUser entity
   AppUser _userDtoToEntity(UserDTO dto) {
     return AppUser(
-      uid: dto.id,
+      uid: dto.uid,
       email: dto.email,
       login: dto.login,
     );

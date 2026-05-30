@@ -8,28 +8,28 @@ sealed class TrainProcessEvent extends Equatable {
 }
 
 class StartTrainingSession extends TrainProcessEvent {
-  final Trainer trainer;
 
   const StartTrainingSession({required this.trainer});
+  final Trainer trainer;
 }
 
 class AnswerQuestion extends TrainProcessEvent {
-  final String selectedAnswer;
 
 
   const AnswerQuestion({required this.selectedAnswer, });
+  final String selectedAnswer;
 }
 
 class UpdateTimer extends TrainProcessEvent {
-  final int timeRemaining;
 
   const UpdateTimer({required this.timeRemaining});
+  final int timeRemaining;
 }
 
 class FinishTrainingSession extends TrainProcessEvent {
-  final int correctAnswers;
 
   const FinishTrainingSession({required this.correctAnswers});
+  final int correctAnswers;
 }
 class NextQuestion extends TrainProcessEvent {
 
@@ -37,9 +37,9 @@ class NextQuestion extends TrainProcessEvent {
   const NextQuestion();
 }
 class SelectAnswer extends TrainProcessEvent {
-  final String answer;
 
   const SelectAnswer({required this.answer});
+  final String answer;
 }
 
 class CheckAnswer extends TrainProcessEvent {}

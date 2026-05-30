@@ -1,76 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+/// Unified typography system using Google Fonts Inter.
+/// Mirrors the uikit.md reference from the design system.
 abstract class TextStyles {
-  static TextStyle get h1 => TextStyle(
-    fontSize: 24.sp, 
-    fontWeight: FontWeight.w700,
-    height: 1.29,
-  );
+  /// Heading 1 — 21pt / bold
+  static TextStyle get h1 =>
+      GoogleFonts.inter(fontSize: 21, fontWeight: FontWeight.w700, height: 1.4);
 
-  static TextStyle get h2 => TextStyle(
-    fontSize: 20.sp, 
-    fontWeight: FontWeight.w700,
-    height: 1.3,
-  );
+  /// Heading 2 — 18pt / bold
+  static TextStyle get h2 =>
+      GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, height: 1.4);
 
-  static TextStyle get h3 => TextStyle(
-    fontSize: 16.sp, 
-    fontWeight: FontWeight.w700,
-    height: 1.5,
-  );
+  /// Heading 3 — 16pt / semibold
+  static TextStyle get h3 =>
+      GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600, height: 1.4);
 
-  static TextStyle get text => TextStyle(
-    fontSize: 14.sp, 
-    fontWeight: FontWeight.w400,
-    height: 1.43,
-  );
+  /// Heading 4 — 14pt / semibold
+  static TextStyle get h4 =>
+      GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, height: 1.4);
 
-  static TextStyle get textMed => TextStyle(
-    fontSize: 14.sp, 
-    fontWeight: FontWeight.w500,
-    height: 1.43,
-  );
-
-  static TextStyle get textBold => TextStyle(
-    fontSize: 14.sp, 
-    fontWeight: FontWeight.w700,
-    height: 1.43,
-  );
-
-  static TextStyle get textSmall => TextStyle(
-    fontSize: 12.sp, 
+  /// Body text — 14pt / regular
+  static TextStyle get text => GoogleFonts.inter(
+    fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.42,
   );
 
-  static TextStyle get textSmallMed => TextStyle(
-    fontSize: 12.sp, 
-    fontWeight: FontWeight.w500,
-    height: 1.42,
-  );
+  /// Body text semibold — 14pt / semibold
+  static TextStyle get textSemi =>
+      GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, height: 1.6);
 
-  static TextStyle get textSmallBold => TextStyle(
-    fontSize: 12.sp, 
-    fontWeight: FontWeight.w700,
-    height: 1.42,
-  );
+  /// Body text regular — 14pt / regular (same line height as semi)
+  static TextStyle get textReg =>
+      GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w400, height: 1.6);
 
-  static TextStyle get desk => TextStyle(
-    fontSize: 10.sp, 
+  /// Small text regular — 12pt / regular
+  static TextStyle get textSReg =>
+      GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w400, height: 1.6);
+
+  /// Small text — 12pt / regular
+  static TextStyle get textSmall => GoogleFonts.inter(
+    fontSize: 12,
     fontWeight: FontWeight.w400,
-    height: 1.4,
+    height: 1.42,
   );
 
-  static TextStyle get deskMed => TextStyle(
-    fontSize: 10.sp, 
-    fontWeight: FontWeight.w500,
-    height: 1.4,
-  );
+  /// Small text bold — 12pt / bold
+  static TextStyle get textSBold =>
+      GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, height: 1.6);
 
-  static TextStyle get deskBold => TextStyle(
-    fontSize: 10.sp, 
-    fontWeight: FontWeight.w700,
-    height: 1.4,
-  );
+  /// Small text semibold — 12pt / semibold
+  static TextStyle get textSSemi =>
+      GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, height: 1.6);
+
+  /// Desk semibold — 10pt / semibold
+  static TextStyle get deskSemi =>
+      GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w600, height: 1.4);
+
+  /// Desk medium — 10pt / medium
+  static TextStyle get deskMed =>
+      GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w500, height: 1.4);
 }

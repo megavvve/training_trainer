@@ -1,14 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:training_trainer/core/network/api_client.dart';
 import 'package:training_trainer/features/trainers/data/datasources/trainers_dto.dart';
 import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
 import 'package:training_trainer/features/trainers/domain/repositories/trainiers_repository.dart';
-import 'package:dio/dio.dart';
 
 /// REST API implementation of TrainersRepository using Modern ApiClient
 class RestTrainersRepositoryImpl implements TrainersRepository {
-  final ApiClient _apiClient;
 
   RestTrainersRepositoryImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<List<Trainer>> getTrainers() async {

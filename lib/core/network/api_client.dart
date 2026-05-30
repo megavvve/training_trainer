@@ -1,20 +1,15 @@
-import 'package:dio/dio.dart';
+import 'dart:io';
+
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:talker/talker.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:training_trainer/core/network/token_storage.dart';
-import 'package:talker/talker.dart';
-import 'dart:io';
 
 /// Modern API client using Dio with Cookie management and JWT refresh logic
 class ApiClient {
-  final String baseUrl;
-  final TokenStorage tokenStorage;
-  final Talker talker;
-  late final Dio dio;
-  late final PersistCookieJar cookieJar;
-
   ApiClient({
     required this.baseUrl,
     required this.tokenStorage,
@@ -29,11 +24,16 @@ class ApiClient {
       ),
     );
   }
+  final String baseUrl;
+  final TokenStorage tokenStorage;
+  final Talker talker;
+  late final Dio dio;
+  late final PersistCookieJar cookieJar;
 
   /// Initialize persistent cookie storage and interceptors
   Future<void> init() async {
     final appDocDir = await getApplicationDocumentsDirectory();
-    final cookiePath = "${appDocDir.path}/.cookies/";
+    final cookiePath = '${appDocDir.path}/.cookies/';
 
     // Ensure directory exists
     await Directory(cookiePath).create(recursive: true);
@@ -78,9 +78,8 @@ class ApiClient {
           if (refreshToken != null) {
             try {
               // Attempt to refresh token
-              // Note: Backend implementation for /auth/refresh is required
               final refreshResponse = await dio.post(
-                '/auth/refresh',
+                '/api/v1/auth/refresh',
                 data: {'refresh_token': refreshToken},
                 options: Options(
                   extra: {'no_auth': true},

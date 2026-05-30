@@ -10,12 +10,6 @@ sealed class TrainProcessState extends Equatable {
 class TrainProcessInitial extends TrainProcessState {}
 
 class TrainProcessInProgress extends TrainProcessState {
-  final int remainingTime;
-  final Question currentQuestion;
-  final int currentQuestionIndex;
-  final int currentRightAnswers;
-  final bool isAnswerChecked;
-  final String? selectedAnswer;
 
   const TrainProcessInProgress({
     required this.remainingTime,
@@ -25,6 +19,12 @@ class TrainProcessInProgress extends TrainProcessState {
     required this.isAnswerChecked,
     this.selectedAnswer,
   });
+  final int remainingTime;
+  final Question currentQuestion;
+  final int currentQuestionIndex;
+  final int currentRightAnswers;
+  final bool isAnswerChecked;
+  final String? selectedAnswer;
 
   TrainProcessInProgress copyWith({
     int? remainingTime,
@@ -57,17 +57,17 @@ class TrainProcessInProgress extends TrainProcessState {
 
 
 class TrainProcessCompleted extends TrainProcessState {
-  final int totalQuestions;
-  final int correctAnswers;
 
   const TrainProcessCompleted({
     required this.totalQuestions,
     required this.correctAnswers,
   });
+  final int totalQuestions;
+  final int correctAnswers;
 }
 
 class TrainProcessError extends TrainProcessState {
-  final String errorMessage;
 
   const TrainProcessError({required this.errorMessage});
+  final String errorMessage;
 }

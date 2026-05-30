@@ -2,9 +2,9 @@ import 'package:training_trainer/core/network/api_client.dart';
 import 'package:training_trainer/core/services/ai/ai_generator_interface.dart';
 
 class RestAIGenerator implements AIGenerator {
-  final ApiClient _apiClient;
 
   RestAIGenerator(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<void> initialize() async {

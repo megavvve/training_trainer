@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:training_trainer/l10n/app_localizations.dart';
 
 class ScaffoldWithNavBar extends StatelessWidget {
-  final StatefulNavigationShell navigationShell;
 
   const ScaffoldWithNavBar({
-    super.key,
-    required this.navigationShell,
+    required this.navigationShell, super.key,
   });
+  final StatefulNavigationShell navigationShell;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationShell.currentIndex,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
+        items: [
+          BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
+          BottomNavigationBarItem(icon: const Icon(Icons.person), label: l10n.profile),
         ],
         onTap: (index) => _onTap(context, index),
       ),

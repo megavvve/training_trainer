@@ -1,46 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:training_trainer/constants/app_colors.dart';
+import 'package:training_trainer/constants/app_fonts.dart';
 import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/features/auth/domain/usecases/sign_out.dart';
+import 'package:training_trainer/l10n/app_localizations.dart';
 
-class SignOutButton extends StatefulWidget {
+class SignOutButton extends StatelessWidget {
   const SignOutButton({super.key});
 
   @override
-  State<SignOutButton> createState() => _SignOutButtonState();
-}
-
-class _SignOutButtonState extends State<SignOutButton> {
-
-  @override
   Widget build(BuildContext context) {
-
-    return MaterialButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      color:  Colors.red,
-       
-      onPressed: () async {
-        await getIt<Signout>().call();
-      },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.exit_to_app,
-            color: Colors.white,
+    final l10n = AppLocalizations.of(context)!;
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: FilledButton(
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColorsExt.negative,
+          foregroundColor: AppColorsExt.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          SizedBox(
-            width: 10.w,
-          ),
-          Text(
-            'Выйти',
-            style: Theme.of(context).textTheme.displaySmall?.copyWith(color: 
-        Colors.white
+        ),
+        onPressed: () async {
+          await getIt<Signout>().call();
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.logout_rounded, color: Colors.white),
+            const SizedBox(width: 8),
+            Text(
+              l10n.signOut,
+              style: TextStyles.textSemi.copyWith(color: Colors.white),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

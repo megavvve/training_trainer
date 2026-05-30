@@ -1,14 +1,15 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:talker/talker.dart';
-import 'dart:convert';
 
 /// REST API client for communicating with FastAPI backend
 class RestClient {
+
+  RestClient({required this.baseUrl, this.talker});
   final String baseUrl;
   final Talker? talker;
   String? _token;
-
-  RestClient({required this.baseUrl, this.talker});
 
   /// Set JWT token for authenticated requests
   void setToken(String? token) {
@@ -147,8 +148,8 @@ class RestClient {
 
 /// Custom exceptions for REST client
 class RestClientException implements Exception {
-  final String message;
   RestClientException(this.message);
+  final String message;
 
   @override
   String toString() => 'RestClientException: $message';

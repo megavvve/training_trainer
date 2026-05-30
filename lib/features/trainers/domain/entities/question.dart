@@ -2,6 +2,13 @@ import 'package:json_annotation/json_annotation.dart';
 part 'question.g.dart';
 @JsonSerializable()
 class Question {
+      factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
+
+  Question(
+      {required this.id,
+      required this.textQuestion,
+      required this.rightAnswer,
+      required this.answers});
   final String id;
 
   final String textQuestion;
@@ -9,13 +16,6 @@ class Question {
   final String rightAnswer;
 
   final List<String> answers;
-
-  Question(
-      {required this.id,
-      required this.textQuestion,
-      required this.rightAnswer,
-      required this.answers});
-      factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
 
   Map<String, dynamic> toJson() => _$QuestionToJson(this);
   Question copyWith({

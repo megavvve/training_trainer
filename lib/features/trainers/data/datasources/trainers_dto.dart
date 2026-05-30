@@ -1,17 +1,9 @@
 /// DTO for Trainer from REST API
+library;
 import 'package:training_trainer/features/trainers/domain/entities/question.dart';
 import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
 
 class TrainerDTO {
-  final String id;
-  final String userId;
-  final String title;
-  final String description;
-  final List<QuestionDTO> questions;
-  final List<String> keywords;
-  final int timeRequiredInSeconds;
-  final double starCount;
-  final DateTime createdAt;
 
   TrainerDTO({
     required this.id,
@@ -53,6 +45,15 @@ class TrainerDTO {
           : (json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now()),
     );
   }
+  final String id;
+  final String userId;
+  final String title;
+  final String description;
+  final List<QuestionDTO> questions;
+  final List<String> keywords;
+  final int timeRequiredInSeconds;
+  final double starCount;
+  final DateTime createdAt;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -83,10 +84,6 @@ class TrainerDTO {
 
 /// DTO for Question from REST API
 class QuestionDTO {
-  final String id;
-  final String textQuestion;
-  final String rightAnswer;
-  final List<String> answers;
 
   QuestionDTO({
     required this.id,
@@ -108,6 +105,10 @@ class QuestionDTO {
       answers: parseAnswers(json['answers'] as List<dynamic>?),
     );
   }
+  final String id;
+  final String textQuestion;
+  final String rightAnswer;
+  final List<String> answers;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -128,11 +129,6 @@ class QuestionDTO {
 
 /// DTO for creating trainer request
 class CreateTrainerRequestDTO {
-  final String title;
-  final String description;
-  final List<QuestionDTO> questions;
-  final List<String> keywords;
-  final int timeRequiredInSeconds;
 
   CreateTrainerRequestDTO({
     required this.title,
@@ -141,6 +137,11 @@ class CreateTrainerRequestDTO {
     required this.keywords,
     required this.timeRequiredInSeconds,
   });
+  final String title;
+  final String description;
+  final List<QuestionDTO> questions;
+  final List<String> keywords;
+  final int timeRequiredInSeconds;
 
   Map<String, dynamic> toJson() => {
     'title': title,
@@ -153,12 +154,6 @@ class CreateTrainerRequestDTO {
 
 /// DTO for updating trainer request
 class UpdateTrainerRequestDTO {
-  final String title;
-  final String description;
-  final List<QuestionDTO> questions;
-  final List<String> keywords;
-  final int timeRequiredInSeconds;
-  final double starCount;
 
   UpdateTrainerRequestDTO({
     required this.title,
@@ -168,6 +163,12 @@ class UpdateTrainerRequestDTO {
     required this.timeRequiredInSeconds,
     this.starCount = 0,
   });
+  final String title;
+  final String description;
+  final List<QuestionDTO> questions;
+  final List<String> keywords;
+  final int timeRequiredInSeconds;
+  final double starCount;
 
   Map<String, dynamic> toJson() => {
     'title': title,

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:training_trainer/l10n/app_localizations.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   const ConfirmationDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: const Text('Прервать тренировку?'),
-      content: const Text('Все прогресс будет потерян'),
+      title: Text(l10n.cancelTrainingTitle),
+      content: Text(l10n.cancelTrainingContent),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: const Text('Отмена'),
+          child: Text(l10n.cancel),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
-          child: const Text('Выйти'),
+          child: Text(l10n.exit),
         ),
       ],
     );

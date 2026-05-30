@@ -1,196 +1,179 @@
 import 'package:flutter/material.dart';
 import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/constants/app_fonts.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppThemes {
-  static final ThemeData lightTheme = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.light,
-    primaryColor: mainColorLight,
-    scaffoldBackgroundColor: backgroundColorLight,
-    dividerColor: secondColorLight,
-    appBarTheme: AppBarTheme(
-      backgroundColor: settingsAppBar,
-      elevation: 2,
-      titleTextStyle: TextStyles.h1.copyWith(
-        color: colorForMaterialCardDark,
-      ),
-      iconTheme: IconThemeData(color: thirdColor),
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: mainColorLight,
-      foregroundColor: Colors.white,
-    ),
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: mainColorLight,
-      brightness: Brightness.light,
-      primary: mainColorLight,
-      onPrimary: Colors.white,
-      secondary: thirdColor,
-      onSecondary: Colors.white,
-      error: colorForButton,
-      onError: Colors.white,
-      surface: trainerBottomSheetBackground,
-      onSurface: colorForMaterialCardDark,
-    ),
-    textTheme: TextTheme(
-      displayLarge: TextStyles.h1.copyWith(color: colorForMaterialCardDark),
-      displayMedium: TextStyles.h2.copyWith(color: colorForMaterialCardDark),
-      displaySmall: TextStyles.h3.copyWith(color: colorForMaterialCardDark),
-      headlineLarge: TextStyles.textBold.copyWith(color: colorForMaterialCardDark),
-      headlineMedium: TextStyles.textMed.copyWith(color: colorForMaterialCardDark),
-      headlineSmall: TextStyles.text.copyWith(color: colorForMaterialCardDark),
-      titleLarge: TextStyles.textSmall.copyWith(color: colorForMaterialCardDark),
-      titleMedium: TextStyles.textSmallMed.copyWith(color: colorForMaterialCardDark),
-      bodyLarge: TextStyles.text.copyWith(color: colorForMaterialCardDark),
-      bodyMedium: TextStyles.textMed.copyWith(color: colorForMaterialCardDark),
-      labelLarge: TextStyles.textBold.copyWith(color: colorForMaterialCardDark),
-      bodySmall: TextStyles.desk.copyWith(color: colorForMaterialCardDark),
-      labelSmall: TextStyles.deskMed.copyWith(color: colorForMaterialCardDark),
-    ),
-    extensions: <ThemeExtension<dynamic>>[
-      CustomButtonTheme(
-        primaryBackground: mainColorLight,
-        primaryText: Colors.white,
-        primaryDisabledBackground: secondColorLight,
-        errorBackground: colorForButton,
-        errorText: Colors.white,
-        errorDisabledBackground: colorForFindTextDark,
-      ),
-    ],
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: trainerBottomSheetBackground,
-      contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w), 
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: secondColorLight),
-        borderRadius: BorderRadius.circular(8.r), 
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: mainColorLight, width: 2.w), 
-        borderRadius: BorderRadius.circular(8.r), 
-      ),
-      errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: colorForButton, width: 2.w), 
-        borderRadius: BorderRadius.circular(8.r), 
-      ),
-      disabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: trainerAppBarButtonsBackground),
-        borderRadius: BorderRadius.circular(8.r), 
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: mainColorLight,
-        foregroundColor: Colors.white,
-        textStyle: TextStyles.textBold,
-        minimumSize: Size(64.w, 36.h), 
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)), 
-      ),
-    ),
-  );
+  static ThemeData _base(AppColors c, Brightness brightness) {
+    final colorScheme = ColorScheme(
+      brightness: brightness,
+      primary: c.primary,
+      onPrimary: c.white,
+      secondary: c.primaryPress,
+      onSecondary: c.white,
+      error: c.negative,
+      onError: c.white,
+      surface: c.bg1,
+      onSurface: c.fill1,
+      outline: c.border2,
+      outlineVariant: c.border1,
+    );
 
-  static final ThemeData darkTheme = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.dark,
-    primaryColor: mainColorDark,
-    scaffoldBackgroundColor: backgroundColorDark,
-    dividerColor: semanticBg3,
-    appBarTheme: AppBarTheme(
-      backgroundColor: colorForMaterialCardDark,
-      elevation: 2,
-      titleTextStyle: TextStyles.h1.copyWith(color: mainColorDark),
-      iconTheme: IconThemeData(color: mainColorDark),
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: mainColorDark,
-      foregroundColor: colorForMaterialCardDark,
-    ),
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: mainColorDark,
-      brightness: Brightness.dark,
-      primary: mainColorDark,
-      onPrimary: colorForMaterialCardDark,
-      secondary: secondColorDark,
-      onSecondary: colorForMaterialCardDark,
-      error: colorForButton,
-      onError: colorForMaterialCardDark,
-      surface: semanticBg2,
-      onSurface: mainColorDark,
-    ),
-    textTheme: TextTheme(
-      displayLarge: TextStyles.h1.copyWith(color: Colors.white),
-      displayMedium: TextStyles.h2.copyWith(color: Colors.white),
-      displaySmall: TextStyles.h3.copyWith(color: Colors.white),
-      headlineLarge: TextStyles.textBold.copyWith(color: Colors.white),
-      headlineMedium: TextStyles.textMed.copyWith(color: Colors.white),
-      headlineSmall: TextStyles.text.copyWith(color: Colors.white),
-      titleLarge: TextStyles.textSmall.copyWith(color: Colors.white),
-      titleMedium: TextStyles.textSmallMed.copyWith(color: Colors.white),
-      bodyLarge: TextStyles.text.copyWith(color: Colors.white),
-      bodyMedium: TextStyles.textMed.copyWith(color: Colors.white),
-      labelLarge: TextStyles.textBold.copyWith(color: Colors.white),
-      bodySmall: TextStyles.desk.copyWith(color: Colors.white),
-      labelSmall: TextStyles.deskMed.copyWith(color: Colors.white),
-    ),
-    extensions: <ThemeExtension<dynamic>>[
-      CustomButtonTheme(
-        primaryBackground: mainColorDark,
-        primaryText: colorForMaterialCardDark,
-        primaryDisabledBackground: semanticBg3,
-        errorBackground: colorForButton,
-        errorText: mainColorDark,
-        errorDisabledBackground: colorForFindTextDark,
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      primaryColor: c.primary,
+      scaffoldBackgroundColor: c.bg2,
+      dividerColor: c.border1,
+      cardColor: c.bg1,
+      colorScheme: colorScheme,
+
+      // ── AppBar ──
+      appBarTheme: AppBarTheme(
+        backgroundColor: c.bg2,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        titleTextStyle: TextStyles.h2.copyWith(color: c.fill1),
+        iconTheme: IconThemeData(color: c.fill1),
       ),
-    ],
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: semanticBg2,
-      contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w), 
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: semanticBg3),
-        borderRadius: BorderRadius.circular(8.r), 
+
+      // ── Text Theme ──
+      textTheme: TextTheme(
+        displayLarge: TextStyles.h1.copyWith(color: c.fill1),
+        displayMedium: TextStyles.h2.copyWith(color: c.fill1),
+        displaySmall: TextStyles.h3.copyWith(color: c.fill1),
+        headlineLarge: TextStyles.textSemi.copyWith(color: c.fill1),
+        headlineMedium: TextStyles.text.copyWith(color: c.fill1),
+        headlineSmall: TextStyles.textSmall.copyWith(color: c.fill1),
+        titleLarge: TextStyles.textSemi.copyWith(color: c.fill1),
+        titleMedium: TextStyles.textSReg.copyWith(color: c.fill2),
+        bodyLarge: TextStyles.text.copyWith(color: c.fill1),
+        bodyMedium: TextStyles.textSmall.copyWith(color: c.fill2),
+        labelLarge: TextStyles.textSBold.copyWith(color: c.fill1),
+        bodySmall: TextStyles.deskSemi.copyWith(color: c.fill2),
+        labelSmall: TextStyles.deskMed.copyWith(color: c.fill2),
       ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: mainColorDark, width: 2.w), 
-        borderRadius: BorderRadius.circular(8.r), 
+
+      // ── Input Decoration ──
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: c.bg1,
+        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: c.border2, width: 1.5),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: c.border2, width: 1.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: c.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: c.negative, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: c.negative, width: 2),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: c.border1, width: 1.5),
+        ),
       ),
-      errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: colorForButton, width: 2.w), 
-        borderRadius: BorderRadius.circular(8.r), 
+
+      // ── Elevated Button ──
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: c.primary,
+          foregroundColor: c.white,
+          disabledBackgroundColor: c.primaryDis,
+          disabledForegroundColor: c.whiteDis,
+          textStyle: TextStyles.textSemi,
+          minimumSize: const Size(64, 48),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          elevation: 0,
+        ),
       ),
-      disabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: semanticBg3),
-        borderRadius: BorderRadius.circular(8.r), 
+
+      // ── Filled Button ──
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: c.primary,
+          foregroundColor: c.white,
+          disabledBackgroundColor: c.primaryDis,
+          textStyle: TextStyles.textSemi,
+          minimumSize: const Size(64, 48),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
       ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: mainColorDark,
-        foregroundColor: colorForMaterialCardDark,
-        textStyle: TextStyles.textBold,
-        minimumSize: Size(64.w, 36.h), 
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)), 
+
+      // ── Text Button ──
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: c.primary,
+          textStyle: TextStyles.textSemi,
+        ),
       ),
-    ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: colorForMaterialCardDark,
-      selectedItemColor: mainColorDark,
-      unselectedItemColor: semanticBg3,
-    ),
-  );
+
+      // ── Floating Action Button ──
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: c.primary,
+        foregroundColor: c.white,
+        elevation: 2,
+      ),
+
+      // ── Bottom Navigation Bar ──
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: c.bg1,
+        selectedItemColor: c.primary,
+        unselectedItemColor: c.fill2,
+        type: BottomNavigationBarType.fixed,
+        elevation: 8,
+      ),
+
+      // ── Card Theme ──
+      cardTheme: CardThemeData(
+        color: c.bg1,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: c.border2, width: 1),
+        ),
+      ),
+
+      // ── Chip Theme ──
+      chipTheme: ChipThemeData(
+        backgroundColor: c.bg2,
+        labelStyle: TextStyles.deskSemi.copyWith(color: c.fill1),
+        side: BorderSide.none,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      ),
+
+      // ── Custom Button Theme extension ──
+      extensions: <ThemeExtension<dynamic>>[
+        CustomButtonTheme(
+          primaryBackground: c.primary,
+          primaryText: c.white,
+          primaryDisabledBackground: c.primaryDis,
+          errorBackground: c.negative,
+          errorText: c.white,
+          errorDisabledBackground: c.negativeDis,
+        ),
+      ],
+    );
+  }
+
+  static final ThemeData lightTheme = _base(AppColors.light, Brightness.light);
+  static final ThemeData darkTheme = _base(AppColors.dark, Brightness.dark);
 }
 
 @immutable
 class CustomButtonTheme extends ThemeExtension<CustomButtonTheme> {
-  final Color primaryBackground;
-  final Color primaryText;
-  final Color primaryDisabledBackground;
-  final Color errorBackground;
-  final Color errorText;
-  final Color errorDisabledBackground;
-
   const CustomButtonTheme({
     required this.primaryBackground,
     required this.primaryText,
@@ -199,6 +182,12 @@ class CustomButtonTheme extends ThemeExtension<CustomButtonTheme> {
     required this.errorText,
     required this.errorDisabledBackground,
   });
+  final Color primaryBackground;
+  final Color primaryText;
+  final Color primaryDisabledBackground;
+  final Color errorBackground;
+  final Color errorText;
+  final Color errorDisabledBackground;
 
   @override
   CustomButtonTheme copyWith({
@@ -212,10 +201,12 @@ class CustomButtonTheme extends ThemeExtension<CustomButtonTheme> {
     return CustomButtonTheme(
       primaryBackground: primaryBackground ?? this.primaryBackground,
       primaryText: primaryText ?? this.primaryText,
-      primaryDisabledBackground: primaryDisabledBackground ?? this.primaryDisabledBackground,
+      primaryDisabledBackground:
+          primaryDisabledBackground ?? this.primaryDisabledBackground,
       errorBackground: errorBackground ?? this.errorBackground,
       errorText: errorText ?? this.errorText,
-      errorDisabledBackground: errorDisabledBackground ?? this.errorDisabledBackground,
+      errorDisabledBackground:
+          errorDisabledBackground ?? this.errorDisabledBackground,
     );
   }
 
@@ -223,12 +214,24 @@ class CustomButtonTheme extends ThemeExtension<CustomButtonTheme> {
   CustomButtonTheme lerp(ThemeExtension<CustomButtonTheme>? other, double t) {
     if (other is! CustomButtonTheme) return this;
     return CustomButtonTheme(
-      primaryBackground: Color.lerp(primaryBackground, other.primaryBackground, t)!,
+      primaryBackground: Color.lerp(
+        primaryBackground,
+        other.primaryBackground,
+        t,
+      )!,
       primaryText: Color.lerp(primaryText, other.primaryText, t)!,
-      primaryDisabledBackground: Color.lerp(primaryDisabledBackground, other.primaryDisabledBackground, t)!,
+      primaryDisabledBackground: Color.lerp(
+        primaryDisabledBackground,
+        other.primaryDisabledBackground,
+        t,
+      )!,
       errorBackground: Color.lerp(errorBackground, other.errorBackground, t)!,
       errorText: Color.lerp(errorText, other.errorText, t)!,
-      errorDisabledBackground: Color.lerp(errorDisabledBackground, other.errorDisabledBackground, t)!,
+      errorDisabledBackground: Color.lerp(
+        errorDisabledBackground,
+        other.errorDisabledBackground,
+        t,
+      )!,
     );
   }
 }

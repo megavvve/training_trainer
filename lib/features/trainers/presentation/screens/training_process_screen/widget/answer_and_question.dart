@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:training_trainer/constants/app_colors.dart';
-import 'package:training_trainer/core/config/theme/cubit/theme_cubit.dart';
+import 'package:training_trainer/constants/app_fonts.dart';
 import 'package:training_trainer/features/trainers/presentation/providers/train_process_bloc/train_process_bloc.dart';
 
 class AnswersAndQuestion extends StatelessWidget {
@@ -12,34 +11,31 @@ class AnswersAndQuestion extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TrainProcessBloc, TrainProcessState>(
       builder: (context, state) {
-        final brightness = context.watch<ThemeCubit>().state.brightness;
-
         if (state is! TrainProcessInProgress) return const SizedBox.shrink();
 
         final question = state.currentQuestion;
 
         return Padding(
-          padding: EdgeInsets.all(17.0.sp),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(16.sp),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color:
-                      brightness == Brightness.dark
-                          ? colorForMaterialCardDark
-                          : Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(14.sp)),
+                  color: AppColorsExt.bg1,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColorsExt.border2, width: 1),
                 ),
-                width: 335.w,
+                width: double.infinity,
                 child: Center(
                   child: Text(
                     question.textQuestion,
-                    style: Theme.of(context).textTheme.displayMedium,
+                    style: TextStyles.h3.copyWith(color: AppColorsExt.fill1),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
-              SizedBox(height: 40.h),
+              const SizedBox(height: 40),
               Answers(
                 list: question.answers,
                 correctAnswer: question.rightAnswer,
@@ -54,26 +50,22 @@ class AnswersAndQuestion extends StatelessWidget {
 }
 
 class Answers extends StatelessWidget {
+  const Answers({
+    required this.list,
+    required this.correctAnswer,
+    required this.isAnswerChecked,
+    super.key,
+  });
   final List<String> list;
   final String correctAnswer;
   final bool isAnswerChecked;
 
-  const Answers({
-    super.key,
-    required this.list,
-    required this.correctAnswer,
-    required this.isAnswerChecked,
-  });
-
   @override
   Widget build(BuildContext context) {
     return BlocSelector<TrainProcessBloc, TrainProcessState, String?>(
-      selector:
-          (state) =>
-              state is TrainProcessInProgress ? state.selectedAnswer : null,
+      selector: (state) =>
+          state is TrainProcessInProgress ? state.selectedAnswer : null,
       builder: (context, selectedAnswer) {
-        final brightness = context.watch<ThemeCubit>().state.brightness;
-
         return Column(
           children: [
             for (int i = 0; i < list.length; i++)
@@ -81,7 +73,6 @@ class Answers extends StatelessWidget {
                 answer: list[i],
                 isSelected: list[i] == selectedAnswer,
                 isCorrect: list[i] == correctAnswer,
-                brightness: brightness,
                 isAnswerChecked: isAnswerChecked,
               ),
           ],
@@ -92,111 +83,94 @@ class Answers extends StatelessWidget {
 }
 
 class _AnswerItem extends StatelessWidget {
-  final String answer;
-  final bool isSelected;
-  final bool isCorrect;
-  final bool isAnswerChecked;
-  final Brightness brightness;
-
   const _AnswerItem({
     required this.answer,
     required this.isSelected,
     required this.isCorrect,
-    required this.brightness,
     required this.isAnswerChecked,
   });
+  final String answer;
+  final bool isSelected;
+  final bool isCorrect;
+  final bool isAnswerChecked;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: 320.w,
-          child: ElevatedButton(
-            style: _styleForAnswer(
-              isSelected: isSelected,
-              isCorrect: isCorrect,
-              isAnswerChecked: isAnswerChecked,
-              context: context,
-            ),
-            onPressed: isAnswerChecked
-                ? ()
-{}                : () => context.read<TrainProcessBloc>().add(
-                      SelectAnswer(answer: answer),
-                    ),
-            child: Padding(
-              padding: EdgeInsets.all(14.0.sp),
-              child: Text(answer, 
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: _getTextColor(
-                    brightness,
-                    isSelected,
-                    isCorrect,
-                    isAnswerChecked,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: _styleForAnswer(
+            isSelected: isSelected,
+            isCorrect: isCorrect,
+            isAnswerChecked: isAnswerChecked,
+          ),
+          onPressed: isAnswerChecked
+              ? null
+              : () => context.read<TrainProcessBloc>().add(
+                    SelectAnswer(answer: answer),
                   ),
-                ),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Text(
+              answer,
+              style: TextStyles.text.copyWith(
+                color: _getTextColor(isSelected, isCorrect, isAnswerChecked),
               ),
             ),
           ),
         ),
-        SizedBox(height: 23.h),
-      ],
+      ),
     );
   }
 
   Color _getTextColor(
-    Brightness brightness,
     bool isSelected,
     bool isCorrect,
     bool isAnswerChecked,
   ) {
-    if (isAnswerChecked&&isCorrect|| isSelected||isAnswerChecked&&isSelected) {
+    if (isAnswerChecked && (isCorrect || isSelected)) {
       return Colors.white;
     }
-    return brightness == Brightness.dark ? Colors.white : Colors.black;
+    return AppColorsExt.fill1;
   }
-}
 
-ButtonStyle _styleForAnswer({
-  required bool isSelected,
-  required bool isCorrect,
-  required bool isAnswerChecked,
-  required BuildContext context,
-}) {
-  final brightness = context.watch<ThemeCubit>().state.brightness;
-  Color backgroundColor;
+  ButtonStyle _styleForAnswer({
+    required bool isSelected,
+    required bool isCorrect,
+    required bool isAnswerChecked,
+  }) {
+    Color backgroundColor;
 
-  if (isAnswerChecked) {
-    if (isCorrect) {
-      backgroundColor = Colors.green; 
-    } else if (isSelected) {
-      backgroundColor = Colors.red; 
+    if (isAnswerChecked) {
+      if (isCorrect) {
+        backgroundColor = AppColorsExt.positive;
+      } else if (isSelected) {
+        backgroundColor = AppColorsExt.negative;
+      } else {
+        backgroundColor = AppColorsExt.bg1;
+      }
     } else {
-      backgroundColor = brightness == Brightness.dark
-          ? colorForMaterialCardDark
-          : Colors.white;
+      backgroundColor = isSelected
+          ? AppColorsExt.primary.withOpacity(0.15)
+          : AppColorsExt.bg1;
     }
-  } else {
-    // Before the answer is checked
-    backgroundColor = isSelected
-        ? Colors.blue.withOpacity(0.3) // Highlight selected answer before checking
-        : (brightness == Brightness.dark
-            ? colorForMaterialCardDark
-            : Colors.white); // Default color if no selection
-  }
 
-  return ElevatedButton.styleFrom(
-    backgroundColor: backgroundColor,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12.sp),
-      side: BorderSide(
-        color: isAnswerChecked
-            ? Colors.transparent
-            : isSelected
-                ? Colors.blue
-                : Colors.transparent,
-        width: 2.w,
+    return ElevatedButton.styleFrom(
+      backgroundColor: backgroundColor,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: isAnswerChecked
+              ? Colors.transparent
+              : isSelected
+                  ? AppColorsExt.primary
+                  : AppColorsExt.border2,
+          width: isAnswerChecked ? 0 : 1.5,
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

@@ -12,10 +12,7 @@ import 'package:uuid/uuid.dart';
 part 'trainers_event.dart';
 part 'trainers_state.dart';
 
-class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
-  final TrainersRepository repository;
-  List<Trainer> trainers = [];
-  List<Trainer> filteredTrainers = []; // New list for filtered trainers
+class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for filtered trainers
 
   TrainersBloc({required this.repository}) : super(TrainersInitial()) {
     on<DeleteTrainer>(_onDeleteTrainer);
@@ -24,6 +21,9 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
     on<SearchTrainers>(_onSearchTrainers);
     on<SortTrainers>(_onSortTrainers);
   }
+  final TrainersRepository repository;
+  List<Trainer> trainers = [];
+  List<Trainer> filteredTrainers = [];
 
   FutureOr<void> _onLoadTrainers(
     LoadTrainers event,

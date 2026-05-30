@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:training_trainer/constants/app_colors.dart';
 
 class TextPatternWidget extends StatelessWidget {
   const TextPatternWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const baseText = "TRAININGTRAINER";
+    const baseText = 'TRAININGTRAINER';
     final lines = _generatePattern(baseText);
 
-     return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (int i = 0; i < lines.length; i++)
-                _buildTextLine(lines[i], i),
-            ],
-          ),
-        );
-    
-
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (int i = 0; i < lines.length; i++) _buildTextLine(lines[i], i),
+        ],
+      ),
+    );
   }
 
   List<String> _generatePattern(String text) {
@@ -33,20 +30,18 @@ class TextPatternWidget extends StatelessWidget {
 
   Widget _buildTextLine(String text, int index) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 2.h),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: Text(
         text,
         style: TextStyle(
-         height: 2.5.h,
-          fontSize: 16.sp,
-          color: Colors.blue.withOpacity(0.5),
+          height: 2.5,
+          fontSize: 16,
+          color: AppColorsExt.primary.withOpacity(0.3),
           fontFamily: 'RobotoMono',
           fontWeight: FontWeight.w500,
-          letterSpacing: 15.sp,
+          letterSpacing: 15,
         ),
       ),
     );
   }
-
-
 }

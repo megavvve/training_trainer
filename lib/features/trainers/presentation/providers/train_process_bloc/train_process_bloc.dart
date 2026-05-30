@@ -8,14 +8,6 @@ part 'train_process_event.dart';
 part 'train_process_state.dart';
 
 class TrainProcessBloc extends Bloc<TrainProcessEvent, TrainProcessState> {
-  late List<Question> _questions;
-  int _remainingTime = 0;
-  int _currentQuestionIndex = 0;
-  int _correctAnswers = 0;
-  Timer? _timer;
-
-  String? _selectedAnswer;
-  bool _isAnswerChecked = false;
   TrainProcessBloc() : super(TrainProcessInitial()) {
     on<StartTrainingSession>(_onStartTrainingSession);
     on<SelectAnswer>(_onSelectAnswer);
@@ -24,6 +16,14 @@ class TrainProcessBloc extends Bloc<TrainProcessEvent, TrainProcessState> {
     on<UpdateTimer>(_onUpdateTimer);
     on<FinishTrainingSession>(_onFinishTrainingSession);
   }
+  late List<Question> _questions;
+  int _remainingTime = 0;
+  int _currentQuestionIndex = 0;
+  int _correctAnswers = 0;
+  Timer? _timer;
+
+  String? _selectedAnswer;
+  bool _isAnswerChecked = false;
 
   FutureOr<void> _onStartTrainingSession(
     StartTrainingSession event,
@@ -50,7 +50,7 @@ class TrainProcessBloc extends Bloc<TrainProcessEvent, TrainProcessState> {
         ),
       );
     } catch (e) {
-      emit(TrainProcessError(errorMessage: 'Ошибка запуска тренировки'));
+      emit(const TrainProcessError(errorMessage: 'Ошибка запуска тренировки'));
     }
   }
 

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:training_trainer/constants/app_colors.dart';
-import 'package:training_trainer/core/config/theme/cubit/theme_cubit.dart';
+import 'package:training_trainer/constants/app_fonts.dart';
 import 'package:training_trainer/features/trainers/domain/entities/trainer.dart';
 import 'package:training_trainer/features/trainers/presentation/providers/train_process_bloc/train_process_bloc.dart';
 import 'package:training_trainer/features/trainers/presentation/screens/training_process_screen/widget/answer_and_question.dart';
@@ -12,8 +11,8 @@ import 'package:training_trainer/features/trainers/presentation/screens/training
 import 'package:training_trainer/routing/app_routes.dart';
 
 class TrainProcessScreen extends StatefulWidget {
+  const TrainProcessScreen({required this.trainer, super.key});
   final Trainer trainer;
-  const TrainProcessScreen({super.key, required this.trainer});
 
   @override
   State<TrainProcessScreen> createState() => _TrainProcessScreenState();
@@ -23,15 +22,13 @@ class _TrainProcessScreenState extends State<TrainProcessScreen> {
   @override
   void initState() {
     context.read<TrainProcessBloc>().add(
-      StartTrainingSession(trainer: widget.trainer),
-    );
+          StartTrainingSession(trainer: widget.trainer),
+        );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final brightness = context.watch<ThemeCubit>().state.brightness;
-
     return BlocListener<TrainProcessBloc, TrainProcessState>(
       listener: (context, state) {
         if (state is TrainProcessCompleted) {
@@ -39,12 +36,14 @@ class _TrainProcessScreenState extends State<TrainProcessScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor:
-            brightness == Brightness.dark
-                ? backgroundColorDark
-                : backgroundColorLight,
-        body: WillPopScope(
-          onWillPop: () async => _handleBackPressed(context),
+        backgroundColor: AppColorsExt.bg2,
+        body: PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (!didPop) {
+              _handleBackPressed(context);
+            }
+          },
           child: Stack(
             children: [
               CustomScrollView(
@@ -53,18 +52,18 @@ class _TrainProcessScreenState extends State<TrainProcessScreen> {
                   SliverList(
                     delegate: SliverChildListDelegate([
                       Padding(
-                        padding: EdgeInsets.only(bottom: 100.h),
-                        child: AnswersAndQuestion(),
+                        padding: const EdgeInsets.only(bottom: 100),
+                        child: const AnswersAndQuestion(),
                       ),
                     ]),
                   ),
                 ],
               ),
-              Positioned(
-                bottom: 40.h,
-                left: 20.w,
-                right: 20.w,
-                child: const CheckButton(),
+              const Positioned(
+                bottom: 40,
+                left: 20,
+                right: 20,
+                child: CheckButton(),
               ),
             ],
           ),
@@ -81,8 +80,8 @@ Future<bool> _handleBackPressed(BuildContext context) async {
   );
   if (result == true) {
     context.read<TrainProcessBloc>().add(
-      FinishTrainingSession(correctAnswers: 0),
-    );
+          const FinishTrainingSession(correctAnswers: 0),
+        );
     context.pop();
     return true;
   }
@@ -96,38 +95,36 @@ SliverAppBar _buildAppBar(BuildContext context, Trainer trainer) {
     snap: true,
     floating: true,
     surfaceTintColor: Colors.transparent,
-    collapsedHeight: 80.h,
-    backgroundColor:
-        context.watch<ThemeCubit>().state.brightness == Brightness.dark
-            ? backgroundColorDark
-            : backgroundColorLight,
+    collapsedHeight: 80,
+    backgroundColor: AppColorsExt.bg2,
     leading: IconButton(
       icon: const Icon(Icons.close),
       onPressed: () => _handleBackPressed(context),
     ),
-    title: Text(trainer.title, style: TextStyle(fontSize: 18.sp)),
+    title: Text(trainer.title, style: TextStyles.h3),
     bottom: PreferredSize(
-      preferredSize: Size.fromHeight(10.h),
+      preferredSize: const Size.fromHeight(10),
       child: BlocBuilder<TrainProcessBloc, TrainProcessState>(
         builder: (context, state) {
-          final progress =
-              state is TrainProcessInProgress
-                  ? (state.isAnswerChecked)?(state.currentQuestionIndex+1) / trainer.questions.length:(state.currentQuestionIndex) / trainer.questions.length
-                  : 0.0;
+          final progress = state is TrainProcessInProgress
+              ? (state.isAnswerChecked
+                  ? (state.currentQuestionIndex + 1) / trainer.questions.length
+                  : state.currentQuestionIndex / trainer.questions.length)
+              : 0.0;
           final remainingTime =
               state is TrainProcessInProgress ? state.remainingTime : 0;
 
           return Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 8.h),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
                 child: LinearProgressIndicator(
                   value: progress,
-                  valueColor: AlwaysStoppedAnimation<Color>(mainColorLight),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColorsExt.primary),
                 ),
               ),
               _buildTimer(remainingTime),
-              SizedBox(height: 8.h),
+              const SizedBox(height: 8),
             ],
           );
         },
@@ -142,10 +139,6 @@ Widget _buildTimer(int seconds) {
 
   return Text(
     '$minutes:$remainingSeconds',
-    style: TextStyle(
-      fontSize: 16.sp,
-      fontWeight: FontWeight.w600,
-      color: mainColorLight,
-    ),
+    style: TextStyles.h3.copyWith(color: AppColorsExt.primary),
   );
 }

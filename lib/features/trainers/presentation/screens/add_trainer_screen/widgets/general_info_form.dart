@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:training_trainer/constants/app_colors.dart';
+import 'package:training_trainer/constants/app_fonts.dart';
+import 'package:training_trainer/l10n/app_localizations.dart';
 
 class GeneralInfoForm extends StatelessWidget {
+  const GeneralInfoForm({
+    required this.titleController,
+    required this.descriptionController,
+    required this.timeController,
+    required this.formKey,
+    super.key,
+  });
   final TextEditingController titleController;
   final TextEditingController descriptionController;
   final TextEditingController timeController;
   final GlobalKey<FormState> formKey;
 
-  const GeneralInfoForm({super.key, 
-    required this.titleController,
-    required this.descriptionController,
-    required this.timeController,
-    required this.formKey,
-  });
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Form(
       key: formKey,
       child: Column(
@@ -23,29 +26,29 @@ class GeneralInfoForm extends StatelessWidget {
           TextFormField(
             controller: titleController,
             decoration: const InputDecoration(
-              labelText: 'Название тренажера',
+              labelText: 'Заголовок',
               border: OutlineInputBorder(),
             ),
-            validator: (value) => value!.isEmpty ? 'Введите название' : null,
+            validator: (value) => value!.isEmpty ? l10n.enterTitle : null,
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16),
           TextFormField(
             controller: descriptionController,
             decoration: const InputDecoration(
-              labelText: 'Описание тренажера',
+              labelText: 'Описание',
               border: OutlineInputBorder(),
             ),
             maxLines: 3,
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16),
           TextFormField(
             controller: timeController,
             decoration: const InputDecoration(
-              labelText: 'Время на прохождение (минуты)',
+              labelText: 'Время (сек)',
               border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.number,
-            validator: (value) => value!.isEmpty ? 'Введите время' : null,
+            validator: (value) => value!.isEmpty ? l10n.enterTime : null,
           ),
         ],
       ),

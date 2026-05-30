@@ -1,50 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:training_trainer/constants/app_colors.dart';
+import 'package:training_trainer/constants/app_fonts.dart';
 import 'package:training_trainer/core/config/theme/cubit/theme_cubit.dart';
+import 'package:training_trainer/l10n/app_localizations.dart';
 
-class ThemeSwitchButton extends StatefulWidget {
+class ThemeSwitchButton extends StatelessWidget {
   const ThemeSwitchButton({super.key});
 
   @override
-  State<ThemeSwitchButton> createState() => _ThemeSwitchButtonState();
-}
-
-class _ThemeSwitchButtonState extends State<ThemeSwitchButton> {
-  @override
   Widget build(BuildContext context) {
     final brightness = context.watch<ThemeCubit>().state.brightness;
-    return Center(
-      child: Container(
-        padding: EdgeInsets.all(16.sp),
-        height: 70.h,
-        //width: 315.w,
-        decoration: BoxDecoration(
-          color:
-              brightness == Brightness.dark
-                  ? colorForMaterialCardDark
-                  : const Color(0xFFAEC6FF),
-          borderRadius: BorderRadius.all(Radius.circular(16.sp)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text("Темная тема", style: TextStyle(fontSize: 20.sp)),
-            ),
-            Switch(
-              value: brightness == Brightness.dark,
-              activeColor: mainColorLight,
-              onChanged: (bool value) {
-                context.read<ThemeCubit>().setThemeBrightness(
-                  value ? Brightness.dark : Brightness.light,
-                );
-              },
-            ),
-          ],
-        ),
+    final l10n = AppLocalizations.of(context)!;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColorsExt.bg1,
+        borderRadius: const BorderRadius.all(Radius.circular(16)),
+        border: Border.all(color: AppColorsExt.border2, width: 1),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(
+                brightness == Brightness.dark
+                    ? Icons.dark_mode_rounded
+                    : Icons.light_mode_rounded,
+                color: AppColorsExt.primary,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                l10n.darkTheme,
+                style: TextStyles.text.copyWith(color: AppColorsExt.fill1),
+              ),
+            ],
+          ),
+          Switch(
+            value: brightness == Brightness.dark,
+            activeColor: AppColorsExt.primary,
+            onChanged: (bool value) {
+              context.read<ThemeCubit>().setThemeBrightness(
+                    value ? Brightness.dark : Brightness.light,
+                  );
+            },
+          ),
+        ],
       ),
     );
   }

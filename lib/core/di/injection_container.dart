@@ -10,6 +10,8 @@ import 'package:training_trainer/core/services/ai/ai_implimentation/rest_ai_gene
 import 'package:training_trainer/features/auth/data/repositories/rest_auth_repository_impl.dart';
 import 'package:training_trainer/features/auth/domain/repositories/auth_repository.dart';
 import 'package:training_trainer/features/auth/domain/usecases/sign_out.dart';
+import 'package:training_trainer/features/results/data/repositories/rest_results_repository_impl.dart';
+import 'package:training_trainer/features/results/domain/repositories/results_repository.dart';
 import 'package:training_trainer/features/trainers/data/repositories/rest_trainers_repository_impl.dart';
 import 'package:training_trainer/features/trainers/domain/repositories/trainiers_repository.dart';
 import 'package:uuid/uuid.dart';
@@ -19,16 +21,17 @@ final getIt = GetIt.instance;
 Future<void> setupDependencies() async {
   // Services
   getIt.registerSingleton<Talker>(Talker());
-  getIt.registerSingleton<Uuid>(Uuid());
+  getIt.registerSingleton<Uuid>(const Uuid());
   getIt.registerSingleton<TokenStorage>(TokenStorage());
 
   final box = await Hive.openBox<dynamic>('settings');
   getIt.registerSingleton<Box<dynamic>>(box);
 
   // REST Client with backend URL from environment
+  // iOS Simulator uses localhost, Android emulator uses 10.0.2.2
   const backendUrl = String.fromEnvironment(
     'BACKEND_URL',
-    defaultValue: 'http://192.168.31.170:8000',
+    defaultValue: 'http://localhost:8000',
   );
 
   // Register and initialize Modern ApiClient (Dio based)
@@ -45,9 +48,7 @@ Future<void> setupDependencies() async {
     RestClient(baseUrl: backendUrl, talker: getIt<Talker>()),
   );
 
-  getIt.registerSingleton<AIGenerator>(
-    RestAIGenerator(getIt<ApiClient>()),
-  );
+  getIt.registerSingleton<AIGenerator>(RestAIGenerator(getIt<ApiClient>()));
 
   // Repositories migrated to ApiClient
   getIt.registerSingleton<AuthRepository>(
@@ -56,7 +57,9 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton<TrainersRepository>(
     RestTrainersRepositoryImpl(getIt<ApiClient>()),
   );
-
+  getIt.registerSingleton<ResultsRepository>(
+    RestResultsRepositoryImpl(getIt<ApiClient>()),
+  );
 
   // UseCases
   getIt.registerFactory<Signout>(

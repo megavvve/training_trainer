@@ -1,55 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:training_trainer/constants/app_colors.dart';
+import 'package:training_trainer/constants/app_fonts.dart';
+import 'package:training_trainer/l10n/app_localizations.dart';
+import 'package:training_trainer/uikit/buttons/secondary_button.dart';
 
 class KeywordsForm extends StatelessWidget {
+  const KeywordsForm({
+    required this.keywordsController,
+    required this.keywords,
+    required this.addKeyword,
+    required this.removeKeyword,
+    super.key,
+  });
   final TextEditingController keywordsController;
   final List<String> keywords;
   final Function(String) addKeyword;
   final Function(String) removeKeyword;
 
-  const KeywordsForm({
-    super.key,
-    required this.keywordsController,
-    required this.keywords,
-    required this.addKeyword,
-    required this.removeKeyword,
-  });
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
-              child: TextFormField(
+              child: TextField(
                 controller: keywordsController,
-                decoration: const InputDecoration(
-                  labelText: 'Ключевое слово',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.keywordsTitle,
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
-            SizedBox(width: 8.w),
-            ElevatedButton(
-              onPressed: () {
-                if (keywordsController.text.isNotEmpty) {
-                  addKeyword(keywordsController.text.trim());
-                  keywordsController.clear();
-                }
-              },
-              child: const Text('Добавить'),
+            const SizedBox(width: 12),
+            SizedBox(
+              height: 48,
+              child: AppSecondaryButton(
+                onTap: () {
+                  if (keywordsController.text.isNotEmpty) {
+                    addKeyword(keywordsController.text.trim());
+                    keywordsController.clear();
+                  }
+                },
+                text: l10n.add,
+              ),
             ),
           ],
         ),
-        SizedBox(height: 16.h),
+        const SizedBox(height: 16),
         Wrap(
-          spacing: 8.w,
-          children: keywords.map((keyword) => Chip(
-            label: Text(keyword),
-            deleteIcon: const Icon(Icons.close),
-            onDeleted: () => removeKeyword(keyword),
-          )).toList(),
+          spacing: 8,
+          runSpacing: 8,
+          children: keywords
+              .map(
+                (keyword) => Chip(
+                  label: Text(
+                    keyword,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  deleteIcon: const Icon(Icons.close, size: 18),
+                  onDeleted: () => removeKeyword(keyword),
+                ),
+              )
+              .toList(),
         ),
       ],
     );

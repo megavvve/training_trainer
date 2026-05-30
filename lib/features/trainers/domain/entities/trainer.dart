@@ -1,8 +1,21 @@
-import 'package:training_trainer/features/trainers/domain/entities/question.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:training_trainer/features/trainers/domain/entities/question.dart';
+
 part 'trainer.g.dart';
 @JsonSerializable()
 class Trainer {
+
+  Trainer({
+    required this.id,
+    required this.starCount,
+    required this.userId,
+    required this.timeRequiredInSeconds,
+    required this.title,
+    required this.description, this.questions = const [],
+    this.keywords = const [],
+    DateTime? createdAt,
+  })  : createdAt = createdAt ?? DateTime.now();
+   factory Trainer.fromJson(Map<String, dynamic> json) => _$TrainerFromJson(json);
   final String id;
   final String userId;
   final double starCount;
@@ -12,19 +25,6 @@ class Trainer {
   final List<String> keywords;
   final String description;
   final DateTime createdAt;
-
-  Trainer({
-    required this.id,
-    required this.starCount,
-    required this.userId,
-    required this.timeRequiredInSeconds,
-    required this.title,
-    this.questions = const [],
-    this.keywords = const [],
-    required this.description,
-    DateTime? createdAt,
-  })  : createdAt = createdAt ?? DateTime.now();
-   factory Trainer.fromJson(Map<String, dynamic> json) => _$TrainerFromJson(json);
 
   /// Connect the generated [_$TrainerToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$TrainerToJson(this);
@@ -41,14 +41,14 @@ class Trainer {
     keywords: ['программирование', 'Dart', 'новичкам'],
     questions: [
       Question(
-        id: "1",
+        id: '1',
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
           'Способ ускорения работы приложения',
           'Метод сжатия данных'
         ],
-        rightAnswer: "Что такое Null Safety в Dart?",
+        rightAnswer: 'Что такое Null Safety в Dart?',
       ),
     ],
   ),
@@ -62,14 +62,14 @@ class Trainer {
     keywords: ['Flutter', 'UI', 'виджеты'],
     questions: [
        Question(
-        id: "1",
+        id: '1',
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
           'Способ ускорения работы приложения',
           'Метод сжатия данных'
         ],
-        rightAnswer: "Что такое Null Safety в Dart?",
+        rightAnswer: 'Что такое Null Safety в Dart?',
       ),
     ],
   ),
@@ -83,14 +83,14 @@ class Trainer {
     keywords: ['сеть', 'HTTP', 'JSON'],
     questions: [
       Question(
-        id: "1",
+        id: '1',
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
           'Способ ускорения работы приложения',
           'Метод сжатия данных'
         ],
-        rightAnswer: "Что такое Null Safety в Dart?",
+        rightAnswer: 'Что такое Null Safety в Dart?',
       ),
     ],
   ),
@@ -104,14 +104,14 @@ class Trainer {
     keywords: ['BLoC', 'Provider', 'Riverpod'],
     questions: [
     Question(
-        id: "1",
+        id: '1',
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
           'Способ ускорения работы приложения',
           'Метод сжатия данных'
         ],
-        rightAnswer: "Что такое Null Safety в Dart?",
+        rightAnswer: 'Что такое Null Safety в Dart?',
       ),
     ],
   ),
@@ -125,14 +125,14 @@ class Trainer {
     keywords: ['анимации', 'UI', 'движение'],
     questions: [
      Question(
-        id: "1",
+        id: '1',
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
           'Способ ускорения работы приложения',
           'Метод сжатия данных'
         ],
-        rightAnswer: "Что такое Null Safety в Dart?",
+        rightAnswer: 'Что такое Null Safety в Dart?',
       ),
     ],
   ),
@@ -146,14 +146,14 @@ class Trainer {
     keywords: ['тесты', 'качество', 'unit'],
     questions: [
        Question(
-        id: "1",
+        id: '1',
         textQuestion: 'Что такое Null Safety в Dart?',
         answers: [
           'Система типов, предотвращающая null-ошибки',
           'Способ ускорения работы приложения',
           'Метод сжатия данных'
         ],
-        rightAnswer: "Что такое Null Safety в Dart?",
+        rightAnswer: 'Что такое Null Safety в Dart?',
       ),
     ],
   ),

@@ -1,0 +1,75 @@
+import 'package:training_trainer/features/results/domain/entities/training_result.dart';
+
+class TrainingResultDTO {
+
+  TrainingResultDTO({
+    required this.id,
+    required this.userId,
+    required this.trainerId,
+    required this.correctAnswers,
+    required this.totalQuestions,
+    required this.scorePercent,
+    required this.completedAt,
+  });
+
+  factory TrainingResultDTO.fromJson(Map<String, dynamic> json) {
+    return TrainingResultDTO(
+      id: json['id'] as String? ?? '',
+      userId: json['userId'] as String? ?? json['user_id'] as String? ?? '',
+      trainerId: json['trainerId'] as String? ?? json['trainer_id'] as String? ?? '',
+      correctAnswers: json['correctAnswers'] as int? ?? json['correct_answers'] as int? ?? 0,
+      totalQuestions: json['totalQuestions'] as int? ?? json['total_questions'] as int? ?? 0,
+      scorePercent: (json['scorePercent'] ?? json['score_percent'] ?? 0.0).toDouble(),
+      completedAt: json['completedAt'] != null 
+          ? DateTime.parse(json['completedAt']) 
+          : (json['completed_at'] != null ? DateTime.parse(json['completed_at']) : DateTime.now()),
+    );
+  }
+  final String id;
+  final String userId;
+  final String trainerId;
+  final int correctAnswers;
+  final int totalQuestions;
+  final double scorePercent;
+  final DateTime completedAt;
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'userId': userId,
+    'trainerId': trainerId,
+    'correctAnswers': correctAnswers,
+    'totalQuestions': totalQuestions,
+    'scorePercent': scorePercent,
+    'completedAt': completedAt.toIso8601String(),
+  };
+
+  TrainingResult toEntity() {
+    return TrainingResult(
+      id: id,
+      userId: userId,
+      trainerId: trainerId,
+      correctAnswers: correctAnswers,
+      totalQuestions: totalQuestions,
+      scorePercent: scorePercent,
+      completedAt: completedAt,
+    );
+  }
+}
+
+class CreateResultRequestDTO {
+
+  CreateResultRequestDTO({
+    required this.trainerId,
+    required this.correctAnswers,
+    required this.totalQuestions,
+  });
+  final String trainerId;
+  final int correctAnswers;
+  final int totalQuestions;
+
+  Map<String, dynamic> toJson() => {
+    'trainerId': trainerId,
+    'correctAnswers': correctAnswers,
+    'totalQuestions': totalQuestions,
+  };
+}

@@ -4,19 +4,13 @@ part of 'trainers_bloc.dart';
 sealed class TrainersEvent {}
 
 final class DeleteTrainer extends TrainersEvent {
-  final Trainer trainer;
   DeleteTrainer(this.trainer);
+  final Trainer trainer;
 }
 
 class LoadTrainers extends TrainersEvent {}
 
 final class AddTrainer extends TrainersEvent {
-  final String userId;
-  final String timeRequiredInSeconds;
-  final String title;
-  final List<Question> questions;
-  final List<String> keywords;
-  final String description;
 
   AddTrainer({
     required this.userId,
@@ -26,14 +20,20 @@ final class AddTrainer extends TrainersEvent {
     required this.keywords,
     required this.description,
   });
+  final String userId;
+  final String timeRequiredInSeconds;
+  final String title;
+  final List<Question> questions;
+  final List<String> keywords;
+  final String description;
 }
 class SortTrainers extends TrainersEvent {
-  final String sortBy;
 
   SortTrainers({required this.sortBy});
+  final String sortBy;
 }
 class SearchTrainers extends TrainersEvent {
-  final String query;
 
   SearchTrainers({required this.query});
+  final String query;
 }

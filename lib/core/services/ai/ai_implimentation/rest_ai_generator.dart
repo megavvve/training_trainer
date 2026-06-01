@@ -56,6 +56,32 @@ class RestAIGenerator implements AIGenerator {
   }
 
   @override
+  Future<Map<String, dynamic>> generateFullTrainer({
+    required String topic,
+    int questionCount = 5,
+    String? title,
+    String language = 'ru',
+  }) async {
+    try {
+      final data = <String, dynamic>{
+        'topic': topic,
+        'question_count': questionCount,
+        'language': language,
+      };
+      if (title != null && title.isNotEmpty) data['title'] = title;
+
+      final response = await _apiClient.post(
+        '/api/v1/ai/generate-trainer',
+        data: data,
+      );
+
+      return response.data as Map<String, dynamic>;
+    } catch (e) {
+      throw Exception('Failed to generate trainer: $e');
+    }
+  }
+
+  @override
   void dispose() {
     // No resources to dispose
   }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/core/config/localization/cubit/locale_cubit.dart';
 import 'package:training_trainer/core/config/theme/app_themes.dart';
 import 'package:training_trainer/core/config/theme/cubit/theme_cubit.dart';
@@ -11,8 +11,8 @@ import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/core/widgets/loading_screen.dart';
 import 'package:training_trainer/features/auth/presentation/providers/auth_providers.dart';
 import 'package:training_trainer/features/trainers/domain/repositories/trainiers_repository.dart';
-import 'package:training_trainer/features/trainers/presentation/providers/train_process_bloc/train_process_bloc.dart';
-import 'package:training_trainer/features/trainers/presentation/providers/trainers_bloc/trainers_bloc.dart';
+import 'package:training_trainer/features/trainers/domain/state/train_process_bloc/train_process_bloc.dart';
+import 'package:training_trainer/features/trainers/domain/state/trainers_bloc/trainers_bloc.dart';
 import 'package:training_trainer/l10n/app_localizations.dart';
 import 'package:training_trainer/routing/app_router.dart';
 
@@ -23,21 +23,6 @@ class MainApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final authState = ref.watch(authStateProvider);
-
-    // Show loading screen while checking auth
-    if (authState.isLoading || !authState.hasValue) {
-      return ScreenUtilInit(
-        designSize: const Size(375, 812),
-        builder: (context, child) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: AppThemes.lightTheme,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: const Locale('ru'),
-          home: const LoadingScreen(),
-        ),
-      );
-    }
 
     return MultiBlocProvider(
       providers: [
@@ -54,28 +39,42 @@ class MainApp extends ConsumerWidget {
                 ..add(LoadTrainers()),
         ),
       ],
-      child: ScreenUtilInit(
-        designSize: const Size(375, 812),
-        builder: (context, child) {
-          return BlocBuilder<LocaleCubit, Locale>(
-            builder: (context, locale) {
-              return BlocBuilder<ThemeCubit, ThemeState>(
-                builder: (context, themeState) {
-                  return MaterialApp.router(
-                    key: ValueKey(themeState.brightness),
-                    routerConfig: router,
-                    debugShowCheckedModeBanner: false,
-                    theme: AppThemes.lightTheme,
-                    darkTheme: AppThemes.darkTheme,
-                    themeMode: themeState.isDark
-                        ? ThemeMode.dark
-                        : ThemeMode.light,
-                    localizationsDelegates:
-                        AppLocalizations.localizationsDelegates,
-                    supportedLocales: AppLocalizations.supportedLocales,
-                    locale: locale,
-                  );
-                },
+      child: BlocBuilder<LocaleCubit, Locale>(
+        builder: (context, locale) {
+          return BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, themeState) {
+              // Sync currentColors for AppColorsExt before building theme
+              currentColors.value = themeState.isDark ? AppColors.dark : AppColors.light;
+
+              final themeMode = themeState.isDark
+                  ? ThemeMode.dark
+                  : ThemeMode.light;
+
+              if (authState.isLoading || !authState.hasValue) {
+                return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  theme: AppThemes.fromBrightness(Brightness.light),
+                  darkTheme: AppThemes.fromBrightness(Brightness.dark),
+                  themeMode: themeMode,
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  locale: locale,
+                  home: const LoadingScreen(),
+                );
+              }
+
+              return MaterialApp.router(
+                key: ValueKey(themeState.brightness),
+                routerConfig: router,
+                debugShowCheckedModeBanner: false,
+                theme: AppThemes.fromBrightness(Brightness.light),
+                darkTheme: AppThemes.fromBrightness(Brightness.dark),
+                themeMode: themeMode,
+                localizationsDelegates:
+                    AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                locale: locale,
               );
             },
           );

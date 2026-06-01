@@ -36,7 +36,7 @@ class TextPatternWidget extends StatelessWidget {
         style: TextStyle(
           height: 2.5,
           fontSize: 16,
-          color: AppColorsExt.primary.withOpacity(0.3),
+          color: AppColorsExt.primary.withValues(alpha: 0.3),
           fontFamily: 'RobotoMono',
           fontWeight: FontWeight.w500,
           letterSpacing: 15,

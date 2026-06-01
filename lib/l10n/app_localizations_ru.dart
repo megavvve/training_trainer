@@ -12,130 +12,76 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'Training Trainer';
 
   @override
-  String get home => 'Главная';
+  String get authHeadingSignIn => 'С возвращением!';
 
   @override
-  String get profile => 'Профиль';
+  String get authHeadingSignUp => 'Создать аккаунт';
 
   @override
-  String get profileLabel => 'Ваш профиль';
+  String get authSubtitleSignIn => 'Войдите чтобы продолжить обучение';
 
   @override
-  String get appSettings => 'Настройки приложения';
+  String get authSubtitleSignUp => 'Начните свой путь в обучении';
 
   @override
-  String get settings => 'Настройки';
+  String get usernameLabel => 'Имя пользователя';
 
   @override
-  String get signOut => 'Выйти';
+  String get usernameHint => 'Придумайте имя пользователя';
 
   @override
-  String get darkTheme => 'Темная тема';
+  String get emailLabel => 'Эл. почта';
 
   @override
-  String get next => 'Далее';
+  String get passwordLabel => 'Пароль';
+
+  @override
+  String get passwordHint => 'Введите пароль';
 
   @override
   String get signIn => 'Войти';
 
   @override
-  String get signUp => 'Зарегистрироваться';
+  String get signUp => 'Регистрация';
 
   @override
-  String get authHeadingSignUp => 'Регистрация';
+  String get noAccount => 'Нет аккаунта? ';
 
   @override
-  String get authHeadingSignIn => 'Вход';
+  String get alreadyHaveAccount => 'Уже есть аккаунт? ';
 
   @override
-  String get authSubtitleSignUp => 'Создайте аккаунт, чтобы начать обучение';
+  String get forgotPassword => 'Забыли пароль?';
 
   @override
-  String get authSubtitleSignIn => 'Войдите в свой аккаунт';
+  String get invalidEmail => 'Пожалуйста, введите корректный email';
 
   @override
-  String get forRegistration => 'для регистрации';
+  String get invalidLogin => 'Логин должен содержать не менее 3 символов';
 
   @override
-  String get forSignIn => 'для входа';
+  String get invalidPassword => 'Пароль должен содержать не менее 6 символов';
 
   @override
-  String get invalidEmail => 'Некорректный email';
+  String get userNotAuthenticated => 'Пользователь не авторизован';
 
   @override
-  String get emptyFields => 'Поля ввода не заполнены';
+  String get createTrainer => 'Создать тренажер';
 
   @override
-  String get userNotAuthenticated => 'Пользователь не аутентифицирован';
+  String get mainInfo => 'Основная информация';
 
   @override
-  String get unknownError => 'Неизвестная ошибка';
-
-  @override
-  String get accessForbidden => 'Доступ запрещен';
-
-  @override
-  String get resourceNotFound => 'Ресурс не найден';
-
-  @override
-  String get passwordRequirement =>
-      'Пароль должен содержать минимум 8 символов, включая буквы и цифры';
-
-  @override
-  String get alreadyHaveAccount => 'Уже есть аккаунт?';
-
-  @override
-  String get noAccount => 'Нет аккаунта?';
-
-  @override
-  String get emailLabel => 'почта';
-
-  @override
-  String get profileLoadError => 'Ошибка загрузки профиля';
-
-  @override
-  String get addTrainerError => 'Ошибка добавления тренажера';
-
-  @override
-  String get deleteTrainerError => 'Ошибка удаления тренажера';
-
-  @override
-  String get searchHint => 'Поиск по названию...';
-
-  @override
-  String foundElements(Object count) {
-    return 'Найдено элементов: $count';
-  }
-
-  @override
-  String get sorting => 'Сортировка';
-
-  @override
-  String get sortByTitle => 'По названию (А-Я)';
-
-  @override
-  String get sortByDate => 'По дате создания';
-
-  @override
-  String get sortByQuestions => 'По количеству вопросов';
-
-  @override
-  String get sort => 'Сортировать';
-
-  @override
-  String get createTrainer => 'Создание тренажера';
-
-  @override
-  String get mainInfo => 'Осн. инфо';
+  String get modeStep => 'Режим';
 
   @override
   String get addQuestions => 'Вопросы';
 
   @override
-  String get keywordsTitle => 'Ключевые слова';
+  String get preview => 'Предпросмотр';
 
   @override
-  String get preview => 'Просмотр';
+  String get next => 'Далее';
 
   @override
   String get back => 'Назад';
@@ -144,68 +90,55 @@ class AppLocalizationsRu extends AppLocalizations {
   String get save => 'Сохранить';
 
   @override
-  String get add => 'Добавить';
-
-  @override
-  String get question => 'Вопрос';
-
-  @override
-  String get start => 'Начать';
-
-  @override
-  String get continueText => 'Продолжить';
-
-  @override
-  String get check => 'Проверка';
-
-  @override
-  String get correct => 'Правильно!';
-
-  @override
-  String get error => 'Ошибка';
-
-  @override
   String get cancel => 'Отмена';
 
   @override
   String get exit => 'Выйти';
 
   @override
-  String get trainerTitle => 'Название тренажера';
+  String get trainerName => 'Название тренажера';
 
   @override
-  String get trainerDescription => 'Описание тренажера';
+  String get trainerDescription => 'Описание';
 
   @override
-  String get timeLimit => 'Время на прохождение (минуты)';
+  String get trainerTime => 'Время';
 
   @override
-  String get enterTitle => 'Введите название';
+  String get trainingProcess => 'Процесс тренировки';
 
   @override
-  String get enterTime => 'Введите время';
+  String get selectAnswer => 'Выберите правильный ответ';
 
   @override
-  String get correctAnswer => 'Правильный ответ';
+  String get confirmTitle => 'Закончить тренировку?';
 
   @override
-  String get addQuestionBtn => 'Добавить вопрос';
+  String get confirmContent => 'Убедитесь, что вы ответили на все вопросы';
 
   @override
-  String get addedQuestions => 'Добавленные вопросы';
+  String get yes => 'Да';
 
   @override
-  String get trainingResult => 'Результат тренировки';
+  String get no => 'Нет';
 
   @override
-  String correctAnswersCount(Object count) {
-    return 'Количество правильных ответов: $count';
-  }
+  String get goodResult => 'Отличный результат!';
 
   @override
-  String incorrectAnswersCount(Object count) {
-    return 'Количество неправильных ответов: $count';
-  }
+  String get normalResult => 'Можно лучше!';
+
+  @override
+  String get badResult => 'Сегодня не ваш день!';
+
+  @override
+  String get statRight => 'Верно';
+
+  @override
+  String get statWrong => 'Неверно';
+
+  @override
+  String get statUnanswered => 'Пропущено';
 
   @override
   String get congrats1 =>
@@ -253,4 +186,208 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get showCorrectAnswer => 'Посмотреть правильный ответ.';
+
+  @override
+  String get history => 'История';
+
+  @override
+  String get noHistoryYet => 'История пока пуста';
+
+  @override
+  String get noTrainersFound => 'Тренажеры не найдены';
+
+  @override
+  String get noTrainersHint =>
+      'Попробуйте изменить поиск или создать новый тренажер';
+
+  @override
+  String foundTrainers(Object count) {
+    return 'Найден $count тренажер';
+  }
+
+  @override
+  String foundTrainersPlural(Object count) {
+    return 'Найдено $count тренажеров';
+  }
+
+  @override
+  String questionsCount(Object count) {
+    return '$count вопросов';
+  }
+
+  @override
+  String minutesShort(Object count) {
+    return '$count мин';
+  }
+
+  @override
+  String get rememberMe => 'Запомнить меня';
+
+  @override
+  String get questionCount => 'Количество вопросов';
+
+  @override
+  String get questionCountHint => 'Сколько вопросов сгенерировать?';
+
+  @override
+  String get describeTopic => 'Опишите тему';
+
+  @override
+  String get topicHint => 'Какой тренажер вы хотите создать?';
+
+  @override
+  String get generate => 'Сгенерировать';
+
+  @override
+  String get modeAutomatic => 'Автоматический';
+
+  @override
+  String get modeAutoDesc => 'Генерация вопросов через ИИ';
+
+  @override
+  String get modeManual => 'Ручной';
+
+  @override
+  String get modeManualDesc => 'Создание вопросов вручную';
+
+  @override
+  String get home => 'Главная';
+
+  @override
+  String get settings => 'Настройки';
+
+  @override
+  String get profile => 'Профиль';
+
+  @override
+  String get signOut => 'Выйти';
+
+  @override
+  String get darkTheme => 'Темная тема';
+
+  @override
+  String get appSettings => 'Настройки приложения';
+
+  @override
+  String get profileLoadError => 'Не удалось загрузить профиль';
+
+  @override
+  String get emptyFields => 'Пожалуйста, заполните все поля';
+
+  @override
+  String get enterTitle => 'Введите название тренажера';
+
+  @override
+  String get enterTime => 'Введите время в минутах';
+
+  @override
+  String get trainerTitle => 'Название тренажера';
+
+  @override
+  String get timeLimit => 'Ограничение времени';
+
+  @override
+  String get keywordsTitle => 'Ключевые слова';
+
+  @override
+  String get add => 'Добавить';
+
+  @override
+  String get question => 'Вопрос';
+
+  @override
+  String get correctAnswer => 'Правильный ответ';
+
+  @override
+  String get addQuestionBtn => 'Добавить вопрос';
+
+  @override
+  String get addedQuestions => 'Добавленные вопросы';
+
+  @override
+  String get searchHint => 'Поиск тренажеров...';
+
+  @override
+  String get sort => 'Сортировка';
+
+  @override
+  String get sorting => 'Сортировка';
+
+  @override
+  String get sortByTitle => 'По названию';
+
+  @override
+  String get sortByDate => 'По дате';
+
+  @override
+  String get sortByQuestions => 'По количеству вопросов';
+
+  @override
+  String get start => 'Начать';
+
+  @override
+  String get check => 'Проверить';
+
+  @override
+  String get continueText => 'Продолжить';
+
+  @override
+  String get correct => 'Верно!';
+
+  @override
+  String get error => 'Ошибка';
+
+  @override
+  String get resultDetail => 'Детали результата';
+
+  @override
+  String get greatJob => 'Отличная работа!';
+
+  @override
+  String get keepPracticing => 'Продолжайте тренироваться!';
+
+  @override
+  String get statCorrect => 'Верных';
+
+  @override
+  String get statTotal => 'Всего';
+
+  @override
+  String get backToHistory => 'Назад к истории';
+
+  @override
+  String get trainingResult => 'Результат тренировки';
+
+  @override
+  String correctAnswersCount(Object count) {
+    return '$count верных';
+  }
+
+  @override
+  String incorrectAnswersCount(Object count) {
+    return '$count неверных';
+  }
+
+  @override
+  String unansweredAnswersCount(Object count) {
+    return '$count пропущено';
+  }
+
+  @override
+  String get generatingStatus1 => 'Анализируем тему...';
+
+  @override
+  String get generatingStatus2 => 'Генерируем вопросы...';
+
+  @override
+  String get pleaseWait => 'Пожалуйста, подождите...';
+
+  @override
+  String get generatingStatus3 => 'Создаем варианты ответов...';
+
+  @override
+  String get generatingStatus4 => 'Формируем тренажер...';
+
+  @override
+  String get generatingStatus5 => 'Уже почти готово...';
 }

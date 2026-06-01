@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/constants/app_fonts.dart';
+import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/core/utils/checks.dart';
 import 'package:training_trainer/core/utils/pop_up_notifications.dart';
-import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/email_form.dart';
-import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/headline.dart';
-import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/login_form.dart';
-import 'package:training_trainer/features/auth/presentation/auth_screen/widgets/password_form.dart';
 import 'package:training_trainer/features/auth/presentation/providers/auth_providers.dart';
 import 'package:training_trainer/l10n/app_localizations.dart';
 import 'package:training_trainer/routing/app_routes.dart';
-import 'package:training_trainer/uikit/buttons/primary_button.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -26,6 +23,17 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _passwordController = TextEditingController();
   final _loginController = TextEditingController();
   bool _isRegistry = false;
+  bool _showPassword = false;
+  bool _rememberMe = false;
+
+  static const String _hiveRememberEmail = 'remember_email';
+  static const String _hiveRememberPassword = 'remember_password';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
 
   @override
   void dispose() {
@@ -35,11 +43,32 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     super.dispose();
   }
 
+  Future<void> _loadSavedCredentials() async {
+    final box = getIt<Box<dynamic>>();
+    final savedEmail = box.get(_hiveRememberEmail) as String?;
+    final savedPassword = box.get(_hiveRememberPassword) as String?;
+    if (savedEmail != null && savedPassword != null) {
+      _emailController.text = savedEmail;
+      _passwordController.text = savedPassword;
+      setState(() => _rememberMe = true);
+    }
+  }
+
+  Future<void> _saveCredentials() async {
+    final box = getIt<Box<dynamic>>();
+    await box.put(_hiveRememberEmail, _emailController.text);
+    await box.put(_hiveRememberPassword, _passwordController.text);
+  }
+
+  static Future<void> clearSavedCredentials() async {
+    final box = getIt<Box<dynamic>>();
+    await box.delete(_hiveRememberEmail);
+    await box.delete(_hiveRememberPassword);
+  }
+
   Future<void> _submit() async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      debugPrint('[Auth] Submitting: isRegistry=$_isRegistry, email=${_emailController.text}');
-
       if (_isRegistry) {
         if (_emailController.text.isEmpty ||
             _passwordController.text.isEmpty ||
@@ -51,13 +80,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           showErrorSnackBar(context, l10n.invalidEmail);
           return;
         }
-        debugPrint('[Auth] Calling signUpProvider...');
         await ref.read(signUpProvider).call(
               email: _emailController.text,
               password: _passwordController.text,
               login: _loginController.text,
             );
-        debugPrint('[Auth] signUpProvider succeeded');
       } else {
         if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
           inputFieldsNotFilledIn(context);
@@ -67,20 +94,25 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           showErrorSnackBar(context, l10n.invalidEmail);
           return;
         }
-        debugPrint('[Auth] Calling signInProvider...');
         await ref.read(signInProvider).call(
               email: _emailController.text,
               password: _passwordController.text,
             );
-        debugPrint('[Auth] signInProvider succeeded');
       }
+
+      // Save credentials if "Remember me" is on
+      if (_rememberMe) {
+        await _saveCredentials();
+      } else {
+        await clearSavedCredentials();
+      }
+
       if (!mounted) return;
-      debugPrint('[Auth] Navigating to trainers...');
       context.go(AppRoutes.trainers);
     } catch (e) {
-      debugPrint('[Auth] ERROR: $e');
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(content: Text('Ошибка входа. Проверьте email и пароль.')),
       );
     }
   }
@@ -88,111 +120,336 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   void _toggleMode() {
     setState(() {
       _isRegistry = !_isRegistry;
+      _loginController.clear();
+      _emailController.clear();
+      _passwordController.clear();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Center(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColorsExt.primary.withValues(alpha: 0.12),
+              AppColorsExt.bg0,
+              AppColorsExt.primary.withValues(alpha: 0.04),
+            ],
+          ),
+        ),
+        child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // App icon/brand
+                const SizedBox(height: 40),
+
+                // ── Icon with glow ──
                 Center(
-                  child: Container(
-                    width: 72,
-                    height: 72,
-                    decoration: BoxDecoration(
-                      color: AppColorsExt.primary,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Icon(
-                      Icons.school_rounded,
-                      color: Colors.white,
-                      size: 36,
-                    ),
+                  child: Stack(
+                    children: [
+                      // Glow effect
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: AppColorsExt.primary.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColorsExt.primary.withValues(alpha: 0.3),
+                              blurRadius: 24,
+                              spreadRadius: 4,
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Icon
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [AppColorsExt.primary, AppColorsExt.primaryPress],
+                            ),
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: const Icon(
+                            Icons.school_rounded,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-
-                const SizedBox(height: 32),
-
-                // Headline
-                Headline(
-                  title: _isRegistry
-                      ? l10n.authHeadingSignUp
-                      : l10n.authHeadingSignIn,
-                  subtitle: _isRegistry
-                      ? l10n.authSubtitleSignUp
-                      : l10n.authSubtitleSignIn,
-                ),
-
-                const SizedBox(height: 32),
-
-                // Login field (registration only)
-                if (_isRegistry) ...[
-                  LoginForm(controller: _loginController),
-                  const SizedBox(height: 16),
-                ],
-
-                // Email field
-                EmailForm(controller: _emailController),
-                const SizedBox(height: 16),
-
-                // Password field
-                PasswordForm(controller: _passwordController),
-
-                const SizedBox(height: 32),
-
-                // Submit button
-                AppPrimaryButton(
-                  key: const ValueKey('submitButton'),
-                  onTap: _submit,
-                  text: _isRegistry ? l10n.signUp : l10n.signIn,
-                  width: double.infinity,
                 ),
 
                 const SizedBox(height: 24),
 
-                // Toggle sign in / sign up
+                // ── Title ──
+                Text(
+                  _isRegistry ? l10n.authHeadingSignUp : l10n.authHeadingSignIn,
+                  style: TextStyles.display.copyWith(color: AppColorsExt.fill1),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _isRegistry ? l10n.authSubtitleSignUp : l10n.authSubtitleSignIn,
+                  style: TextStyles.text.copyWith(color: AppColorsExt.fill2),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 32),
+
+                // ── Form Card ──
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: AppColorsExt.bg1,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppColorsExt.border1.withValues(alpha: 0.5)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 24,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      // Username field (sign up only)
+                      if (_isRegistry) ...[
+                        _buildField(
+                          label: l10n.usernameLabel,
+                          hint: l10n.usernameHint,
+                          icon: Icons.person_outline,
+                          controller: _loginController,
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Email field
+                      _buildField(
+                        label: l10n.emailLabel,
+                        hint: l10n.emailLabel,
+                        icon: Icons.mail_outline,
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Password field
+                      _buildPasswordField(),
+
+                      // ── Remember me (sign in only) ──
+                      if (!_isRegistry) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 28,
+                              width: 28,
+                              child: Checkbox(
+                                value: _rememberMe,
+                                onChanged: (v) => setState(() => _rememberMe = v ?? false),
+                                activeColor: AppColorsExt.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            GestureDetector(
+                              onTap: () => setState(() => _rememberMe = !_rememberMe),
+                              child: Text(
+                                l10n.rememberMe,
+                                style: TextStyles.textSmall.copyWith(color: AppColorsExt.fill2),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+
+                      // Forgot password (sign in only)
+                      if (!_isRegistry)
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {},
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                            ),
+                            child: Text(
+                              l10n.forgotPassword,
+                              style: TextStyles.textSSemi.copyWith(color: AppColorsExt.primary),
+                            ),
+                          ),
+                        ),
+
+                      const SizedBox(height: 32),
+
+                      // Submit button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [AppColorsExt.primary, AppColorsExt.primaryPress],
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColorsExt.primary.withValues(alpha: 0.3),
+                                blurRadius: 16,
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(16),
+                              onTap: _submit,
+                              child: Center(
+                                child: Text(
+                                  _isRegistry ? l10n.authHeadingSignUp : l10n.signIn,
+                                  style: TextStyles.textSemi.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // ── Toggle ──
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      _isRegistry
-                          ? l10n.alreadyHaveAccount
-                          : l10n.noAccount,
-                      style: TextStyles.textSmall.copyWith(
-                        color: AppColorsExt.fill2,
-                      ),
+                      _isRegistry ? l10n.alreadyHaveAccount : l10n.noAccount,
+                      style: TextStyles.textSmall.copyWith(color: AppColorsExt.fill2),
                     ),
-                    const SizedBox(width: 4),
                     GestureDetector(
                       onTap: _toggleMode,
                       child: Text(
                         _isRegistry ? l10n.signIn : l10n.signUp,
                         style: TextStyles.textSSemi.copyWith(
                           color: AppColorsExt.primary,
+                          decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
                   ],
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 32),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildField({
+    required String label,
+    required String hint,
+    required IconData icon,
+    required TextEditingController controller,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(
+            label,
+            style: TextStyles.textSSemi.copyWith(color: AppColorsExt.fill2, fontSize: 12),
+          ),
+        ),
+        Container(
+          height: 56,
+          decoration: BoxDecoration(
+            color: AppColorsExt.bg2,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.transparent, width: 2),
+          ),
+          child: TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            decoration: InputDecoration(
+              prefixIcon: Icon(icon, size: 20, color: AppColorsExt.fill3),
+              hintText: hint,
+              hintStyle: TextStyles.text.copyWith(color: AppColorsExt.fill3),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+            style: TextStyles.text.copyWith(color: AppColorsExt.fill1),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPasswordField() {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(
+            l10n.passwordLabel,
+            style: TextStyles.textSSemi.copyWith(color: AppColorsExt.fill2, fontSize: 12),
+          ),
+        ),
+        Container(
+          height: 56,
+          decoration: BoxDecoration(
+            color: AppColorsExt.bg2,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: TextField(
+            controller: _passwordController,
+            obscureText: !_showPassword,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.lock_outline, size: 20, color: AppColorsExt.fill3),
+              hintText: l10n.passwordHint,
+              hintStyle: TextStyles.text.copyWith(color: AppColorsExt.fill3),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 16),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _showPassword ? Icons.visibility_off : Icons.visibility,
+                  size: 20,
+                  color: AppColorsExt.fill3,
+                ),
+                onPressed: () => setState(() => _showPassword = !_showPassword),
+              ),
+            ),
+            style: TextStyles.text.copyWith(color: AppColorsExt.fill1),
+          ),
+        ),
+      ],
     );
   }
 }

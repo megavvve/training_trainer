@@ -28,8 +28,12 @@ class UpdateTimer extends TrainProcessEvent {
 
 class FinishTrainingSession extends TrainProcessEvent {
 
-  const FinishTrainingSession({required this.correctAnswers});
+  const FinishTrainingSession({
+    required this.correctAnswers,
+    required this.unansweredCount,
+  });
   final int correctAnswers;
+  final int unansweredCount;
 }
 class NextQuestion extends TrainProcessEvent {
 

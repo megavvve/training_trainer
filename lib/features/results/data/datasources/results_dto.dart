@@ -7,6 +7,7 @@ class TrainingResultDTO {
     required this.userId,
     required this.trainerId,
     required this.correctAnswers,
+    required this.unansweredCount,
     required this.totalQuestions,
     required this.scorePercent,
     required this.completedAt,
@@ -18,10 +19,11 @@ class TrainingResultDTO {
       userId: json['userId'] as String? ?? json['user_id'] as String? ?? '',
       trainerId: json['trainerId'] as String? ?? json['trainer_id'] as String? ?? '',
       correctAnswers: json['correctAnswers'] as int? ?? json['correct_answers'] as int? ?? 0,
+      unansweredCount: json['unansweredCount'] as int? ?? json['unanswered_count'] as int? ?? 0,
       totalQuestions: json['totalQuestions'] as int? ?? json['total_questions'] as int? ?? 0,
       scorePercent: (json['scorePercent'] ?? json['score_percent'] ?? 0.0).toDouble(),
-      completedAt: json['completedAt'] != null 
-          ? DateTime.parse(json['completedAt']) 
+      completedAt: json['completedAt'] != null
+          ? DateTime.parse(json['completedAt'])
           : (json['completed_at'] != null ? DateTime.parse(json['completed_at']) : DateTime.now()),
     );
   }
@@ -29,6 +31,7 @@ class TrainingResultDTO {
   final String userId;
   final String trainerId;
   final int correctAnswers;
+  final int unansweredCount;
   final int totalQuestions;
   final double scorePercent;
   final DateTime completedAt;
@@ -38,6 +41,7 @@ class TrainingResultDTO {
     'userId': userId,
     'trainerId': trainerId,
     'correctAnswers': correctAnswers,
+    'unansweredCount': unansweredCount,
     'totalQuestions': totalQuestions,
     'scorePercent': scorePercent,
     'completedAt': completedAt.toIso8601String(),
@@ -49,6 +53,7 @@ class TrainingResultDTO {
       userId: userId,
       trainerId: trainerId,
       correctAnswers: correctAnswers,
+      unansweredCount: unansweredCount,
       totalQuestions: totalQuestions,
       scorePercent: scorePercent,
       completedAt: completedAt,
@@ -61,15 +66,18 @@ class CreateResultRequestDTO {
   CreateResultRequestDTO({
     required this.trainerId,
     required this.correctAnswers,
+    required this.unansweredCount,
     required this.totalQuestions,
   });
   final String trainerId;
   final int correctAnswers;
+  final int unansweredCount;
   final int totalQuestions;
 
   Map<String, dynamic> toJson() => {
     'trainerId': trainerId,
     'correctAnswers': correctAnswers,
+    'unansweredCount': unansweredCount,
     'totalQuestions': totalQuestions,
   };
 }

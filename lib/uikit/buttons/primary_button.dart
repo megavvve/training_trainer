@@ -3,7 +3,7 @@ import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/constants/app_fonts.dart';
 import 'package:training_trainer/uikit/buttons/custom_button.dart';
 
-/// Primary action button — purple fill.
+/// Primary action button — indigo fill with white text.
 class AppPrimaryButton extends StatelessWidget {
   const AppPrimaryButton({
     required this.text,
@@ -34,12 +34,12 @@ class AppPrimaryButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, color: AppColorsExt.white, size: 20),
+            Icon(icon, color: AppColorsExt.onPrimary, size: 20),
             const SizedBox(width: 8),
           ],
           Text(
             text,
-            style: TextStyles.textSemi.copyWith(color: AppColorsExt.white),
+            style: TextStyles.textSemi.copyWith(color: AppColorsExt.onPrimary),
           ),
         ],
       ),

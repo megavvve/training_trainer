@@ -10,6 +10,11 @@ import 'package:training_trainer/core/network/token_storage.dart';
 
 /// Modern API client using Dio with Cookie management and JWT refresh logic
 class ApiClient {
+  /// Callback invoked when token refresh ultimately fails (e.g. expired refresh).
+  /// Set by [RestAuthRepositoryImpl] to trigger [AuthRepository.signOut],
+  /// which emits `null` on the auth state stream → GoRouter redirects to login.
+  void Function()? onAuthFailure;
+
   ApiClient({
     required this.baseUrl,
     required this.tokenStorage,
@@ -70,6 +75,13 @@ class ApiClient {
       onError: (DioException e, handler) async {
         // Handle 401 Unauthorized errors
         if (e.response?.statusCode == 401) {
+          // Don't intercept auth endpoints — login/register 401 should
+          // propagate to the caller (e.g. show "wrong password" error).
+          final path = e.requestOptions.path;
+          if (path.contains('/auth/')) {
+            return handler.next(e);
+          }
+
           talker.warning(
             '401 Unauthorized detected. Attempting token refresh...',
           );
@@ -104,11 +116,12 @@ class ApiClient {
             } catch (refreshError) {
               talker.error('Token refresh failed: $refreshError');
               await tokenStorage.clear();
-              // Here you could also trigger a navigation event to the login screen
+              onAuthFailure?.call();
             }
           } else {
             talker.warning('No refresh token available. Clearing storage.');
             await tokenStorage.clear();
+            onAuthFailure?.call();
           }
         }
         return handler.next(e);

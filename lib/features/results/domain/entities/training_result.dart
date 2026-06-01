@@ -5,6 +5,7 @@ class TrainingResult {
     required this.userId,
     required this.trainerId,
     required this.correctAnswers,
+    required this.unansweredCount,
     required this.totalQuestions,
     required this.scorePercent,
     required this.completedAt,
@@ -13,6 +14,7 @@ class TrainingResult {
   final String userId;
   final String trainerId;
   final int correctAnswers;
+  final int unansweredCount;
   final int totalQuestions;
   final double scorePercent;
   final DateTime completedAt;

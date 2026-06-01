@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:training_trainer/constants/app_colors.dart';
-import 'package:training_trainer/constants/app_fonts.dart';
 import 'package:training_trainer/l10n/app_localizations.dart';
 import 'package:training_trainer/uikit/buttons/secondary_button.dart';
+import 'package:training_trainer/uikit/inputs/app_text_field.dart';
 
 class KeywordsForm extends StatelessWidget {
   const KeywordsForm({
@@ -27,12 +27,9 @@ class KeywordsForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
-              child: TextField(
+              child: CustomTextField(
+                label: l10n.keywordsTitle,
                 controller: keywordsController,
-                decoration: InputDecoration(
-                  labelText: l10n.keywordsTitle,
-                  border: const OutlineInputBorder(),
-                ),
               ),
             ),
             const SizedBox(width: 12),

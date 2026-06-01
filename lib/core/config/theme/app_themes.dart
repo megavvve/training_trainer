@@ -3,18 +3,25 @@ import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/constants/app_fonts.dart';
 
 class AppThemes {
-  static ThemeData _base(AppColors c, Brightness brightness) {
+  /// Build a ThemeData from the current color palette.
+  /// Uses [currentColors] ValueNotifier so it stays in sync with theme switches.
+  static ThemeData fromBrightness(Brightness brightness) {
+    final c = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
+
     final colorScheme = ColorScheme(
       brightness: brightness,
       primary: c.primary,
-      onPrimary: c.white,
-      secondary: c.primaryPress,
-      onSecondary: c.white,
-      error: c.negative,
-      onError: c.white,
+      onPrimary: c.onPrimary,
+      secondary: c.secondary,
+      onSecondary: c.onSecondary,
+      tertiary: c.tertiary,
+      onTertiary: c.onTertiary,
+      error: c.error,
+      onError: c.onError,
       surface: c.bg1,
       onSurface: c.fill1,
-      outline: c.border2,
+      surfaceContainerHighest: c.bg2,
+      outline: c.outline,
       outlineVariant: c.border1,
     );
 
@@ -22,22 +29,20 @@ class AppThemes {
       useMaterial3: true,
       brightness: brightness,
       primaryColor: c.primary,
-      scaffoldBackgroundColor: c.bg2,
+      scaffoldBackgroundColor: c.bg0,
       dividerColor: c.border1,
       cardColor: c.bg1,
       colorScheme: colorScheme,
 
-      // ── AppBar ──
       appBarTheme: AppBarTheme(
-        backgroundColor: c.bg2,
+        backgroundColor: c.bg1,
         elevation: 0,
-        scrolledUnderElevation: 0,
+        scrolledUnderElevation: 1,
         surfaceTintColor: Colors.transparent,
         titleTextStyle: TextStyles.h2.copyWith(color: c.fill1),
         iconTheme: IconThemeData(color: c.fill1),
       ),
 
-      // ── Text Theme ──
       textTheme: TextTheme(
         displayLarge: TextStyles.h1.copyWith(color: c.fill1),
         displayMedium: TextStyles.h2.copyWith(color: c.fill1),
@@ -54,64 +59,63 @@ class AppThemes {
         labelSmall: TextStyles.deskMed.copyWith(color: c.fill2),
       ),
 
-      // ── Input Decoration ──
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: c.bg1,
-        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: c.border2, width: 1.5),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: c.border2, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: c.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: c.negative, width: 1.5),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: c.error, width: 1.5),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: c.negative, width: 2),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: c.error, width: 2),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: c.border1, width: 1.5),
         ),
       ),
 
-      // ── Elevated Button ──
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: c.primary,
-          foregroundColor: c.white,
+          foregroundColor: c.onPrimary,
           disabledBackgroundColor: c.primaryDis,
-          disabledForegroundColor: c.whiteDis,
+          disabledForegroundColor: c.fill3,
           textStyle: TextStyles.textSemi,
           minimumSize: const Size(64, 48),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 0,
         ),
       ),
 
-      // ── Filled Button ──
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: c.primary,
-          foregroundColor: c.white,
+          foregroundColor: c.onPrimary,
           disabledBackgroundColor: c.primaryDis,
+          disabledForegroundColor: c.fill3,
           textStyle: TextStyles.textSemi,
           minimumSize: const Size(64, 48),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
 
-      // ── Text Button ──
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: c.primary,
@@ -119,119 +123,74 @@ class AppThemes {
         ),
       ),
 
-      // ── Floating Action Button ──
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: c.primary,
-        foregroundColor: c.white,
-        elevation: 2,
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: c.primary,
+          side: BorderSide(color: c.primary),
+          textStyle: TextStyles.textSemi,
+          minimumSize: const Size(64, 48),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
       ),
 
-      // ── Bottom Navigation Bar ──
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: c.primary,
+        foregroundColor: c.onPrimary,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: c.bg1,
         selectedItemColor: c.primary,
         unselectedItemColor: c.fill2,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
+        selectedLabelStyle: TextStyles.deskSemi,
+        unselectedLabelStyle: TextStyles.deskMed,
       ),
 
-      // ── Card Theme ──
       cardTheme: CardThemeData(
         color: c.bg1,
         elevation: 0,
+        shadowColor: c.shadow,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(color: c.border2, width: 1),
         ),
       ),
 
-      // ── Chip Theme ──
       chipTheme: ChipThemeData(
         backgroundColor: c.bg2,
         labelStyle: TextStyles.deskSemi.copyWith(color: c.fill1),
+        secondaryLabelStyle: TextStyles.deskSemi.copyWith(color: c.primary),
         side: BorderSide.none,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       ),
 
-      // ── Custom Button Theme extension ──
-      extensions: <ThemeExtension<dynamic>>[
-        CustomButtonTheme(
-          primaryBackground: c.primary,
-          primaryText: c.white,
-          primaryDisabledBackground: c.primaryDis,
-          errorBackground: c.negative,
-          errorText: c.white,
-          errorDisabledBackground: c.negativeDis,
-        ),
-      ],
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: c.primary,
+        linearTrackColor: c.bg3,
+        circularTrackColor: c.bg3,
+      ),
+
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: c.fill1,
+        contentTextStyle: TextStyles.textSmall.copyWith(color: c.bg1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        behavior: SnackBarBehavior.floating,
+      ),
+
+      dialogTheme: DialogThemeData(
+        backgroundColor: c.bg1,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      ),
     );
   }
 
-  static final ThemeData lightTheme = _base(AppColors.light, Brightness.light);
-  static final ThemeData darkTheme = _base(AppColors.dark, Brightness.dark);
-}
-
-@immutable
-class CustomButtonTheme extends ThemeExtension<CustomButtonTheme> {
-  const CustomButtonTheme({
-    required this.primaryBackground,
-    required this.primaryText,
-    required this.primaryDisabledBackground,
-    required this.errorBackground,
-    required this.errorText,
-    required this.errorDisabledBackground,
-  });
-  final Color primaryBackground;
-  final Color primaryText;
-  final Color primaryDisabledBackground;
-  final Color errorBackground;
-  final Color errorText;
-  final Color errorDisabledBackground;
-
-  @override
-  CustomButtonTheme copyWith({
-    Color? primaryBackground,
-    Color? primaryText,
-    Color? primaryDisabledBackground,
-    Color? errorBackground,
-    Color? errorText,
-    Color? errorDisabledBackground,
-  }) {
-    return CustomButtonTheme(
-      primaryBackground: primaryBackground ?? this.primaryBackground,
-      primaryText: primaryText ?? this.primaryText,
-      primaryDisabledBackground:
-          primaryDisabledBackground ?? this.primaryDisabledBackground,
-      errorBackground: errorBackground ?? this.errorBackground,
-      errorText: errorText ?? this.errorText,
-      errorDisabledBackground:
-          errorDisabledBackground ?? this.errorDisabledBackground,
-    );
-  }
-
-  @override
-  CustomButtonTheme lerp(ThemeExtension<CustomButtonTheme>? other, double t) {
-    if (other is! CustomButtonTheme) return this;
-    return CustomButtonTheme(
-      primaryBackground: Color.lerp(
-        primaryBackground,
-        other.primaryBackground,
-        t,
-      )!,
-      primaryText: Color.lerp(primaryText, other.primaryText, t)!,
-      primaryDisabledBackground: Color.lerp(
-        primaryDisabledBackground,
-        other.primaryDisabledBackground,
-        t,
-      )!,
-      errorBackground: Color.lerp(errorBackground, other.errorBackground, t)!,
-      errorText: Color.lerp(errorText, other.errorText, t)!,
-      errorDisabledBackground: Color.lerp(
-        errorDisabledBackground,
-        other.errorDisabledBackground,
-        t,
-      )!,
-    );
-  }
+  /// Convenience — build theme from current colors
+  static ThemeData get lightTheme => fromBrightness(Brightness.light);
+  static ThemeData get darkTheme => fromBrightness(Brightness.dark);
 }

@@ -64,7 +64,7 @@ class _CustomButtonState extends State<CustomButton> {
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColorsExt.white,
+                      AppColorsExt.onPrimary,
                     ),
                   ),
                 )

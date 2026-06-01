@@ -15,14 +15,18 @@ class TrainProcessInProgress extends TrainProcessState {
     required this.remainingTime,
     required this.currentQuestion,
     required this.currentQuestionIndex,
+    required this.totalQuestions,
     required this.currentRightAnswers,
+    required this.currentUnansweredCount,
     required this.isAnswerChecked,
     this.selectedAnswer,
   });
   final int remainingTime;
   final Question currentQuestion;
   final int currentQuestionIndex;
+  final int totalQuestions;
   final int currentRightAnswers;
+  final int currentUnansweredCount;
   final bool isAnswerChecked;
   final String? selectedAnswer;
 
@@ -30,7 +34,9 @@ class TrainProcessInProgress extends TrainProcessState {
     int? remainingTime,
     Question? currentQuestion,
     int? currentQuestionIndex,
+    int? totalQuestions,
     int? currentRightAnswers,
+    int? currentUnansweredCount,
     bool? isAnswerChecked,
     String? selectedAnswer,
   }) {
@@ -38,7 +44,9 @@ class TrainProcessInProgress extends TrainProcessState {
       remainingTime: remainingTime ?? this.remainingTime,
       currentQuestion: currentQuestion ?? this.currentQuestion,
       currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
+      totalQuestions: totalQuestions ?? this.totalQuestions,
       currentRightAnswers: currentRightAnswers ?? this.currentRightAnswers,
+      currentUnansweredCount: currentUnansweredCount ?? this.currentUnansweredCount,
       isAnswerChecked: isAnswerChecked ?? this.isAnswerChecked,
       selectedAnswer: selectedAnswer ?? this.selectedAnswer,
     );
@@ -47,11 +55,13 @@ class TrainProcessInProgress extends TrainProcessState {
   @override
   List<Object> get props => [
     remainingTime,
-    currentQuestion, 
+    currentQuestion,
     currentQuestionIndex,
+    totalQuestions,
     currentRightAnswers,
+    currentUnansweredCount,
     isAnswerChecked,
-    selectedAnswer ?? '', 
+    selectedAnswer ?? '',
   ];
 }
 
@@ -61,9 +71,11 @@ class TrainProcessCompleted extends TrainProcessState {
   const TrainProcessCompleted({
     required this.totalQuestions,
     required this.correctAnswers,
+    required this.unansweredCount,
   });
   final int totalQuestions;
   final int correctAnswers;
+  final int unansweredCount;
 }
 
 class TrainProcessError extends TrainProcessState {

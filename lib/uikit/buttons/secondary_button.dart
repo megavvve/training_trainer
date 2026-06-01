@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/constants/app_fonts.dart';
-import 'package:training_trainer/uikit/buttons/custom_button.dart';
 
-/// Secondary action button — outline style.
+/// Secondary action button — outlined style with border.
 class AppSecondaryButton extends StatelessWidget {
   const AppSecondaryButton({
     required this.text,
@@ -23,25 +22,45 @@ class AppSecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomButton(
-      disabled: disabled,
+    return SizedBox(
       width: width,
-      baseColor: AppColorsExt.bg1,
-      onTap: onTap,
-      isLoading: isLoading,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null) ...[
-            Icon(icon, color: AppColorsExt.fill1, size: 20),
-            const SizedBox(width: 8),
-          ],
-          Text(
-            text,
-            style: TextStyles.textSemi.copyWith(color: AppColorsExt.fill1),
+      height: 48,
+      child: OutlinedButton(
+        onPressed: disabled || isLoading ? null : onTap,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColorsExt.primary,
+          disabledForegroundColor: AppColorsExt.fill3,
+          side: BorderSide(
+            color: disabled ? AppColorsExt.border2 : AppColorsExt.primary,
           ),
-        ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+        ),
+        child: isLoading
+            ? SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColorsExt.primary),
+                ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null) ...[
+                    Icon(icon, size: 20),
+                    const SizedBox(width: 8),
+                  ],
+                  Text(
+                    text,
+                    style: TextStyles.textSemi,
+                  ),
+                ],
+              ),
       ),
     );
   }

@@ -8,6 +8,7 @@ abstract class ResultsRepository {
   Future<TrainingResult> createResult({
     required String trainerId,
     required int correctAnswers,
+    required int unansweredCount,
     required int totalQuestions,
   });
 }

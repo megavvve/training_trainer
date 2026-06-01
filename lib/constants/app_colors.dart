@@ -1,48 +1,44 @@
 import 'package:flutter/material.dart';
 
-/// Semantic color system for the entire app.
-/// Supports light and dark themes via [AppColors.light] and [AppColors.dark].
+/// Material Design 3 color system — redesigned for Training Trainer.
+/// Light: clean white bg with indigo-purple accent
+/// Dark: deep navy bg with lighter accent
 class AppColors {
   const AppColors({
-    required this.fill1,
-    required this.fill1Dis,
-    required this.fill2,
-    required this.fill2Dis,
-    required this.fill3,
+    required this.fill1,     // Primary text
+    required this.fill1Dis,  // Primary text disabled
+    required this.fill2,     // Secondary text
+    required this.fill2Dis,  // Secondary text disabled
+    required this.fill3,     // Tertiary / muted text
     required this.fill3Dis,
-    required this.bg1,
+    required this.bg0,       // App background (lightest)
+    required this.bg1,       // Surface / card background
     required this.bg1Press,
-    required this.bg2,
+    required this.bg2,       // Elevated surface
     required this.bg2Press,
-    required this.bg3,
+    required this.bg3,       // Disabled / chip bg
     required this.bg3Press,
-    required this.bg3Dis,
-    required this.bg4,
-    required this.bg4Press,
-    required this.bg4Dis,
-    required this.border1,
-    required this.border2,
-    required this.border3,
-    required this.primary,
+    required this.border1,   // Subtle border
+    required this.border2,   // Default border
+    required this.border3,   // Strong border
+    required this.primary,   // Brand primary (indigo)
+    required this.onPrimary,
     required this.primaryPress,
     required this.primaryDis,
-    required this.negative,
-    required this.negativePress,
-    required this.negativeDis,
-    required this.warning,
-    required this.warningPress,
-    required this.warningDis,
-    required this.positive,
-    required this.positivePress,
-    required this.positiveDis,
-    required this.fade,
-    this.white = const Color(0xFFFFFFFF),
-    this.black = const Color(0xFF000000),
-    this.whiteDis = const Color(0x80FFFFFF),
+    required this.primaryContainer,   // Tinted container
+    required this.onPrimaryContainer,
+    required this.secondary,
+    required this.onSecondary,
+    required this.tertiary,
+    required this.onTertiary,
+    required this.error,
+    required this.onError,
+    required this.errorContainer,
+    required this.onErrorContainer,
+    required this.outline,
+    required this.surfaceDim,
+    required this.shadow,
   });
-
-  final Color white;
-  final Color black;
 
   final Color fill1;
   final Color fill1Dis;
@@ -51,123 +47,123 @@ class AppColors {
   final Color fill3;
   final Color fill3Dis;
 
+  final Color bg0;
   final Color bg1;
   final Color bg1Press;
   final Color bg2;
   final Color bg2Press;
   final Color bg3;
   final Color bg3Press;
-  final Color bg3Dis;
-  final Color bg4;
-  final Color bg4Press;
-  final Color bg4Dis;
 
   final Color border1;
   final Color border2;
   final Color border3;
 
   final Color primary;
+  final Color onPrimary;
   final Color primaryPress;
   final Color primaryDis;
+  final Color primaryContainer;
+  final Color onPrimaryContainer;
 
-  final Color negative;
-  final Color negativePress;
-  final Color negativeDis;
+  final Color secondary;
+  final Color onSecondary;
+  final Color tertiary;
+  final Color onTertiary;
 
-  final Color warning;
-  final Color warningPress;
-  final Color warningDis;
+  final Color error;
+  final Color onError;
+  final Color errorContainer;
+  final Color onErrorContainer;
 
-  final Color positive;
-  final Color positivePress;
-  final Color positiveDis;
+  final Color outline;
+  final Color surfaceDim;
+  final Color shadow;
 
-  final Color fade;
-  final Color whiteDis;
-
-  /// Light theme — original blue academic style.
+  /// Light theme — clean white + indigo
   static const AppColors light = AppColors(
-    fill1: Color(0xFF171717),
-    fill1Dis: Color(0xFFA3A3A3),
-    fill2: Color(0xFF737373),
-    fill2Dis: Color(0xFFA3A3A3),
-    fill3: Color(0xFFA3A3A3),
-    fill3Dis: Color(0xFFA3A3A3),
+    fill1: Color(0xFF1A1C2E),
+    fill1Dis: Color(0xFFC4C5D0),
+    fill2: Color(0xFF6B6E82),
+    fill2Dis: Color(0xFFC4C5D0),
+    fill3: Color(0xFF9396A8),
+    fill3Dis: Color(0xFFE0E0E8),
 
+    bg0: Color(0xFFF5F6FA),
     bg1: Color(0xFFFFFFFF),
-    bg1Press: Color(0xFFE5E5E5),
-    bg2: Color(0xFFF5F5F5),
-    bg2Press: Color(0xFFE5E5E5),
-    bg3: Color(0xFFE5E5E5),
-    bg3Press: Color(0xFFD4D4D4),
-    bg3Dis: Color(0xFFF5F5F5),
-    bg4: Color(0xFFD4D4D4),
-    bg4Press: Color(0xFFA3A3A3),
-    bg4Dis: Color(0xFFE5E5E5),
+    bg1Press: Color(0xFFF0F1F5),
+    bg2: Color(0xFFF8F9FE),
+    bg2Press: Color(0xFFEEF0F6),
+    bg3: Color(0xFFEDEEF3),
+    bg3Press: Color(0xFFE2E3EB),
 
-    border1: Color(0xFFF5F5F5),
-    border2: Color(0xFFE5E5E5),
-    border3: Color(0xFFD4D4D4),
+    border1: Color(0xFFEDEEF3),
+    border2: Color(0xFFD9DAE3),
+    border3: Color(0xFFC4C5D0),
 
-    primary: Color(0xFF5B94F1),
-    primaryPress: Color(0xFF4A7FCC),
-    primaryDis: Color(0x665B94F1),
+    primary: Color(0xFF5B67CA),
+    onPrimary: Color(0xFFFFFFFF),
+    primaryPress: Color(0xFF4A55B0),
+    primaryDis: Color(0x335B67CA),
+    primaryContainer: Color(0xFFE1E0FF),
+    onPrimaryContainer: Color(0xFF1A1C4E),
 
-    negative: Color(0xFFEF4444),
-    negativePress: Color(0xFFDC2626),
-    negativeDis: Color(0x66EF4444),
+    secondary: Color(0xFF6C63FF),
+    onSecondary: Color(0xFFFFFFFF),
+    tertiary: Color(0xFFBB86FC),
+    onTertiary: Color(0xFFFFFFFF),
 
-    warning: Color(0xFFF59E0B),
-    warningPress: Color(0xFFD97706),
-    warningDis: Color(0x66F59E0B),
+    error: Color(0xFFE53E3E),
+    onError: Color(0xFFFFFFFF),
+    errorContainer: Color(0xFFFFE0E0),
+    onErrorContainer: Color(0xFF5C1010),
 
-    positive: Color(0xFF10B981),
-    positivePress: Color(0xFF059669),
-    positiveDis: Color(0x6610B981),
-
-    fade: Color(0x800D0A0A),
+    outline: Color(0xFFD9DAE3),
+    surfaceDim: Color(0xFFE8E9F0),
+    shadow: Color(0x1A000000),
   );
 
+  /// Dark theme — deep navy + light indigo
   static const AppColors dark = AppColors(
-    fill1: Color(0xFFF5F5F5),
-    fill1Dis: Color(0xFF525252),
-    fill2: Color(0xFFA3A3A3),
-    fill2Dis: Color(0xFF737373),
-    fill3: Color(0xFFA3A3A3),
-    fill3Dis: Color(0xFF737373),
+    fill1: Color(0xFFE8E9F0),
+    fill1Dis: Color(0xFF6B6E82),
+    fill2: Color(0xFFA8AAB8),
+    fill2Dis: Color(0xFF6B6E82),
+    fill3: Color(0xFF9396A8),
+    fill3Dis: Color(0xFF555770),
 
-    bg1: Color(0xFF1E293B),
-    bg1Press: Color(0xFF334155),
-    bg2: Color(0xFF0F172A),
-    bg2Press: Color(0xFF1E293B),
-    bg3: Color(0xFF334155),
-    bg3Press: Color(0xFF475569),
-    bg3Dis: Color(0xFF1E293B),
-    bg4: Color(0xFF475569),
-    bg4Press: Color(0xFF64748B),
-    bg4Dis: Color(0xFF334155),
+    bg0: Color(0xFF0D0F1C),
+    bg1: Color(0xFF141627),
+    bg1Press: Color(0xFF1E2038),
+    bg2: Color(0xFF1A1D31),
+    bg2Press: Color(0xFF242740),
+    bg3: Color(0xFF242740),
+    bg3Press: Color(0xFF2E3150),
 
-    border1: Color(0xFF334155),
-    border2: Color(0xFF475569),
-    border3: Color(0xFF64748B),
+    border1: Color(0xFF1E2038),
+    border2: Color(0xFF2E3150),
+    border3: Color(0xFF3F4270),
 
-    primary: Color(0xFF93C5FD),
-    primaryPress: Color(0xFF60A5FA),
-    primaryDis: Color(0x6693C5FD),
+    primary: Color(0xFFB0B5FF),
+    onPrimary: Color(0xFF1A1C4E),
+    primaryPress: Color(0xFF9599E0),
+    primaryDis: Color(0x33B0B5FF),
+    primaryContainer: Color(0xFF3A3F7A),
+    onPrimaryContainer: Color(0xFFE1E0FF),
 
-    negative: Color(0xFFEF4444),
-    negativePress: Color(0xFFDC2626),
-    negativeDis: Color(0x66EF4444),
+    secondary: Color(0xFF9D95FF),
+    onSecondary: Color(0xFF1A1C4E),
+    tertiary: Color(0xFFD4A4FF),
+    onTertiary: Color(0xFF1A1C4E),
 
-    warning: Color(0xFFF59E0B),
-    warningPress: Color(0xFFD97706),
-    warningDis: Color(0x66F59E0B),
+    error: Color(0xFFFF6B6B),
+    onError: Color(0xFF5C1010),
+    errorContainer: Color(0xFF5C2020),
+    onErrorContainer: Color(0xFFFFE0E0),
 
-    positive: Color(0xFF10B981),
-    positivePress: Color(0xFF059669),
-    positiveDis: Color(0x6610B981),
-
-    fade: Color(0x80000000),
+    outline: Color(0xFF2E3150),
+    surfaceDim: Color(0xFF0D0F1C),
+    shadow: Color(0x33000000),
   );
 }
 
@@ -178,9 +174,6 @@ final ValueNotifier<AppColors> currentColors = ValueNotifier(AppColors.light);
 class AppColorsExt {
   static AppColors get c => currentColors.value;
 
-  static Color get white => c.white;
-  static Color get black => c.black;
-
   static Color get fill1 => c.fill1;
   static Color get fill1Dis => c.fill1Dis;
   static Color get fill2 => c.fill2;
@@ -188,37 +181,36 @@ class AppColorsExt {
   static Color get fill3 => c.fill3;
   static Color get fill3Dis => c.fill3Dis;
 
+  static Color get bg0 => c.bg0;
   static Color get bg1 => c.bg1;
   static Color get bg1Press => c.bg1Press;
   static Color get bg2 => c.bg2;
   static Color get bg2Press => c.bg2Press;
   static Color get bg3 => c.bg3;
   static Color get bg3Press => c.bg3Press;
-  static Color get bg3Dis => c.bg3Dis;
-  static Color get bg4 => c.bg4;
-  static Color get bg4Press => c.bg4Press;
-  static Color get bg4Dis => c.bg4Dis;
 
   static Color get border1 => c.border1;
   static Color get border2 => c.border2;
   static Color get border3 => c.border3;
 
   static Color get primary => c.primary;
+  static Color get onPrimary => c.onPrimary;
   static Color get primaryPress => c.primaryPress;
   static Color get primaryDis => c.primaryDis;
+  static Color get primaryContainer => c.primaryContainer;
+  static Color get onPrimaryContainer => c.onPrimaryContainer;
 
-  static Color get negative => c.negative;
-  static Color get negativePress => c.negativePress;
-  static Color get negativeDis => c.negativeDis;
+  static Color get secondary => c.secondary;
+  static Color get onSecondary => c.onSecondary;
+  static Color get tertiary => c.tertiary;
+  static Color get onTertiary => c.onTertiary;
 
-  static Color get warning => c.warning;
-  static Color get warningPress => c.warningPress;
-  static Color get warningDis => c.warningDis;
+  static Color get error => c.error;
+  static Color get onError => c.onError;
+  static Color get errorContainer => c.errorContainer;
+  static Color get onErrorContainer => c.onErrorContainer;
 
-  static Color get positive => c.positive;
-  static Color get positivePress => c.positivePress;
-  static Color get positiveDis => c.positiveDis;
-
-  static Color get fade => c.fade;
-  static Color get whiteDis => c.whiteDis;
+  static Color get outline => c.outline;
+  static Color get surfaceDim => c.surfaceDim;
+  static Color get shadow => c.shadow;
 }

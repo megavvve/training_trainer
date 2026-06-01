@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:training_trainer/core/network/api_client.dart';
 import 'package:training_trainer/core/network/token_storage.dart';
 import 'package:training_trainer/features/auth/data/datasources/auth_dto.dart';
@@ -13,6 +15,9 @@ class RestAuthRepositoryImpl implements AuthRepository {
     _authStateController.onListen = () {
       _authStateController.add(_currentUser);
     };
+    // When the API client detects an unrecoverable auth failure
+    // (token refresh failed), force sign-out so GoRouter redirects to login.
+    _apiClient.onAuthFailure = signOut;
     _init();
   }
   final ApiClient _apiClient;
@@ -78,7 +83,7 @@ class RestAuthRepositoryImpl implements AuthRepository {
       return user;
     } catch (e) {
       debugPrint('[AuthRepo] Registration FAILED: $e');
-      throw Exception('Registration failed: $e');
+      throw Exception(_extractErrorMessage(e));
     }
   }
 
@@ -117,7 +122,7 @@ class RestAuthRepositoryImpl implements AuthRepository {
       return user;
     } catch (e) {
       debugPrint('[AuthRepo] Sign in FAILED: $e');
-      throw Exception('Sign in failed: $e');
+      throw Exception(_extractErrorMessage(e));
     }
   }
 
@@ -128,8 +133,21 @@ class RestAuthRepositoryImpl implements AuthRepository {
       await _apiClient.cookieJar.deleteAll();
       _currentUser = null;
       _authStateController.add(null);
+      // Clear saved "remember me" credentials
+      await _clearRememberMeCredentials();
     } catch (e) {
       throw Exception('Sign out failed: $e');
+    }
+  }
+
+  /// Clear saved email/password from "remember me" feature.
+  Future<void> _clearRememberMeCredentials() async {
+    try {
+      final box = await Hive.openBox<dynamic>('settings');
+      await box.delete('remember_email');
+      await box.delete('remember_password');
+    } catch (_) {
+      // Silently fail — credentials are not critical.
     }
   }
 
@@ -140,6 +158,21 @@ class RestAuthRepositoryImpl implements AuthRepository {
       email: dto.email,
       login: dto.login,
     );
+  }
+
+  /// Extract a user-friendly error message from Dio (or other) exceptions.
+  String _extractErrorMessage(Object error) {
+    // DioException carries the response body from FastAPI
+    final dioErr = error is DioException ? error : null;
+    if (dioErr != null && dioErr.response?.data is Map) {
+      final detail = (dioErr.response!.data as Map)['detail'];
+      if (detail is String && detail.isNotEmpty) return detail;
+    }
+    if (dioErr != null && dioErr.response?.data is String) {
+      final body = dioErr.response!.data as String;
+      if (body.isNotEmpty) return body;
+    }
+    return 'Authentication failed. Please check your credentials.';
   }
 
   /// Clean up resources

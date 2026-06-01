@@ -20,6 +20,7 @@ class TrainProcessBloc extends Bloc<TrainProcessEvent, TrainProcessState> {
   int _remainingTime = 0;
   int _currentQuestionIndex = 0;
   int _correctAnswers = 0;
+  int _unansweredCount = 0;
   Timer? _timer;
 
   String? _selectedAnswer;
@@ -43,8 +44,9 @@ class TrainProcessBloc extends Bloc<TrainProcessEvent, TrainProcessState> {
           remainingTime: _remainingTime,
           currentQuestion: _questions[_currentQuestionIndex],
           currentQuestionIndex: _currentQuestionIndex,
+          totalQuestions: _questions.length,
           currentRightAnswers: _correctAnswers,
-    
+          currentUnansweredCount: _unansweredCount,
           isAnswerChecked: false,
           selectedAnswer: null,
         ),
@@ -79,7 +81,6 @@ class TrainProcessBloc extends Bloc<TrainProcessEvent, TrainProcessState> {
       current.copyWith(
         selectedAnswer: _selectedAnswer,
         isAnswerChecked: true,
-        
         currentRightAnswers: isCorrect ? _correctAnswers + 1 : _correctAnswers,
       ),
     );
@@ -96,7 +97,10 @@ class TrainProcessBloc extends Bloc<TrainProcessEvent, TrainProcessState> {
     _isAnswerChecked = false;
 
     if (_currentQuestionIndex >= _questions.length) {
-      add(FinishTrainingSession(correctAnswers: _correctAnswers));
+      add(FinishTrainingSession(
+        correctAnswers: _correctAnswers,
+        unansweredCount: _unansweredCount,
+      ));
       return Future.value();
     }
 
@@ -133,10 +137,32 @@ class TrainProcessBloc extends Bloc<TrainProcessEvent, TrainProcessState> {
     Emitter<TrainProcessState> emit,
   ) {
     _timer?.cancel();
+
+    int finalUnanswered = event.unansweredCount;
+
+    // If we're finishing mid-question (timer expiry / exit) and no answer
+    // was selected, count the current question as unanswered
+    if (!_isAnswerChecked && _selectedAnswer == null) {
+      finalUnanswered++;
+    }
+    // If answer was selected but not checked, verify it now
+    if (!_isAnswerChecked && _selectedAnswer != null) {
+      final current = state as TrainProcessInProgress;
+      if (_selectedAnswer == current.currentQuestion.rightAnswer) {
+        _correctAnswers++;
+      }
+    }
+
+    // Count all remaining unvisited questions as unanswered
+    for (int i = _currentQuestionIndex + 1; i < _questions.length; i++) {
+      finalUnanswered++;
+    }
+
     emit(
       TrainProcessCompleted(
         totalQuestions: _questions.length,
-        correctAnswers: event.correctAnswers,
+        correctAnswers: _correctAnswers,
+        unansweredCount: finalUnanswered,
       ),
     );
     return Future.value();
@@ -144,18 +170,25 @@ class TrainProcessBloc extends Bloc<TrainProcessEvent, TrainProcessState> {
 
   void _initializeSession(Trainer trainer) {
     _questions = trainer.questions;
-    _remainingTime = 300; //TODO
+    _remainingTime = trainer.timeRequiredInSeconds ?? 0;
     _currentQuestionIndex = 0;
     _correctAnswers = 0;
+    _unansweredCount = 0;
   }
 
   void _startTimer() {
+    // Если время не задано (null) — таймер не запускаем, тренировка без ограничения
+    if (_remainingTime <= 0) return;
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_remainingTime > 0) {
         _remainingTime--;
         add(UpdateTimer(timeRemaining: _remainingTime));
       } else {
-        add(FinishTrainingSession(correctAnswers: _correctAnswers));
+        add(FinishTrainingSession(
+          correctAnswers: _correctAnswers,
+          unansweredCount: _unansweredCount,
+        ));
       }
     });
   }

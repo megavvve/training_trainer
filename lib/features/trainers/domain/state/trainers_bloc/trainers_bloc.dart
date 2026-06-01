@@ -12,7 +12,7 @@ import 'package:uuid/uuid.dart';
 part 'trainers_event.dart';
 part 'trainers_state.dart';
 
-class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for filtered trainers
+class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
 
   TrainersBloc({required this.repository}) : super(TrainersInitial()) {
     on<DeleteTrainer>(_onDeleteTrainer);
@@ -20,6 +20,9 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for 
     on<LoadTrainers>(_onLoadTrainers);
     on<SearchTrainers>(_onSearchTrainers);
     on<SortTrainers>(_onSortTrainers);
+    on<EnterDeleteMode>(_onEnterDeleteMode);
+    on<ExitDeleteMode>(_onExitDeleteMode);
+    on<ReorderTrainers>(_onReorderTrainers);
   }
   final TrainersRepository repository;
   List<Trainer> trainers = [];
@@ -29,14 +32,28 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for 
     LoadTrainers event,
     Emitter<TrainersState> emit,
   ) async {
-    emit(TrainersLoading());
-    try {
-      trainers = await repository.getTrainers();
-      filteredTrainers = List.from(trainers); // Initialize filtered list with all trainers
-      emit(TrainersLoadSuccess(filteredTrainers));
-    } catch (e) {
-      getIt<Talker>().error('LoadTrainers Error: $e');
-      emit(TrainersLoadFailure(e.toString()));
+    // If we already have data, refresh in background without full-screen loading
+    if (state is TrainersLoadSuccess) {
+      final currentState = state as TrainersLoadSuccess;
+      emit(currentState.copyWith(isRefreshing: true));
+      try {
+        trainers = await repository.getTrainers();
+        filteredTrainers = List.from(trainers);
+        emit(TrainersLoadSuccess(filteredTrainers, isDeleteMode: currentState.isDeleteMode));
+      } catch (e) {
+        getIt<Talker>().error('LoadTrainers Error: $e');
+        emit(currentState.copyWith(isRefreshing: false));
+      }
+    } else {
+      emit(TrainersLoading());
+      try {
+        trainers = await repository.getTrainers();
+        filteredTrainers = List.from(trainers);
+        emit(TrainersLoadSuccess(filteredTrainers));
+      } catch (e) {
+        getIt<Talker>().error('LoadTrainers Error: $e');
+        emit(TrainersLoadFailure('Не удалось загрузить тренажёры'));
+      }
     }
   }
 
@@ -51,7 +68,9 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for 
         id: getIt<Uuid>().v4(),
         userId: event.userId,
         starCount: 0,
-        timeRequiredInSeconds: int.parse(event.timeRequiredInSeconds) * 60,
+        timeRequiredInSeconds: event.timeRequiredInSeconds.isNotEmpty
+            ? int.tryParse(event.timeRequiredInSeconds)
+            : null,
         title: event.title,
         questions: event.questions,
         keywords: event.keywords,
@@ -70,7 +89,7 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for 
       emit(TrainersLoadFailure(e.message));
     } catch (e) {
       getIt<Talker>().error('AddTrainer Unexpected Error: $e');
-      emit(TrainersLoadFailure('Ошибка добавления тренажера: $e'));
+      emit(TrainersLoadFailure('Ошибка добавления тренажёра'));
     }
   }
 
@@ -78,18 +97,22 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for 
     DeleteTrainer event,
     Emitter<TrainersState> emit,
   ) async {
-    emit(TrainersLoading());
+    final currentState = state is TrainersLoadSuccess ? state as TrainersLoadSuccess : null;
     try {
       await repository.deleteTrainer(event.trainer.id);
       trainers = List.from(trainers)..removeWhere((t) => t.id == event.trainer.id);
-      filteredTrainers = List.from(trainers); 
+      filteredTrainers = List.from(trainers);
+      // Exit delete mode after deletion
       emit(TrainersLoadSuccess(filteredTrainers));
     } on DeleteTrainerException catch (e) {
       getIt<Talker>().error('DeleteTrainer Error: ${e.message}');
       emit(TrainersLoadFailure(e.message));
     } catch (e) {
       getIt<Talker>().error('DeleteTrainer Unexpected Error: $e');
-      emit(TrainersLoadFailure('Ошибка удаления тренажера'));
+      // If 404, trainer was already deleted — just refresh
+      trainers = List.from(trainers)..removeWhere((t) => t.id == event.trainer.id);
+      filteredTrainers = List.from(trainers);
+      emit(TrainersLoadSuccess(filteredTrainers));
     }
   }
 
@@ -97,20 +120,19 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for 
     SearchTrainers event,
     Emitter<TrainersState> emit,
   ) async {
+    final currentState = state as TrainersLoadSuccess;
     if (event.query.isEmpty) {
       filteredTrainers = List.from(trainers); 
-      emit(TrainersLoadSuccess(filteredTrainers));
+      emit(currentState.copyWith(trainers: filteredTrainers));
     } else {
       final query = event.query.toLowerCase();
-
       filteredTrainers = trainers.where((trainer) {
         return trainer.title.toLowerCase().contains(query) ||
             trainer.keywords.any(
               (keyword) => keyword.toLowerCase().contains(query),
             );
       }).toList();
-
-      emit(TrainersLoadSuccess(filteredTrainers)); 
+      emit(currentState.copyWith(trainers: filteredTrainers));
     }
   }
 
@@ -118,6 +140,7 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for 
     SortTrainers event,
     Emitter<TrainersState> emit,
   ) {
+    final currentState = state as TrainersLoadSuccess;
     switch (event.sortBy) {
       case 'title':
         filteredTrainers.sort((a, b) => a.title.compareTo(b.title));
@@ -131,6 +154,38 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> { // New list for 
       default:
         break;
     }
-    emit(TrainersLoadSuccess(filteredTrainers));
+    emit(currentState.copyWith(trainers: filteredTrainers));
+  }
+
+  // ── Delete Mode ──
+
+  FutureOr<void> _onEnterDeleteMode(
+    EnterDeleteMode event,
+    Emitter<TrainersState> emit,
+  ) {
+    final currentState = state as TrainersLoadSuccess;
+    emit(currentState.copyWith(isDeleteMode: true));
+  }
+
+  FutureOr<void> _onExitDeleteMode(
+    ExitDeleteMode event,
+    Emitter<TrainersState> emit,
+  ) {
+    final currentState = state as TrainersLoadSuccess;
+    emit(currentState.copyWith(isDeleteMode: false));
+  }
+
+  FutureOr<void> _onReorderTrainers(
+    ReorderTrainers event,
+    Emitter<TrainersState> emit,
+  ) {
+    final currentState = state as TrainersLoadSuccess;
+    // Reorder filteredTrainers based on the new ID order
+    final idToTrainer = {for (final t in filteredTrainers) t.id: t};
+    filteredTrainers = event.ids.map((id) => idToTrainer[id]!).toList();
+    // Update allTrainers too
+    final allMap = {for (final t in trainers) t.id: t};
+    trainers = event.ids.where((id) => allMap.containsKey(id)).map((id) => allMap[id]!).toList();
+    emit(currentState.copyWith(trainers: filteredTrainers));
   }
 }

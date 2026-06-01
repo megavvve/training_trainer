@@ -37,3 +37,11 @@ class SearchTrainers extends TrainersEvent {
   SearchTrainers({required this.query});
   final String query;
 }
+
+// ── Delete Mode Events ──
+class EnterDeleteMode extends TrainersEvent {}
+class ExitDeleteMode extends TrainersEvent {}
+class ReorderTrainers extends TrainersEvent {
+  ReorderTrainers(this.ids);
+  final List<String> ids;
+}

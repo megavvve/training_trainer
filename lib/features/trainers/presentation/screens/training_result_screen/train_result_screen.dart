@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/constants/app_fonts.dart';
-import 'package:training_trainer/features/trainers/presentation/providers/train_process_bloc/train_process_bloc.dart';
+import 'package:training_trainer/features/trainers/domain/state/train_process_bloc/train_process_bloc.dart';
 import 'package:training_trainer/l10n/app_localizations.dart';
 import 'package:training_trainer/routing/app_routes.dart';
 import 'package:training_trainer/uikit/buttons/primary_button.dart';
@@ -18,7 +18,7 @@ class TrainingResultScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColorsExt.bg2,
+      backgroundColor: AppColorsExt.bg0,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -26,7 +26,12 @@ class TrainingResultScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.close),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            while (context.canPop()) {
+              context.pop();
+            }
+            context.go(AppRoutes.trainers);
+          },
         ),
       ),
       body: PopScope(
@@ -39,6 +44,12 @@ class TrainingResultScreen extends StatelessWidget {
             if (state is TrainProcessCompleted) {
               final correctAnswers = state.correctAnswers;
               final totalQuestions = state.totalQuestions;
+              final unansweredCount = state.unansweredCount;
+              final incorrectAnswers = totalQuestions - correctAnswers - unansweredCount;
+              final percent = totalQuestions > 0
+                  ? (correctAnswers / totalQuestions * 100).round()
+                  : 0;
+              final isGood = percent >= 70;
               final randomResultingText = getRandomCongratulations(l10n);
 
               return Padding(
@@ -47,33 +58,35 @@ class TrainingResultScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: AppColorsExt.positive.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.check_circle_outline_rounded,
-                        color: AppColors.light.positive,
-                        size: 64,
-                      ),
-                    ),
-                    const SizedBox(height: 32),
+                    // Score circle
+                    _buildScoreCircle(percent, isGood),
+                    const SizedBox(height: 24),
                     Text(
                       randomResultingText,
-                      style: TextStyles.h3,
+                      style: TextStyles.h3.copyWith(color: AppColorsExt.fill1),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 48),
-                    _buildResultRow(
-                      l10n.correctAnswersCount(correctAnswers),
-                      AppColorsExt.positive,
+                    const SizedBox(height: 40),
+                    // Stats section
+                    _buildStatCard(
+                      icon: Icons.check_circle_rounded,
+                      label: l10n.correctAnswersCount(correctAnswers),
+                      value: '$correctAnswers',
+                      color: AppColorsExt.primary,
                     ),
-                    const SizedBox(height: 12),
-                    _buildResultRow(
-                      l10n.incorrectAnswersCount(totalQuestions - correctAnswers),
-                      AppColorsExt.negative,
+                    const SizedBox(height: 10),
+                    _buildStatCard(
+                      icon: Icons.cancel_rounded,
+                      label: l10n.incorrectAnswersCount(incorrectAnswers),
+                      value: '$incorrectAnswers',
+                      color: AppColorsExt.error,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildStatCard(
+                      icon: Icons.remove_circle_outline_rounded,
+                      label: l10n.unansweredAnswersCount(unansweredCount),
+                      value: '$unansweredCount',
+                      color: AppColorsExt.fill2,
                     ),
                     const Spacer(),
                     AppPrimaryButton(
@@ -99,19 +112,54 @@ class TrainingResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildResultRow(String text, Color color) {
+  Widget _buildScoreCircle(int percent, bool isGood) {
+    return Container(
+      width: 120,
+      height: 120,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isGood ? AppColorsExt.primaryContainer : AppColorsExt.errorContainer,
+      ),
+      child: Center(
+        child: Text(
+          '$percent%',
+          style: TextStyles.display.copyWith(
+            color: isGood ? AppColorsExt.primary : AppColorsExt.error,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color color,
+  }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.05),
+        color: AppColorsExt.bg1,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.1)),
+        border: Border.all(color: AppColorsExt.border1),
       ),
-      child: Text(
-        text,
-        style: TextStyles.h3.copyWith(color: color),
-        textAlign: TextAlign.center,
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 22),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyles.text.copyWith(color: AppColorsExt.fill1),
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyles.h3.copyWith(color: color),
+          ),
+        ],
       ),
     );
   }

@@ -12,28 +12,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Training Trainer';
 
   @override
-  String get home => 'Home';
+  String get authHeadingSignIn => 'Welcome back!';
 
   @override
-  String get profile => 'Profile';
+  String get authHeadingSignUp => 'Create an account';
 
   @override
-  String get profileLabel => 'Your Profile';
+  String get authSubtitleSignIn => 'Log in to continue your learning';
 
   @override
-  String get appSettings => 'App Settings';
+  String get authSubtitleSignUp => 'Start your learning journey';
 
   @override
-  String get settings => 'Settings';
+  String get usernameLabel => 'Username';
 
   @override
-  String get signOut => 'Sign Out';
+  String get usernameHint => 'Create a username';
 
   @override
-  String get darkTheme => 'Dark Theme';
+  String get emailLabel => 'Email';
 
   @override
-  String get next => 'Next';
+  String get passwordLabel => 'Password';
+
+  @override
+  String get passwordHint => 'Enter your password';
 
   @override
   String get signIn => 'Sign In';
@@ -42,100 +45,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signUp => 'Sign Up';
 
   @override
-  String get authHeadingSignUp => 'Registration';
+  String get noAccount => 'Don\'t have an account? ';
 
   @override
-  String get authHeadingSignIn => 'Sign In';
+  String get alreadyHaveAccount => 'Already have an account? ';
 
   @override
-  String get authSubtitleSignUp => 'Create an account to start learning';
+  String get forgotPassword => 'Forgot password?';
 
   @override
-  String get authSubtitleSignIn => 'Sign in to your account';
+  String get invalidEmail => 'Please enter a valid email';
 
   @override
-  String get forRegistration => 'for registration';
+  String get invalidLogin => 'Login must be at least 3 characters';
 
   @override
-  String get forSignIn => 'for sign in';
-
-  @override
-  String get invalidEmail => 'Invalid email';
-
-  @override
-  String get emptyFields => 'Input fields are not filled';
+  String get invalidPassword => 'Password must be at least 6 characters';
 
   @override
   String get userNotAuthenticated => 'User is not authenticated';
 
   @override
-  String get unknownError => 'Unknown error';
+  String get createTrainer => 'Create trainer';
 
   @override
-  String get accessForbidden => 'Access forbidden';
+  String get mainInfo => 'Main info';
 
   @override
-  String get resourceNotFound => 'Resource not found';
-
-  @override
-  String get passwordRequirement =>
-      'Password must contain at least 8 characters, including letters and numbers';
-
-  @override
-  String get alreadyHaveAccount => 'Already have an account?';
-
-  @override
-  String get noAccount => 'Don\'t have an account?';
-
-  @override
-  String get emailLabel => 'email';
-
-  @override
-  String get profileLoadError => 'Profile load error';
-
-  @override
-  String get addTrainerError => 'Error adding trainer';
-
-  @override
-  String get deleteTrainerError => 'Error deleting trainer';
-
-  @override
-  String get searchHint => 'Search by title...';
-
-  @override
-  String foundElements(Object count) {
-    return 'Found elements: $count';
-  }
-
-  @override
-  String get sorting => 'Sorting';
-
-  @override
-  String get sortByTitle => 'By title (A-Z)';
-
-  @override
-  String get sortByDate => 'By creation date';
-
-  @override
-  String get sortByQuestions => 'By number of questions';
-
-  @override
-  String get sort => 'Sort';
-
-  @override
-  String get createTrainer => 'Create Trainer';
-
-  @override
-  String get mainInfo => 'Main Info';
+  String get modeStep => 'Mode';
 
   @override
   String get addQuestions => 'Questions';
 
   @override
-  String get keywordsTitle => 'Keywords';
+  String get preview => 'Preview';
 
   @override
-  String get preview => 'Preview';
+  String get next => 'Next';
 
   @override
   String get back => 'Back';
@@ -144,68 +90,56 @@ class AppLocalizationsEn extends AppLocalizations {
   String get save => 'Save';
 
   @override
-  String get add => 'Add';
-
-  @override
-  String get question => 'Question';
-
-  @override
-  String get start => 'Start';
-
-  @override
-  String get continueText => 'Continue';
-
-  @override
-  String get check => 'Check';
-
-  @override
-  String get correct => 'Correct!';
-
-  @override
-  String get error => 'Error';
-
-  @override
   String get cancel => 'Cancel';
 
   @override
   String get exit => 'Exit';
 
   @override
-  String get trainerTitle => 'Trainer Title';
+  String get trainerName => 'Trainer name';
 
   @override
-  String get trainerDescription => 'Trainer Description';
+  String get trainerDescription => 'Description';
 
   @override
-  String get timeLimit => 'Time limit (minutes)';
+  String get trainerTime => 'Time';
 
   @override
-  String get enterTitle => 'Enter title';
+  String get trainingProcess => 'Training process';
 
   @override
-  String get enterTime => 'Enter time';
+  String get selectAnswer => 'Select the correct answer';
 
   @override
-  String get correctAnswer => 'Correct Answer';
+  String get confirmTitle => 'Finish the training?';
 
   @override
-  String get addQuestionBtn => 'Add Question';
+  String get confirmContent =>
+      'Make sure you have answered all the questions before finishing';
 
   @override
-  String get addedQuestions => 'Added Questions';
+  String get yes => 'Yes';
 
   @override
-  String get trainingResult => 'Training Result';
+  String get no => 'No';
 
   @override
-  String correctAnswersCount(Object count) {
-    return 'Number of correct answers: $count';
-  }
+  String get goodResult => 'Great result!';
 
   @override
-  String incorrectAnswersCount(Object count) {
-    return 'Number of incorrect answers: $count';
-  }
+  String get normalResult => 'You can do better!';
+
+  @override
+  String get badResult => 'That is not your day!';
+
+  @override
+  String get statRight => 'Right';
+
+  @override
+  String get statWrong => 'Wrong';
+
+  @override
+  String get statUnanswered => 'Unanswered';
 
   @override
   String get congrats1 =>
@@ -253,4 +187,208 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showCorrectAnswer => 'See the correct answer.';
+
+  @override
+  String get history => 'History';
+
+  @override
+  String get noHistoryYet => 'No history yet';
+
+  @override
+  String get noTrainersFound => 'No trainers found';
+
+  @override
+  String get noTrainersHint =>
+      'Try adjusting your search or create a new trainer';
+
+  @override
+  String foundTrainers(Object count) {
+    return 'Found $count trainer';
+  }
+
+  @override
+  String foundTrainersPlural(Object count) {
+    return 'Found $count trainers';
+  }
+
+  @override
+  String questionsCount(Object count) {
+    return '$count questions';
+  }
+
+  @override
+  String minutesShort(Object count) {
+    return '$count min';
+  }
+
+  @override
+  String get rememberMe => 'Remember me';
+
+  @override
+  String get questionCount => 'Number of questions';
+
+  @override
+  String get questionCountHint => 'How many questions to generate?';
+
+  @override
+  String get describeTopic => 'Describe the topic';
+
+  @override
+  String get topicHint => 'What trainer do you want to create?';
+
+  @override
+  String get generate => 'Generate';
+
+  @override
+  String get modeAutomatic => 'Automatic';
+
+  @override
+  String get modeAutoDesc => 'Generate questions via AI';
+
+  @override
+  String get modeManual => 'Manual';
+
+  @override
+  String get modeManualDesc => 'Create questions yourself';
+
+  @override
+  String get home => 'Home';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get darkTheme => 'Dark Theme';
+
+  @override
+  String get appSettings => 'App Settings';
+
+  @override
+  String get profileLoadError => 'Failed to load profile';
+
+  @override
+  String get emptyFields => 'Please fill in all fields';
+
+  @override
+  String get enterTitle => 'Enter trainer title';
+
+  @override
+  String get enterTime => 'Enter time in minutes';
+
+  @override
+  String get trainerTitle => 'Trainer Title';
+
+  @override
+  String get timeLimit => 'Time Limit';
+
+  @override
+  String get keywordsTitle => 'Keywords';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String get question => 'Question';
+
+  @override
+  String get correctAnswer => 'Correct Answer';
+
+  @override
+  String get addQuestionBtn => 'Add Question';
+
+  @override
+  String get addedQuestions => 'Added Questions';
+
+  @override
+  String get searchHint => 'Search trainers...';
+
+  @override
+  String get sort => 'Sort';
+
+  @override
+  String get sorting => 'Sorting';
+
+  @override
+  String get sortByTitle => 'By title';
+
+  @override
+  String get sortByDate => 'By date';
+
+  @override
+  String get sortByQuestions => 'By questions count';
+
+  @override
+  String get start => 'Start';
+
+  @override
+  String get check => 'Check';
+
+  @override
+  String get continueText => 'Continue';
+
+  @override
+  String get correct => 'Correct!';
+
+  @override
+  String get error => 'Error';
+
+  @override
+  String get resultDetail => 'Result Details';
+
+  @override
+  String get greatJob => 'Great job!';
+
+  @override
+  String get keepPracticing => 'Keep practicing!';
+
+  @override
+  String get statCorrect => 'Correct';
+
+  @override
+  String get statTotal => 'Total';
+
+  @override
+  String get backToHistory => 'Back to history';
+
+  @override
+  String get trainingResult => 'Training Result';
+
+  @override
+  String correctAnswersCount(Object count) {
+    return '$count correct';
+  }
+
+  @override
+  String incorrectAnswersCount(Object count) {
+    return '$count incorrect';
+  }
+
+  @override
+  String unansweredAnswersCount(Object count) {
+    return '$count unanswered';
+  }
+
+  @override
+  String get generatingStatus1 => 'Analyzing the topic...';
+
+  @override
+  String get generatingStatus2 => 'Generating questions...';
+
+  @override
+  String get pleaseWait => 'Please wait...';
+
+  @override
+  String get generatingStatus3 => 'Creating answer options...';
+
+  @override
+  String get generatingStatus4 => 'Building the trainer...';
+
+  @override
+  String get generatingStatus5 => 'Almost there...';
 }

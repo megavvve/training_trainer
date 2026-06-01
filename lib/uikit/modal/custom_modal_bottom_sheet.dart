@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/constants/app_fonts.dart';
@@ -57,7 +59,9 @@ class _BottomSheetWrapper extends StatelessWidget {
           left: 16,
           right: 16,
           top: 8,
-          bottom: MediaQuery.of(context).viewPadding.bottom + 16,
+          bottom:(Platform.isIOS
+              ? 8
+              : MediaQuery.of(context).viewPadding.bottom + 8),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

@@ -16,8 +16,8 @@ class SignOutButton extends StatelessWidget {
       height: 48,
       child: FilledButton(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColorsExt.negative,
-          foregroundColor: AppColorsExt.white,
+          backgroundColor: AppColorsExt.error,
+          foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

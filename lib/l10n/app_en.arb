@@ -1,83 +1,48 @@
 {
   "appTitle": "Training Trainer",
-  "home": "Home",
-  "profile": "Profile",
-  "profileLabel": "Your Profile",
-  "appSettings": "App Settings",
-  "settings": "Settings",
-  "signOut": "Sign Out",
-  "darkTheme": "Dark Theme",
-  "next": "Next",
+  "authHeadingSignIn": "Welcome back!",
+  "authHeadingSignUp": "Create an account",
+  "authSubtitleSignIn": "Log in to continue your learning",
+  "authSubtitleSignUp": "Start your learning journey",
+  "usernameLabel": "Username",
+  "usernameHint": "Create a username",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "passwordHint": "Enter your password",
   "signIn": "Sign In",
   "signUp": "Sign Up",
-  "authHeadingSignUp": "Registration",
-  "authHeadingSignIn": "Sign In",
-  "authSubtitleSignUp": "Create an account to start learning",
-  "authSubtitleSignIn": "Sign in to your account",
-  "forRegistration": "for registration",
-  "forSignIn": "for sign in",
-  "invalidEmail": "Invalid email",
-  "emptyFields": "Input fields are not filled",
+  "noAccount": "Don't have an account? ",
+  "alreadyHaveAccount": "Already have an account? ",
+  "forgotPassword": "Forgot password?",
+  "invalidEmail": "Please enter a valid email",
+  "invalidLogin": "Login must be at least 3 characters",
+  "invalidPassword": "Password must be at least 6 characters",
   "userNotAuthenticated": "User is not authenticated",
-  "unknownError": "Unknown error",
-  "accessForbidden": "Access forbidden",
-  "resourceNotFound": "Resource not found",
-  "passwordRequirement": "Password must contain at least 8 characters, including letters and numbers",
-  "alreadyHaveAccount": "Already have an account?",
-  "noAccount": "Don't have an account?",
-  "emailLabel": "email",
-  "profileLoadError": "Profile load error",
-  "addTrainerError": "Error adding trainer",
-  "deleteTrainerError": "Error deleting trainer",
-  "searchHint": "Search by title...",
-  "foundElements": "Found elements: {count}",
-  "@foundElements": {
-    "placeholders": {
-      "count": {}
-    }
-  },
-  "sorting": "Sorting",
-  "sortByTitle": "By title (A-Z)",
-  "sortByDate": "By creation date",
-  "sortByQuestions": "By number of questions",
-  "sort": "Sort",
-  "createTrainer": "Create Trainer",
-  "mainInfo": "Main Info",
+  "createTrainer": "Create trainer",
+  "mainInfo": "Main info",
+  "modeStep": "Mode",
   "addQuestions": "Questions",
-  "keywordsTitle": "Keywords",
   "preview": "Preview",
+  "next": "Next",
   "back": "Back",
   "save": "Save",
-  "add": "Add",
-  "question": "Question",
-  "start": "Start",
-  "continueText": "Continue",
-  "check": "Check",
-  "correct": "Correct!",
-  "error": "Error",
   "cancel": "Cancel",
   "exit": "Exit",
-  "trainerTitle": "Trainer Title",
-  "trainerDescription": "Trainer Description",
-  "timeLimit": "Time limit (minutes)",
-  "enterTitle": "Enter title",
-  "enterTime": "Enter time",
-  "correctAnswer": "Correct Answer",
-  "addQuestionBtn": "Add Question",
-  "addedQuestions": "Added Questions",
-  "trainingResult": "Training Result",
-  "correctAnswersCount": "Number of correct answers: {count}",
-  "@correctAnswersCount": {
-    "placeholders": {
-      "count": {}
-    }
-  },
-  "incorrectAnswersCount": "Number of incorrect answers: {count}",
-  "@incorrectAnswersCount": {
-    "placeholders": {
-      "count": {}
-    }
-  },
+  "trainerName": "Trainer name",
+  "trainerDescription": "Description",
+  "trainerTime": "Time",
+  "trainingProcess": "Training process",
+  "selectAnswer": "Select the correct answer",
+  "confirmTitle": "Finish the training?",
+  "confirmContent": "Make sure you have answered all the questions before finishing",
+  "yes": "Yes",
+  "no": "No",
+  "goodResult": "Great result!",
+  "normalResult": "You can do better!",
+  "badResult": "That is not your day!",
+  "statRight": "Right",
+  "statWrong": "Wrong",
+  "statUnanswered": "Unanswered",
   "congrats1": "Congratulations! You have successfully completed the trainer. Keep growing in your chosen field!",
   "congrats2": "Great job! Now you have even more knowledge in your arsenal. Apply it with confidence!",
   "congrats3": "You have completed the trainer. Don't forget that every question is a step towards your success!",
@@ -91,5 +56,103 @@
   "cancelTrainingContent": "All progress will be lost",
   "ok": "OK",
   "wellDone": "Well done!",
-  "showCorrectAnswer": "See the correct answer."
+  "showCorrectAnswer": "See the correct answer.",
+  "history": "History",
+  "noHistoryYet": "No history yet",
+  "noTrainersFound": "No trainers found",
+  "noTrainersHint": "Try adjusting your search or create a new trainer",
+  "foundTrainers": "Found {count} trainer",
+  "foundTrainersPlural": "Found {count} trainers",
+  "@foundTrainers": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@foundTrainersPlural": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "questionsCount": "{count} questions",
+  "@questionsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "minutesShort": "{count} min",
+  "@minutesShort": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "rememberMe": "Remember me",
+  "questionCount": "Number of questions",
+  "questionCountHint": "How many questions to generate?",
+  "describeTopic": "Describe the topic",
+  "topicHint": "What trainer do you want to create?",
+  "generate": "Generate",
+  "modeAutomatic": "Automatic",
+  "modeAutoDesc": "Generate questions via AI",
+  "modeManual": "Manual",
+  "modeManualDesc": "Create questions yourself",
+  "home": "Home",
+  "settings": "Settings",
+  "profile": "Profile",
+  "signOut": "Sign Out",
+  "darkTheme": "Dark Theme",
+  "appSettings": "App Settings",
+  "profileLoadError": "Failed to load profile",
+  "emptyFields": "Please fill in all fields",
+  "enterTitle": "Enter trainer title",
+  "enterTime": "Enter time in minutes",
+  "trainerTitle": "Trainer Title",
+  "timeLimit": "Time Limit",
+  "keywordsTitle": "Keywords",
+  "add": "Add",
+  "question": "Question",
+  "correctAnswer": "Correct Answer",
+  "addQuestionBtn": "Add Question",
+  "addedQuestions": "Added Questions",
+  "searchHint": "Search trainers...",
+  "sort": "Sort",
+  "sorting": "Sorting",
+  "sortByTitle": "By title",
+  "sortByDate": "By date",
+  "sortByQuestions": "By questions count",
+  "start": "Start",
+  "check": "Check",
+  "continueText": "Continue",
+  "correct": "Correct!",
+  "error": "Error",
+  "resultDetail": "Result Details",
+  "greatJob": "Great job!",
+  "keepPracticing": "Keep practicing!",
+  "statCorrect": "Correct",
+  "statTotal": "Total",
+  "backToHistory": "Back to history",
+  "trainingResult": "Training Result",
+  "correctAnswersCount": "{count} correct",
+  "@correctAnswersCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "incorrectAnswersCount": "{count} incorrect",
+  "@incorrectAnswersCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "unansweredAnswersCount": "{count} unanswered",
+  "@unansweredAnswersCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "generatingStatus1": "Analyzing the topic...",
+  "generatingStatus2": "Generating questions...",
+  "pleaseWait": "Please wait...",
+  "generatingStatus3": "Creating answer options...",
+  "generatingStatus4": "Building the trainer...",
+  "generatingStatus5": "Almost there..."
 }

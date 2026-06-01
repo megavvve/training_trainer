@@ -3,7 +3,6 @@ import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/constants/app_fonts.dart';
 
 /// Text field with floating label, eye button, clear button, and icon support.
-/// Mirrors the reference UIKit [CustomTextField](uikit.md:539).
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
     required this.label,
@@ -152,7 +151,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       if (!isDisabled && widget.isSuccess)
                         Container(
                           decoration: BoxDecoration(
-                            color: AppColors.light.positive,
+                            color: AppColorsExt.primary,
                             shape: BoxShape.circle,
                           ),
                           child: const Padding(
@@ -189,7 +188,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         color: isDisabled
                             ? AppColorsExt.fill2
                             : hasError
-                                ? AppColorsExt.negative
+                                ? AppColorsExt.error
                                 : hasFocus
                                     ? AppColorsExt.primary
                                     : AppColorsExt.fill1,
@@ -229,8 +228,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
               widget.errorText,
               style: TextStyle(
                 color: widget.isSuccess
-                    ? AppColorsExt.positive
-                    : AppColorsExt.negative,
+                    ? AppColorsExt.primary
+                    : AppColorsExt.error,
                 fontSize: 12,
               ),
               maxLines: null,
@@ -243,14 +242,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   OutlineInputBorder _outlineBorder(Color color) => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(color: color, width: 1.5),
       );
 
   Color _getBorderColor(bool hasError, bool hasFocus) {
     if (widget.isDisabled) return AppColorsExt.border1;
-    if (widget.isSuccess && hasError) return AppColorsExt.positive;
-    if (hasError) return AppColorsExt.negative;
+    if (widget.isSuccess && hasError) return AppColorsExt.primary;
+    if (hasError) return AppColorsExt.error;
     if (hasFocus) return AppColorsExt.primary;
     return AppColorsExt.border2;
   }

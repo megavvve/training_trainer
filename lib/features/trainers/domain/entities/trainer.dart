@@ -9,9 +9,7 @@ class Trainer {
     required this.id,
     required this.starCount,
     required this.userId,
-    required this.timeRequiredInSeconds,
-    required this.title,
-    required this.description, this.questions = const [],
+    required this.title, required this.description, this.timeRequiredInSeconds, this.questions = const [],
     this.keywords = const [],
     DateTime? createdAt,
   })  : createdAt = createdAt ?? DateTime.now();
@@ -19,7 +17,7 @@ class Trainer {
   final String id;
   final String userId;
   final double starCount;
-  final int timeRequiredInSeconds;
+  final int? timeRequiredInSeconds;
   final String title;
   final List<Question> questions;
   final List<String> keywords;

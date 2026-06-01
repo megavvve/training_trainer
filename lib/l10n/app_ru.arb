@@ -1,83 +1,48 @@
 {
   "appTitle": "Training Trainer",
-  "home": "Главная",
-  "profile": "Профиль",
-  "profileLabel": "Ваш профиль",
-  "appSettings": "Настройки приложения",
-  "settings": "Настройки",
-  "signOut": "Выйти",
-  "darkTheme": "Темная тема",
-  "next": "Далее",
+  "authHeadingSignIn": "С возвращением!",
+  "authHeadingSignUp": "Создать аккаунт",
+  "authSubtitleSignIn": "Войдите чтобы продолжить обучение",
+  "authSubtitleSignUp": "Начните свой путь в обучении",
+  "usernameLabel": "Имя пользователя",
+  "usernameHint": "Придумайте имя пользователя",
+  "emailLabel": "Эл. почта",
+  "passwordLabel": "Пароль",
+  "passwordHint": "Введите пароль",
   "signIn": "Войти",
-  "signUp": "Зарегистрироваться",
-  "authHeadingSignUp": "Регистрация",
-  "authHeadingSignIn": "Вход",
-  "authSubtitleSignUp": "Создайте аккаунт, чтобы начать обучение",
-  "authSubtitleSignIn": "Войдите в свой аккаунт",
-  "forRegistration": "для регистрации",
-  "forSignIn": "для входа",
-  "invalidEmail": "Некорректный email",
-  "emptyFields": "Поля ввода не заполнены",
-  "userNotAuthenticated": "Пользователь не аутентифицирован",
-  "unknownError": "Неизвестная ошибка",
-  "accessForbidden": "Доступ запрещен",
-  "resourceNotFound": "Ресурс не найден",
-  "passwordRequirement": "Пароль должен содержать минимум 8 символов, включая буквы и цифры",
-  "alreadyHaveAccount": "Уже есть аккаунт?",
-  "noAccount": "Нет аккаунта?",
-  "emailLabel": "почта",
-  "profileLoadError": "Ошибка загрузки профиля",
-  "addTrainerError": "Ошибка добавления тренажера",
-  "deleteTrainerError": "Ошибка удаления тренажера",
-  "searchHint": "Поиск по названию...",
-  "foundElements": "Найдено элементов: {count}",
-  "@foundElements": {
-    "placeholders": {
-      "count": {}
-    }
-  },
-  "sorting": "Сортировка",
-  "sortByTitle": "По названию (А-Я)",
-  "sortByDate": "По дате создания",
-  "sortByQuestions": "По количеству вопросов",
-  "sort": "Сортировать",
-  "createTrainer": "Создание тренажера",
-  "mainInfo": "Осн. инфо",
+  "signUp": "Регистрация",
+  "noAccount": "Нет аккаунта? ",
+  "alreadyHaveAccount": "Уже есть аккаунт? ",
+  "forgotPassword": "Забыли пароль?",
+  "invalidEmail": "Пожалуйста, введите корректный email",
+  "invalidLogin": "Логин должен содержать не менее 3 символов",
+  "invalidPassword": "Пароль должен содержать не менее 6 символов",
+  "userNotAuthenticated": "Пользователь не авторизован",
+  "createTrainer": "Создать тренажер",
+  "mainInfo": "Основная информация",
+  "modeStep": "Режим",
   "addQuestions": "Вопросы",
-  "keywordsTitle": "Ключевые слова",
-  "preview": "Просмотр",
+  "preview": "Предпросмотр",
+  "next": "Далее",
   "back": "Назад",
   "save": "Сохранить",
-  "add": "Добавить",
-  "question": "Вопрос",
-  "start": "Начать",
-  "continueText": "Продолжить",
-  "check": "Проверка",
-  "correct": "Правильно!",
-  "error": "Ошибка",
   "cancel": "Отмена",
   "exit": "Выйти",
-  "trainerTitle": "Название тренажера",
-  "trainerDescription": "Описание тренажера",
-  "timeLimit": "Время на прохождение (минуты)",
-  "enterTitle": "Введите название",
-  "enterTime": "Введите время",
-  "correctAnswer": "Правильный ответ",
-  "addQuestionBtn": "Добавить вопрос",
-  "addedQuestions": "Добавленные вопросы",
-  "trainingResult": "Результат тренировки",
-  "correctAnswersCount": "Количество правильных ответов: {count}",
-  "@correctAnswersCount": {
-    "placeholders": {
-      "count": {}
-    }
-  },
-  "incorrectAnswersCount": "Количество неправильных ответов: {count}",
-  "@incorrectAnswersCount": {
-    "placeholders": {
-      "count": {}
-    }
-  },
+  "trainerName": "Название тренажера",
+  "trainerDescription": "Описание",
+  "trainerTime": "Время",
+  "trainingProcess": "Процесс тренировки",
+  "selectAnswer": "Выберите правильный ответ",
+  "confirmTitle": "Закончить тренировку?",
+  "confirmContent": "Убедитесь, что вы ответили на все вопросы",
+  "yes": "Да",
+  "no": "Нет",
+  "goodResult": "Отличный результат!",
+  "normalResult": "Можно лучше!",
+  "badResult": "Сегодня не ваш день!",
+  "statRight": "Верно",
+  "statWrong": "Неверно",
+  "statUnanswered": "Пропущено",
   "congrats1": "Поздравляем! Вы успешно завершили тренажер. Продолжайте развиваться в выбранной области!",
   "congrats2": "Отличная работа! Теперь у вас ещё больше знаний в вашем арсенале. Применяйте их с уверенностью!",
   "congrats3": "Вы завершили тренажер. Не забывайте, что каждый вопрос - шаг к вашему успеху!",
@@ -91,5 +56,103 @@
   "cancelTrainingContent": "Весь прогресс будет потерян",
   "ok": "OK",
   "wellDone": "Молодец!",
-  "showCorrectAnswer": "Посмотреть правильный ответ."
+  "showCorrectAnswer": "Посмотреть правильный ответ.",
+  "history": "История",
+  "noHistoryYet": "История пока пуста",
+  "noTrainersFound": "Тренажеры не найдены",
+  "noTrainersHint": "Попробуйте изменить поиск или создать новый тренажер",
+  "foundTrainers": "Найден {count} тренажер",
+  "foundTrainersPlural": "Найдено {count} тренажеров",
+  "@foundTrainers": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@foundTrainersPlural": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "questionsCount": "{count} вопросов",
+  "@questionsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "minutesShort": "{count} мин",
+  "@minutesShort": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "rememberMe": "Запомнить меня",
+  "questionCount": "Количество вопросов",
+  "questionCountHint": "Сколько вопросов сгенерировать?",
+  "describeTopic": "Опишите тему",
+  "topicHint": "Какой тренажер вы хотите создать?",
+  "generate": "Сгенерировать",
+  "modeAutomatic": "Автоматический",
+  "modeAutoDesc": "Генерация вопросов через ИИ",
+  "modeManual": "Ручной",
+  "modeManualDesc": "Создание вопросов вручную",
+  "home": "Главная",
+  "settings": "Настройки",
+  "profile": "Профиль",
+  "signOut": "Выйти",
+  "darkTheme": "Темная тема",
+  "appSettings": "Настройки приложения",
+  "profileLoadError": "Не удалось загрузить профиль",
+  "emptyFields": "Пожалуйста, заполните все поля",
+  "enterTitle": "Введите название тренажера",
+  "enterTime": "Введите время в минутах",
+  "trainerTitle": "Название тренажера",
+  "timeLimit": "Ограничение времени",
+  "keywordsTitle": "Ключевые слова",
+  "add": "Добавить",
+  "question": "Вопрос",
+  "correctAnswer": "Правильный ответ",
+  "addQuestionBtn": "Добавить вопрос",
+  "addedQuestions": "Добавленные вопросы",
+  "searchHint": "Поиск тренажеров...",
+  "sort": "Сортировка",
+  "sorting": "Сортировка",
+  "sortByTitle": "По названию",
+  "sortByDate": "По дате",
+  "sortByQuestions": "По количеству вопросов",
+  "start": "Начать",
+  "check": "Проверить",
+  "continueText": "Продолжить",
+  "correct": "Верно!",
+  "error": "Ошибка",
+  "resultDetail": "Детали результата",
+  "greatJob": "Отличная работа!",
+  "keepPracticing": "Продолжайте тренироваться!",
+  "statCorrect": "Верных",
+  "statTotal": "Всего",
+  "backToHistory": "Назад к истории",
+  "trainingResult": "Результат тренировки",
+  "correctAnswersCount": "{count} верных",
+  "@correctAnswersCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "incorrectAnswersCount": "{count} неверных",
+  "@incorrectAnswersCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "unansweredAnswersCount": "{count} пропущено",
+  "@unansweredAnswersCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "generatingStatus1": "Анализируем тему...",
+  "generatingStatus2": "Генерируем вопросы...",
+  "pleaseWait": "Пожалуйста, подождите...",
+  "generatingStatus3": "Создаем варианты ответов...",
+  "generatingStatus4": "Формируем тренажер...",
+  "generatingStatus5": "Уже почти готово..."
 }

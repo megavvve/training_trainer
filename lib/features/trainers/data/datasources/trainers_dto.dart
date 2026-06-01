@@ -12,9 +12,7 @@ class TrainerDTO {
     required this.description,
     required this.questions,
     required this.keywords,
-    required this.timeRequiredInSeconds,
-    required this.starCount,
-    required this.createdAt,
+    required this.starCount, required this.createdAt, this.timeRequiredInSeconds,
   });
 
   factory TrainerDTO.fromJson(Map<String, dynamic> json) {
@@ -38,7 +36,7 @@ class TrainerDTO {
       description: json['description'] as String? ?? '',
       questions: parseQuestions(json['questions'] as List<dynamic>?),
       keywords: parseKeywords(json['keywords'] as List<dynamic>?),
-      timeRequiredInSeconds: json['timeRequiredInSeconds'] as int? ?? json['time_required_in_seconds'] as int? ?? 0,
+      timeRequiredInSeconds: json['timeRequiredInSeconds'] as int? ?? json['time_required_in_seconds'] as int?,
       starCount: (json['starCount'] ?? json['star_count'] ?? 0).toDouble(),
       createdAt: json['createdAt'] != null 
           ? DateTime.parse(json['createdAt']) 
@@ -51,7 +49,7 @@ class TrainerDTO {
   final String description;
   final List<QuestionDTO> questions;
   final List<String> keywords;
-  final int timeRequiredInSeconds;
+  final int? timeRequiredInSeconds;
   final double starCount;
   final DateTime createdAt;
 
@@ -62,7 +60,7 @@ class TrainerDTO {
     'description': description,
     'questions': questions.map((q) => q.toJson()).toList(),
     'keywords': keywords,
-    'timeRequiredInSeconds': timeRequiredInSeconds,
+    if (timeRequiredInSeconds != null) 'timeRequiredInSeconds': timeRequiredInSeconds,
     'starCount': starCount,
     'createdAt': createdAt.toIso8601String(),
   };
@@ -135,20 +133,20 @@ class CreateTrainerRequestDTO {
     required this.description,
     required this.questions,
     required this.keywords,
-    required this.timeRequiredInSeconds,
+    this.timeRequiredInSeconds,
   });
   final String title;
   final String description;
   final List<QuestionDTO> questions;
   final List<String> keywords;
-  final int timeRequiredInSeconds;
+  final int? timeRequiredInSeconds;
 
   Map<String, dynamic> toJson() => {
     'title': title,
     'description': description,
     'questions': questions.map((q) => q.toJson()).toList(),
     'keywords': keywords,
-    'timeRequiredInSeconds': timeRequiredInSeconds,
+    if (timeRequiredInSeconds != null) 'timeRequiredInSeconds': timeRequiredInSeconds,
   };
 }
 
@@ -160,14 +158,14 @@ class UpdateTrainerRequestDTO {
     required this.description,
     required this.questions,
     required this.keywords,
-    required this.timeRequiredInSeconds,
+    this.timeRequiredInSeconds,
     this.starCount = 0,
   });
   final String title;
   final String description;
   final List<QuestionDTO> questions;
   final List<String> keywords;
-  final int timeRequiredInSeconds;
+  final int? timeRequiredInSeconds;
   final double starCount;
 
   Map<String, dynamic> toJson() => {
@@ -175,7 +173,7 @@ class UpdateTrainerRequestDTO {
     'description': description,
     'questions': questions.map((q) => q.toJson()).toList(),
     'keywords': keywords,
-    'timeRequiredInSeconds': timeRequiredInSeconds,
+    if (timeRequiredInSeconds != null) 'timeRequiredInSeconds': timeRequiredInSeconds,
     'starCount': starCount,
   };
 }

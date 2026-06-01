@@ -10,6 +10,13 @@ abstract class AIGenerator {
     int count = 5,
   });
 
+  Future<Map<String, dynamic>> generateFullTrainer({
+    required String topic,
+    int questionCount = 5,
+    String? title,
+    String language = 'ru',
+  });
+
   Future<void> initialize();
   void dispose();
 }

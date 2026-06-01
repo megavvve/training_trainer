@@ -11,13 +11,13 @@ class RestResultsRepositoryImpl implements ResultsRepository {
   @override
   Future<List<TrainingResult>> getMyResults() async {
     try {
-      final response = await _apiClient.get('/api/v1/results/me');
+      final response = await _apiClient.get('/api/v1/results');
       final results = (response.data as List?)
           ?.map((item) => TrainingResultDTO.fromJson(item as Map<String, dynamic>))
           .toList();
       return results?.map((dto) => dto.toEntity()).toList() ?? [];
     } catch (e) {
-      throw Exception('Failed to fetch results: $e');
+      throw Exception('Не удалось загрузить историю тренировок');
     }
   }
 
@@ -25,12 +25,14 @@ class RestResultsRepositoryImpl implements ResultsRepository {
   Future<TrainingResult> createResult({
     required String trainerId,
     required int correctAnswers,
+    required int unansweredCount,
     required int totalQuestions,
   }) async {
     try {
       final dto = CreateResultRequestDTO(
         trainerId: trainerId,
         correctAnswers: correctAnswers,
+        unansweredCount: unansweredCount,
         totalQuestions: totalQuestions,
       );
 
@@ -40,7 +42,7 @@ class RestResultsRepositoryImpl implements ResultsRepository {
       );
       return TrainingResultDTO.fromJson(response.data).toEntity();
     } catch (e) {
-      throw Exception('Failed to save result: $e');
+      throw Exception('Не удалось сохранить результат');
     }
   }
 }

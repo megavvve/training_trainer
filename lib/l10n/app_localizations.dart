@@ -104,53 +104,59 @@ abstract class AppLocalizations {
   /// **'Training Trainer'**
   String get appTitle;
 
-  /// No description provided for @home.
+  /// No description provided for @authHeadingSignIn.
   ///
   /// In en, this message translates to:
-  /// **'Home'**
-  String get home;
+  /// **'Welcome back!'**
+  String get authHeadingSignIn;
 
-  /// No description provided for @profile.
+  /// No description provided for @authHeadingSignUp.
   ///
   /// In en, this message translates to:
-  /// **'Profile'**
-  String get profile;
+  /// **'Create an account'**
+  String get authHeadingSignUp;
 
-  /// No description provided for @profileLabel.
+  /// No description provided for @authSubtitleSignIn.
   ///
   /// In en, this message translates to:
-  /// **'Your Profile'**
-  String get profileLabel;
+  /// **'Log in to continue your learning'**
+  String get authSubtitleSignIn;
 
-  /// No description provided for @appSettings.
+  /// No description provided for @authSubtitleSignUp.
   ///
   /// In en, this message translates to:
-  /// **'App Settings'**
-  String get appSettings;
+  /// **'Start your learning journey'**
+  String get authSubtitleSignUp;
 
-  /// No description provided for @settings.
+  /// No description provided for @usernameLabel.
   ///
   /// In en, this message translates to:
-  /// **'Settings'**
-  String get settings;
+  /// **'Username'**
+  String get usernameLabel;
 
-  /// No description provided for @signOut.
+  /// No description provided for @usernameHint.
   ///
   /// In en, this message translates to:
-  /// **'Sign Out'**
-  String get signOut;
+  /// **'Create a username'**
+  String get usernameHint;
 
-  /// No description provided for @darkTheme.
+  /// No description provided for @emailLabel.
   ///
   /// In en, this message translates to:
-  /// **'Dark Theme'**
-  String get darkTheme;
+  /// **'Email'**
+  String get emailLabel;
 
-  /// No description provided for @next.
+  /// No description provided for @passwordLabel.
   ///
   /// In en, this message translates to:
-  /// **'Next'**
-  String get next;
+  /// **'Password'**
+  String get passwordLabel;
+
+  /// No description provided for @passwordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get passwordHint;
 
   /// No description provided for @signIn.
   ///
@@ -164,53 +170,41 @@ abstract class AppLocalizations {
   /// **'Sign Up'**
   String get signUp;
 
-  /// No description provided for @authHeadingSignUp.
+  /// No description provided for @noAccount.
   ///
   /// In en, this message translates to:
-  /// **'Registration'**
-  String get authHeadingSignUp;
+  /// **'Don\'t have an account? '**
+  String get noAccount;
 
-  /// No description provided for @authHeadingSignIn.
+  /// No description provided for @alreadyHaveAccount.
   ///
   /// In en, this message translates to:
-  /// **'Sign In'**
-  String get authHeadingSignIn;
+  /// **'Already have an account? '**
+  String get alreadyHaveAccount;
 
-  /// No description provided for @authSubtitleSignUp.
+  /// No description provided for @forgotPassword.
   ///
   /// In en, this message translates to:
-  /// **'Create an account to start learning'**
-  String get authSubtitleSignUp;
-
-  /// No description provided for @authSubtitleSignIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in to your account'**
-  String get authSubtitleSignIn;
-
-  /// No description provided for @forRegistration.
-  ///
-  /// In en, this message translates to:
-  /// **'for registration'**
-  String get forRegistration;
-
-  /// No description provided for @forSignIn.
-  ///
-  /// In en, this message translates to:
-  /// **'for sign in'**
-  String get forSignIn;
+  /// **'Forgot password?'**
+  String get forgotPassword;
 
   /// No description provided for @invalidEmail.
   ///
   /// In en, this message translates to:
-  /// **'Invalid email'**
+  /// **'Please enter a valid email'**
   String get invalidEmail;
 
-  /// No description provided for @emptyFields.
+  /// No description provided for @invalidLogin.
   ///
   /// In en, this message translates to:
-  /// **'Input fields are not filled'**
-  String get emptyFields;
+  /// **'Login must be at least 3 characters'**
+  String get invalidLogin;
+
+  /// No description provided for @invalidPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get invalidPassword;
 
   /// No description provided for @userNotAuthenticated.
   ///
@@ -218,119 +212,23 @@ abstract class AppLocalizations {
   /// **'User is not authenticated'**
   String get userNotAuthenticated;
 
-  /// No description provided for @unknownError.
-  ///
-  /// In en, this message translates to:
-  /// **'Unknown error'**
-  String get unknownError;
-
-  /// No description provided for @accessForbidden.
-  ///
-  /// In en, this message translates to:
-  /// **'Access forbidden'**
-  String get accessForbidden;
-
-  /// No description provided for @resourceNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Resource not found'**
-  String get resourceNotFound;
-
-  /// No description provided for @passwordRequirement.
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least 8 characters, including letters and numbers'**
-  String get passwordRequirement;
-
-  /// No description provided for @alreadyHaveAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Already have an account?'**
-  String get alreadyHaveAccount;
-
-  /// No description provided for @noAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Don\'t have an account?'**
-  String get noAccount;
-
-  /// No description provided for @emailLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'email'**
-  String get emailLabel;
-
-  /// No description provided for @profileLoadError.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile load error'**
-  String get profileLoadError;
-
-  /// No description provided for @addTrainerError.
-  ///
-  /// In en, this message translates to:
-  /// **'Error adding trainer'**
-  String get addTrainerError;
-
-  /// No description provided for @deleteTrainerError.
-  ///
-  /// In en, this message translates to:
-  /// **'Error deleting trainer'**
-  String get deleteTrainerError;
-
-  /// No description provided for @searchHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Search by title...'**
-  String get searchHint;
-
-  /// No description provided for @foundElements.
-  ///
-  /// In en, this message translates to:
-  /// **'Found elements: {count}'**
-  String foundElements(Object count);
-
-  /// No description provided for @sorting.
-  ///
-  /// In en, this message translates to:
-  /// **'Sorting'**
-  String get sorting;
-
-  /// No description provided for @sortByTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'By title (A-Z)'**
-  String get sortByTitle;
-
-  /// No description provided for @sortByDate.
-  ///
-  /// In en, this message translates to:
-  /// **'By creation date'**
-  String get sortByDate;
-
-  /// No description provided for @sortByQuestions.
-  ///
-  /// In en, this message translates to:
-  /// **'By number of questions'**
-  String get sortByQuestions;
-
-  /// No description provided for @sort.
-  ///
-  /// In en, this message translates to:
-  /// **'Sort'**
-  String get sort;
-
   /// No description provided for @createTrainer.
   ///
   /// In en, this message translates to:
-  /// **'Create Trainer'**
+  /// **'Create trainer'**
   String get createTrainer;
 
   /// No description provided for @mainInfo.
   ///
   /// In en, this message translates to:
-  /// **'Main Info'**
+  /// **'Main info'**
   String get mainInfo;
+
+  /// No description provided for @modeStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode'**
+  String get modeStep;
 
   /// No description provided for @addQuestions.
   ///
@@ -338,17 +236,17 @@ abstract class AppLocalizations {
   /// **'Questions'**
   String get addQuestions;
 
-  /// No description provided for @keywordsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Keywords'**
-  String get keywordsTitle;
-
   /// No description provided for @preview.
   ///
   /// In en, this message translates to:
   /// **'Preview'**
   String get preview;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
 
   /// No description provided for @back.
   ///
@@ -362,48 +260,6 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get save;
 
-  /// No description provided for @add.
-  ///
-  /// In en, this message translates to:
-  /// **'Add'**
-  String get add;
-
-  /// No description provided for @question.
-  ///
-  /// In en, this message translates to:
-  /// **'Question'**
-  String get question;
-
-  /// No description provided for @start.
-  ///
-  /// In en, this message translates to:
-  /// **'Start'**
-  String get start;
-
-  /// No description provided for @continueText.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue'**
-  String get continueText;
-
-  /// No description provided for @check.
-  ///
-  /// In en, this message translates to:
-  /// **'Check'**
-  String get check;
-
-  /// No description provided for @correct.
-  ///
-  /// In en, this message translates to:
-  /// **'Correct!'**
-  String get correct;
-
-  /// No description provided for @error.
-  ///
-  /// In en, this message translates to:
-  /// **'Error'**
-  String get error;
-
   /// No description provided for @cancel.
   ///
   /// In en, this message translates to:
@@ -416,71 +272,95 @@ abstract class AppLocalizations {
   /// **'Exit'**
   String get exit;
 
-  /// No description provided for @trainerTitle.
+  /// No description provided for @trainerName.
   ///
   /// In en, this message translates to:
-  /// **'Trainer Title'**
-  String get trainerTitle;
+  /// **'Trainer name'**
+  String get trainerName;
 
   /// No description provided for @trainerDescription.
   ///
   /// In en, this message translates to:
-  /// **'Trainer Description'**
+  /// **'Description'**
   String get trainerDescription;
 
-  /// No description provided for @timeLimit.
+  /// No description provided for @trainerTime.
   ///
   /// In en, this message translates to:
-  /// **'Time limit (minutes)'**
-  String get timeLimit;
+  /// **'Time'**
+  String get trainerTime;
 
-  /// No description provided for @enterTitle.
+  /// No description provided for @trainingProcess.
   ///
   /// In en, this message translates to:
-  /// **'Enter title'**
-  String get enterTitle;
+  /// **'Training process'**
+  String get trainingProcess;
 
-  /// No description provided for @enterTime.
+  /// No description provided for @selectAnswer.
   ///
   /// In en, this message translates to:
-  /// **'Enter time'**
-  String get enterTime;
+  /// **'Select the correct answer'**
+  String get selectAnswer;
 
-  /// No description provided for @correctAnswer.
+  /// No description provided for @confirmTitle.
   ///
   /// In en, this message translates to:
-  /// **'Correct Answer'**
-  String get correctAnswer;
+  /// **'Finish the training?'**
+  String get confirmTitle;
 
-  /// No description provided for @addQuestionBtn.
+  /// No description provided for @confirmContent.
   ///
   /// In en, this message translates to:
-  /// **'Add Question'**
-  String get addQuestionBtn;
+  /// **'Make sure you have answered all the questions before finishing'**
+  String get confirmContent;
 
-  /// No description provided for @addedQuestions.
+  /// No description provided for @yes.
   ///
   /// In en, this message translates to:
-  /// **'Added Questions'**
-  String get addedQuestions;
+  /// **'Yes'**
+  String get yes;
 
-  /// No description provided for @trainingResult.
+  /// No description provided for @no.
   ///
   /// In en, this message translates to:
-  /// **'Training Result'**
-  String get trainingResult;
+  /// **'No'**
+  String get no;
 
-  /// No description provided for @correctAnswersCount.
+  /// No description provided for @goodResult.
   ///
   /// In en, this message translates to:
-  /// **'Number of correct answers: {count}'**
-  String correctAnswersCount(Object count);
+  /// **'Great result!'**
+  String get goodResult;
 
-  /// No description provided for @incorrectAnswersCount.
+  /// No description provided for @normalResult.
   ///
   /// In en, this message translates to:
-  /// **'Number of incorrect answers: {count}'**
-  String incorrectAnswersCount(Object count);
+  /// **'You can do better!'**
+  String get normalResult;
+
+  /// No description provided for @badResult.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not your day!'**
+  String get badResult;
+
+  /// No description provided for @statRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get statRight;
+
+  /// No description provided for @statWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get statWrong;
+
+  /// No description provided for @statUnanswered.
+  ///
+  /// In en, this message translates to:
+  /// **'Unanswered'**
+  String get statUnanswered;
 
   /// No description provided for @congrats1.
   ///
@@ -565,6 +445,384 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'See the correct answer.'**
   String get showCorrectAnswer;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
+
+  /// No description provided for @noHistoryYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No history yet'**
+  String get noHistoryYet;
+
+  /// No description provided for @noTrainersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No trainers found'**
+  String get noTrainersFound;
+
+  /// No description provided for @noTrainersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search or create a new trainer'**
+  String get noTrainersHint;
+
+  /// No description provided for @foundTrainers.
+  ///
+  /// In en, this message translates to:
+  /// **'Found {count} trainer'**
+  String foundTrainers(Object count);
+
+  /// No description provided for @foundTrainersPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Found {count} trainers'**
+  String foundTrainersPlural(Object count);
+
+  /// No description provided for @questionsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} questions'**
+  String questionsCount(Object count);
+
+  /// No description provided for @minutesShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min'**
+  String minutesShort(Object count);
+
+  /// No description provided for @rememberMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember me'**
+  String get rememberMe;
+
+  /// No description provided for @questionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of questions'**
+  String get questionCount;
+
+  /// No description provided for @questionCountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'How many questions to generate?'**
+  String get questionCountHint;
+
+  /// No description provided for @describeTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the topic'**
+  String get describeTopic;
+
+  /// No description provided for @topicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What trainer do you want to create?'**
+  String get topicHint;
+
+  /// No description provided for @generate.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate'**
+  String get generate;
+
+  /// No description provided for @modeAutomatic.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic'**
+  String get modeAutomatic;
+
+  /// No description provided for @modeAutoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate questions via AI'**
+  String get modeAutoDesc;
+
+  /// No description provided for @modeManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get modeManual;
+
+  /// No description provided for @modeManualDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Create questions yourself'**
+  String get modeManualDesc;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// No description provided for @darkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Theme'**
+  String get darkTheme;
+
+  /// No description provided for @appSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'App Settings'**
+  String get appSettings;
+
+  /// No description provided for @profileLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load profile'**
+  String get profileLoadError;
+
+  /// No description provided for @emptyFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all fields'**
+  String get emptyFields;
+
+  /// No description provided for @enterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter trainer title'**
+  String get enterTitle;
+
+  /// No description provided for @enterTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter time in minutes'**
+  String get enterTime;
+
+  /// No description provided for @trainerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trainer Title'**
+  String get trainerTitle;
+
+  /// No description provided for @timeLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Limit'**
+  String get timeLimit;
+
+  /// No description provided for @keywordsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keywords'**
+  String get keywordsTitle;
+
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// No description provided for @question.
+  ///
+  /// In en, this message translates to:
+  /// **'Question'**
+  String get question;
+
+  /// No description provided for @correctAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct Answer'**
+  String get correctAnswer;
+
+  /// No description provided for @addQuestionBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Question'**
+  String get addQuestionBtn;
+
+  /// No description provided for @addedQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Added Questions'**
+  String get addedQuestions;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search trainers...'**
+  String get searchHint;
+
+  /// No description provided for @sort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get sort;
+
+  /// No description provided for @sorting.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorting'**
+  String get sorting;
+
+  /// No description provided for @sortByTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'By title'**
+  String get sortByTitle;
+
+  /// No description provided for @sortByDate.
+  ///
+  /// In en, this message translates to:
+  /// **'By date'**
+  String get sortByDate;
+
+  /// No description provided for @sortByQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'By questions count'**
+  String get sortByQuestions;
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get start;
+
+  /// No description provided for @check.
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get check;
+
+  /// No description provided for @continueText.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueText;
+
+  /// No description provided for @correct.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct!'**
+  String get correct;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// No description provided for @resultDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Result Details'**
+  String get resultDetail;
+
+  /// No description provided for @greatJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Great job!'**
+  String get greatJob;
+
+  /// No description provided for @keepPracticing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep practicing!'**
+  String get keepPracticing;
+
+  /// No description provided for @statCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get statCorrect;
+
+  /// No description provided for @statTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get statTotal;
+
+  /// No description provided for @backToHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to history'**
+  String get backToHistory;
+
+  /// No description provided for @trainingResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Training Result'**
+  String get trainingResult;
+
+  /// No description provided for @correctAnswersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} correct'**
+  String correctAnswersCount(Object count);
+
+  /// No description provided for @incorrectAnswersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} incorrect'**
+  String incorrectAnswersCount(Object count);
+
+  /// No description provided for @unansweredAnswersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unanswered'**
+  String unansweredAnswersCount(Object count);
+
+  /// No description provided for @generatingStatus1.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing the topic...'**
+  String get generatingStatus1;
+
+  /// No description provided for @generatingStatus2.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating questions...'**
+  String get generatingStatus2;
+
+  /// No description provided for @pleaseWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait...'**
+  String get pleaseWait;
+
+  /// No description provided for @generatingStatus3.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating answer options...'**
+  String get generatingStatus3;
+
+  /// No description provided for @generatingStatus4.
+  ///
+  /// In en, this message translates to:
+  /// **'Building the trainer...'**
+  String get generatingStatus4;
+
+  /// No description provided for @generatingStatus5.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost there...'**
+  String get generatingStatus5;
 }
 
 class _AppLocalizationsDelegate

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/features/trainers/domain/state/train_process_bloc/train_process_bloc.dart';
 import 'package:training_trainer/l10n/app_localizations.dart';
 import 'package:training_trainer/uikit/buttons/primary_button.dart';
@@ -15,8 +14,6 @@ class CheckButton extends StatelessWidget {
       builder: (context, state) {
         if (state is! TrainProcessInProgress) return const SizedBox.shrink();
 
-        final isCorrect = state.isAnswerChecked &&
-            state.selectedAnswer == state.currentQuestion.rightAnswer;
 
         return AppPrimaryButton(
           width: double.infinity,
@@ -29,7 +26,7 @@ class CheckButton extends StatelessWidget {
   }
 
   void _handleCheckAnswer(BuildContext context, TrainProcessInProgress state) {
-    final l10n = AppLocalizations.of(context)!;
+    AppLocalizations.of(context)!;
     if (!state.isAnswerChecked) {
       if (state.selectedAnswer == null) return;
       context.read<TrainProcessBloc>().add(CheckAnswer());

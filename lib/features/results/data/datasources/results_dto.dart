@@ -11,6 +11,7 @@ class TrainingResultDTO {
     required this.totalQuestions,
     required this.scorePercent,
     required this.completedAt,
+    this.trainerTitle = '',
   });
 
   factory TrainingResultDTO.fromJson(Map<String, dynamic> json) {
@@ -25,6 +26,7 @@ class TrainingResultDTO {
       completedAt: json['completedAt'] != null
           ? DateTime.parse(json['completedAt'])
           : (json['completed_at'] != null ? DateTime.parse(json['completed_at']) : DateTime.now()),
+      trainerTitle: json['trainerTitle'] as String? ?? json['trainer_title'] as String? ?? '',
     );
   }
   final String id;
@@ -35,6 +37,7 @@ class TrainingResultDTO {
   final int totalQuestions;
   final double scorePercent;
   final DateTime completedAt;
+  final String trainerTitle;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -45,6 +48,7 @@ class TrainingResultDTO {
     'totalQuestions': totalQuestions,
     'scorePercent': scorePercent,
     'completedAt': completedAt.toIso8601String(),
+    'trainerTitle': trainerTitle,
   };
 
   TrainingResult toEntity() {
@@ -57,6 +61,7 @@ class TrainingResultDTO {
       totalQuestions: totalQuestions,
       scorePercent: scorePercent,
       completedAt: completedAt,
+      trainerTitle: trainerTitle,
     );
   }
 }
@@ -74,10 +79,15 @@ class CreateResultRequestDTO {
   final int unansweredCount;
   final int totalQuestions;
 
+  double get scorePercent => totalQuestions > 0
+      ? (correctAnswers / totalQuestions) * 100
+      : 0.0;
+
   Map<String, dynamic> toJson() => {
     'trainerId': trainerId,
     'correctAnswers': correctAnswers,
     'unansweredCount': unansweredCount,
     'totalQuestions': totalQuestions,
+    'scorePercent': scorePercent,
   };
 }

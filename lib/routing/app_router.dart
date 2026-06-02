@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:training_trainer/features/auth/presentation/auth_screen/auth_screen.dart';
@@ -19,13 +20,23 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     debugLogDiagnostics: true,
-    initialLocation: AppRoutes.trainers,
+    initialLocation: AppRoutes.splash,
 
     redirect: (context, state) {
-      if (authState.isLoading) return null;
+      final isSplashRoute = state.matchedLocation == AppRoutes.splash;
+
+      // Во время загрузки — показываем сплеш-экран
+      if (authState.isLoading) {
+        return isSplashRoute ? null : AppRoutes.splash;
+      }
 
       final isAuth = authState.value != null;
       final isAuthRoute = state.matchedLocation == AppRoutes.auth;
+
+      // Загрузка завершена, убираем сплеш
+      if (isSplashRoute) {
+        return isAuth ? AppRoutes.trainers : AppRoutes.auth;
+      }
 
       if (!isAuth) {
         return isAuthRoute ? null : AppRoutes.auth;
@@ -38,6 +49,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: AppRoutes.splash,
+        builder: (context, state) => const Scaffold(
+          backgroundColor: Color(0xFF0D0F1C),
+          body: Center(
+            child: CircularProgressIndicator(color: Color(0xFFB0B5FF)),
+          ),
+        ),
+      ),
       GoRoute(
         path: AppRoutes.auth,
         builder: (context, state) => const AuthScreen(),

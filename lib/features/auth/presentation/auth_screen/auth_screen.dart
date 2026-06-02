@@ -131,22 +131,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppColorsExt.primary.withValues(alpha: 0.12),
-              AppColorsExt.bg0,
-              AppColorsExt.primary.withValues(alpha: 0.04),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
+      backgroundColor: AppColorsExt.bg0,
+      body: SafeArea(
+        child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
@@ -192,22 +179,25 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
-                // ── Title ──
+                // ── Training Trainer heading ──
                 Text(
-                  _isRegistry ? l10n.authHeadingSignUp : l10n.authHeadingSignIn,
-                  style: TextStyles.display.copyWith(color: AppColorsExt.fill1),
+                  'Training Trainer',
+                  style: TextStyles.h2.copyWith(
+                    color: AppColorsExt.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Text(
                   _isRegistry ? l10n.authSubtitleSignUp : l10n.authSubtitleSignIn,
                   style: TextStyles.text.copyWith(color: AppColorsExt.fill2),
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 28),
 
-                const SizedBox(height: 32),
 
                 // ── Form Card ──
                 Container(
@@ -263,38 +253,39 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                 value: _rememberMe,
                                 onChanged: (v) => setState(() => _rememberMe = v ?? false),
                                 activeColor: AppColorsExt.primary,
+                                checkColor: Colors.white,
+                                side: const BorderSide(color: Colors.grey, width: 1.5),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 8),
-                            GestureDetector(
-                              onTap: () => setState(() => _rememberMe = !_rememberMe),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () => setState(() => _rememberMe = !_rememberMe),
+                                child: Text(
+                                  l10n.rememberMe,
+                                  style: TextStyles.textSmall.copyWith(color: AppColorsExt.fill2),
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {},
+                              style: TextButton.styleFrom(
+                                foregroundColor: AppColorsExt.primary,
+                                padding: EdgeInsets.zero,
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
                               child: Text(
-                                l10n.rememberMe,
-                                style: TextStyles.textSmall.copyWith(color: AppColorsExt.fill2),
+                                l10n.forgotPassword,
+                                style: TextStyles.textSmall.copyWith(color: AppColorsExt.primary),
                               ),
                             ),
                           ],
                         ),
                       ],
-
-                      // Forgot password (sign in only)
-                      if (!_isRegistry)
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                            ),
-                            child: Text(
-                              l10n.forgotPassword,
-                              style: TextStyles.textSSemi.copyWith(color: AppColorsExt.primary),
-                            ),
-                          ),
-                        ),
 
                       const SizedBox(height: 32),
 
@@ -365,7 +356,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             ),
           ),
         ),
-      ),
     );
   }
 

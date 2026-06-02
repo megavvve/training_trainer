@@ -58,7 +58,9 @@ Future<void> setupDependencies() async {
     RestTrainersRepositoryImpl(getIt<ApiClient>()),
   );
   getIt.registerSingleton<ResultsRepository>(
-    RestResultsRepositoryImpl(getIt<ApiClient>()),
+    RestResultsRepositoryImpl(
+      getIt<ApiClient>(),
+    ),
   );
 
   // UseCases

@@ -212,7 +212,7 @@ class QuestionsForm extends StatelessWidget {
   }
 
   void _editQuestion(BuildContext context, Question question) {
-    final l10n = AppLocalizations.of(context)!;
+    AppLocalizations.of(context)!;
     final textCtrl = TextEditingController(text: question.textQuestion);
     final answerCtrl = TextEditingController(text: question.rightAnswer);
     final wrongCtrls = question.answers

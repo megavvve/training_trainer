@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:training_trainer/core/di/injection_container.dart';
 import 'package:training_trainer/features/auth/domain/entities/app_user.dart';

@@ -323,8 +323,8 @@ class _TrainerListContentState extends State<_TrainerListContent> {
               )
             : isDeleteMode
                 ? ListView.builder(
-                    key: const ValueKey('delete-list'),
-                    padding: const EdgeInsets.only(bottom: 100),
+                    key: const ValueKey('list'),
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 100),
                     physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: filtered.length,
                     itemBuilder: (context, index) => TrainerListCard(

@@ -97,7 +97,7 @@ class TrainersBloc extends Bloc<TrainersEvent, TrainersState> {
     DeleteTrainer event,
     Emitter<TrainersState> emit,
   ) async {
-    final currentState = state is TrainersLoadSuccess ? state as TrainersLoadSuccess : null;
+    final _ = state is TrainersLoadSuccess ? state as TrainersLoadSuccess : null;
     try {
       await repository.deleteTrainer(event.trainer.id);
       trainers = List.from(trainers)..removeWhere((t) => t.id == event.trainer.id);

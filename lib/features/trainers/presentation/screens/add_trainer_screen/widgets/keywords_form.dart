@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:training_trainer/constants/app_colors.dart';
 import 'package:training_trainer/l10n/app_localizations.dart';
 import 'package:training_trainer/uikit/buttons/secondary_button.dart';
 import 'package:training_trainer/uikit/inputs/app_text_field.dart';

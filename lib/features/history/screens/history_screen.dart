@@ -104,15 +104,25 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final results = _results ?? [];
 
     if (results.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+      return RefreshIndicator(
+        onRefresh: _loadResults,
+        child: ListView(
           children: [
-            Icon(Icons.history_rounded, size: 64, color: AppColorsExt.fill3),
-            const SizedBox(height: 16),
-            Text(
-              l10n.noHistoryYet,
-              style: TextStyles.h3.copyWith(color: AppColorsExt.fill2),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.history_rounded, size: 64, color: AppColorsExt.fill3),
+                    const SizedBox(height: 16),
+                    Text(
+                      l10n.noHistoryYet,
+                      style: TextStyles.h3.copyWith(color: AppColorsExt.fill2),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -200,12 +210,14 @@ class _HistoryCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${entry.correctAnswers}/${entry.totalQuestions}',
+                            entry.trainerTitle.isNotEmpty ? entry.trainerTitle : 'Тренировка',
                             style: TextStyles.textSemi.copyWith(color: AppColorsExt.fill1),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '${(percent * 100).round()}% — ${isGood ? "отлично" : "нужно практиковаться"}',
+                            '${entry.correctAnswers}/${entry.totalQuestions} — ${(percent * 100).round()}%',
                             style: TextStyles.textSmall.copyWith(color: AppColorsExt.fill2),
                           ),
                         ],

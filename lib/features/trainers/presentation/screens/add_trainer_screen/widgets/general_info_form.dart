@@ -5,11 +5,7 @@ import 'package:training_trainer/l10n/app_localizations.dart';
 import 'package:training_trainer/uikit/inputs/app_text_field.dart';
 
 class GeneralInfoForm extends StatefulWidget {
-  const GeneralInfoForm({
-    required this.titleController,
-    required this.descriptionController,
-    required this.timeController,
-    required this.formKey,
+  const GeneralInfoForm({required this.titleController, required this.descriptionController, required this.timeController, required this.formKey, super.key,
     this.timeUnitMinutes = true,
     this.onTimeUnitChanged,
   });

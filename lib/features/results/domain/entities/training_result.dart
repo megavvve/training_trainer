@@ -9,6 +9,7 @@ class TrainingResult {
     required this.totalQuestions,
     required this.scorePercent,
     required this.completedAt,
+    this.trainerTitle = '',
   });
   final String id;
   final String userId;
@@ -18,6 +19,7 @@ class TrainingResult {
   final int totalQuestions;
   final double scorePercent;
   final DateTime completedAt;
+  final String trainerTitle;
 
   @override
   String toString() {

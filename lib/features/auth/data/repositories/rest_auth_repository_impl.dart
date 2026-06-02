@@ -12,9 +12,6 @@ import 'package:training_trainer/features/auth/domain/repositories/auth_reposito
 class RestAuthRepositoryImpl implements AuthRepository {
 
   RestAuthRepositoryImpl(this._tokenStorage, this._apiClient) {
-    _authStateController.onListen = () {
-      _authStateController.add(_currentUser);
-    };
     // When the API client detects an unrecoverable auth failure
     // (token refresh failed), force sign-out so GoRouter redirects to login.
     _apiClient.onAuthFailure = signOut;
